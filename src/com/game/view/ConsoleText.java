@@ -6,7 +6,7 @@ package com.game.view;
  * text and text color, text and background color, text and text color and background color.
  */
 
-class ConsoleText {
+public class ConsoleText {
 
     // INSTANCE VARIABLES
     String text;
@@ -36,7 +36,7 @@ class ConsoleText {
     }
 
     // builds a new ConsoleText object with the given text.
-    ConsoleText(String text) {
+    public ConsoleText(String text) {
         setText(text);
         setTextColor(AnsiTextColor.NONE);
         setBackgroundColor(AnsiBackgroundColor.NONE);

@@ -18,12 +18,12 @@ public class ConsoleView {
 
     // METHODS
         // Add ConsoleText to the text list
-    void add(ConsoleText text){
+    public void add(ConsoleText text){
     	this.text.add(text);
     }
 
         // For each ConsoleText in text call Console.print and pass the color and text
-    String show(){
+    public String show(){
         for(ConsoleText t : text){
             Console.print(t.text, t.textColor, t.backgroundColor);
         }

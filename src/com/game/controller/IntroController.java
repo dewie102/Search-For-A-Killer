@@ -1,48 +1,61 @@
 package com.game.controller;
 
-import org.w3c.dom.ls.LSOutput;
+import com.game.view.ConsoleView;
+import com.game.view.ConsoleText;
+
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.Reader;
+import java.util.Iterator;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 class IntroController {
 
-    public static void printIntro(){
+    private static final ConsoleView cv = new ConsoleView();
+    private static final JSONObject obj = loadJSON();
+
+    public static void printIntro() throws ParseException, IOException {
         printStory();
         printObjective();
         printHowToWin();
+
+        String aString = cv.show();
+    }
+
+    private static JSONObject loadJSON(){
+        JSONParser parser = new JSONParser();
+        try (Reader reader = new FileReader("data/introText.json")) {
+
+            return (JSONObject) parser.parse(reader);
+        } catch (IOException | ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     private static void printStory(){
-        System.out.println(
-"       ================The Story================\n" +
-"You are the newest detective to join Cool Town Detective Agency \n"+
-"and you’ve just been called out to investigate a reported murder \n" +
-"at the Old Manor in town. It seems that the town’s founder, \n" +
-"Mr. Cool, has been killed.\n"
-        );
+        assert obj != null;
+        String story = (String) obj.get("story");
+        ConsoleText ctStory = new ConsoleText(story);
+        cv.add(ctStory);
     }
 
     private static void printObjective(){
-        System.out.println(
-"       ================Your Mission================\n" +
-"Your Mission: Solve the case by figuring out who the murderer is, \n" +
-"and what the murder weapon was. Investigate the house, talk to \n" +
-"witnesses and suspects, and find evidence to piece together what \n" +
-"happened.\n"
-        );
+        assert obj != null;
+        String objective = (String) obj.get("objective");
+        ConsoleText ctObjective = new ConsoleText(objective);
+        cv.add(ctObjective);
     }
 
     private static void printHowToWin(){
-        System.out.println();
-        System.out.println(
-"       ================Winning================\n" +
-"Once you think you know the answer, call in to the Police Department \n" +
-"to report your findings. If you solve the case correctly – you win! \n" +
-"If not, your first case at the agency might be your last. \n"
-        );
-    }
-
-
-    public static void main(String[] args) {
-        printIntro();
+        assert obj != null;
+        String howToWin = (String) obj.get("howToWin");
+        ConsoleText ctHowToWin = new ConsoleText(howToWin);
+        cv.add(ctHowToWin);
     }
 
 }
