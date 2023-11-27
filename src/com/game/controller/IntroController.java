@@ -1,5 +1,7 @@
 package com.game.controller;
 
+import org.w3c.dom.ls.LSOutput;
+
 class IntroController {
 
     private static void printIntro(){
@@ -29,6 +31,7 @@ class IntroController {
     }
 
     private static void printHowToWin(){
+        System.out.println();
         System.out.println(
 "       ================Winning================\n" +
 "Once you think you know the answer, call in to the Police Department \n" +
@@ -36,6 +39,7 @@ class IntroController {
 "If not, your first case at the agency might be your last. \n"
         );
     }
+
 
     public static void main(String[] args) {
         printIntro();
