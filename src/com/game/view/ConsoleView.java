@@ -14,16 +14,16 @@ public class ConsoleView {
 
     // INSTANCE VARIABLES
         // text list that holds all the ConsoleText objects
-    List<ConsoleText> text = new ArrayList<>();
+    public List<ConsoleText> text = new ArrayList<>();
 
     // METHODS
         // Add ConsoleText to the text list
-    void add(ConsoleText text){
+    public void add(ConsoleText text){
     	this.text.add(text);
     }
 
         // For each ConsoleText in text call Console.print and pass the color and text
-    String show(){
+        public String show(){
         for(ConsoleText t : text){
             Console.print(t.text, t.textColor, t.backgroundColor);
         }
