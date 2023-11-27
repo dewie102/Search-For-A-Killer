@@ -4,7 +4,7 @@ import org.w3c.dom.ls.LSOutput;
 
 class IntroController {
 
-    private static void printIntro(){
+    public static void printIntro(){
         printStory();
         printObjective();
         printHowToWin();
