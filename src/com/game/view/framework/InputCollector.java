@@ -1,6 +1,7 @@
 package com.game.view.framework;
 
 import com.game.view.ConsoleText;
+import com.game.view.Console;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,18 +14,15 @@ import java.util.Scanner;
 public class InputCollector {
     // Instance of java.util.Scanner that will collect input from the Console
     private static final Scanner SCANNER = new Scanner(System.in);
+    private static final String PROMPT = "> ";
 
     // private constructor, class can't be instantiated
     private InputCollector(){}
 
     // This method will collect input from the console and return it back, no validations performed
     public static String collectInput(){
+        Console.print(PROMPT);
         return SCANNER.nextLine();
-    }
-
-    // We call collectInput with an empty ignoreList
-    public static String collectInput(Map<String, List<String>> commands, List<String> entities) throws InvalidInputException {
-        return collectInput(commands, entities, new ArrayList<>());
     }
 
     /*
@@ -34,7 +32,7 @@ public class InputCollector {
      * The ignoreList is a list of words that will be ignored by the validation, for example "go to the kitchen" will be taken as "go kitchen"
      * The method will return a parsed string in the form of <command target>
      */
-    public static String collectInput(Map<String, List<String>> commands, List<String> entities, List<String> ignoreList) throws InvalidInputException {
+    public static String collectInput(Map<String, List<String>> commands, List<String> entities, List<String> ignoreList, String escapeCommand) throws InvalidInputException {
         String line = collectInput();
         line = line.trim().toLowerCase().replaceAll(" +", " ");
         for (var ignore : ignoreList){
@@ -46,6 +44,11 @@ public class InputCollector {
         String[] parts = line.split(" ", 2);
         String command = null;
         String target = null;
+
+        if(parts[0].toLowerCase().equals(escapeCommand))
+            return escapeCommand;
+        if(parts.length != 2)
+            throw new InvalidInputException("The command entered by the user is not valid.");
 
         for (var com : commands.entrySet()){
             if(com.getKey().toLowerCase().equals(parts[0]) || com.getValue().contains(parts[0])) {
