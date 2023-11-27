@@ -1,9 +1,8 @@
 package com.game.view.framework;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
+import com.game.view.ConsoleText;
+
+import java.util.*;
 
 /*
  * Static class that handles input entered by the user, it will do basic validations
@@ -67,7 +66,7 @@ public class InputCollector {
      * The method will also accept if the user types the option
      * The method returns the index of the option selected by the user
      */
-    public static String collectInput(List<String> options) throws InvalidInputException {
+    public static String collectInput(List<ConsoleText> options) throws InvalidInputException{
         String line = collectInput().trim().toLowerCase();
         String result = null;
         int optionNumber;
@@ -75,7 +74,7 @@ public class InputCollector {
             optionNumber = Integer.parseInt(line);
         }catch (Exception e){
             for (int i = 0; i < options.size(); i++){
-                if(options.get(i).toLowerCase().equals(line)) {
+                if(options.get(i).getText().toLowerCase().equals(line)) {
                     return ((Integer)i).toString();
                 }
             }
@@ -86,4 +85,29 @@ public class InputCollector {
         optionNumber = optionNumber - 1;
         return ((Integer)optionNumber).toString();
     }
+
+    /*
+     * This method will make sure the user enters a number from 1 to options.size()
+     * The method will also accept if the user types the option
+     * The method returns the index of the option selected by the user
+     */
+//    public static String collectInput(List<String> options) throws InvalidInputException {
+//        String line = collectInput().trim().toLowerCase();
+//        String result = null;
+//        int optionNumber;
+//        try{
+//            optionNumber = Integer.parseInt(line);
+//        }catch (Exception e){
+//            for (int i = 0; i < options.size(); i++){
+//                if(options.get(i).toLowerCase().equals(line)) {
+//                    return ((Integer)i).toString();
+//                }
+//            }
+//            throw new InvalidInputException("The selected option is not valid.");
+//        }
+//        if(optionNumber < 1 || optionNumber > options.size())
+//            throw new InvalidInputException("The selected option is not valid.");
+//        optionNumber = optionNumber - 1;
+//        return ((Integer)optionNumber).toString();
+//    }
 }
