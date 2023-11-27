@@ -54,4 +54,16 @@ public class ConsoleText {
     void setTextColor(AnsiTextColor textColor) {
         this.textColor = textColor;
     }
+
+    public String getText() {
+        return text;
+    }
+
+    public AnsiBackgroundColor getBackgroundColor() {
+        return backgroundColor;
+    }
+
+    public AnsiTextColor getTextColor() {
+        return textColor;
+    }
 }
