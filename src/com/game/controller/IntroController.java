@@ -60,7 +60,7 @@ class IntroController {
     }
 
     private static void enterToContinue(){
-        ConsoleText pressEnter = new ConsoleText("Press enter to continue.");
+        ConsoleText pressEnter = new ConsoleText("\nPress enter to continue.");
         cv.add(pressEnter);
     }
 
