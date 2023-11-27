@@ -22,7 +22,7 @@ public class ConsoleText {
     }
 
     // builds a new ConsoleText object with the given text and text color.
-    ConsoleText(String text, AnsiTextColor textColor) {
+    public ConsoleText(String text, AnsiTextColor textColor) {
         setText(text);
         setTextColor(textColor);
         setBackgroundColor(AnsiBackgroundColor.NONE);

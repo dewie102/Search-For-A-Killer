@@ -1,5 +1,5 @@
 package com.game.model;
 
-class Item extends Entity{
+public class Item extends Entity{
 
 }
