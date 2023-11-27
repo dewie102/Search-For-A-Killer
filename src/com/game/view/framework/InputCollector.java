@@ -1,5 +1,7 @@
 package com.game.view.framework;
 
+import com.game.view.ConsoleText;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -67,7 +69,7 @@ public class InputCollector {
      * The method will also accept if the user types the option
      * The method returns the index of the option selected by the user
      */
-    public static String collectInput(List<String> options) throws InvalidInputException {
+    public static String collectInput(List<ConsoleText> options) throws InvalidInputException {
         String line = collectInput().trim().toLowerCase();
         String result = null;
         int optionNumber;
@@ -75,7 +77,7 @@ public class InputCollector {
             optionNumber = Integer.parseInt(line);
         }catch (Exception e){
             for (int i = 0; i < options.size(); i++){
-                if(options.get(i).toLowerCase().equals(line)) {
+                if(options.get(i).getText().toLowerCase().equals(line)) {
                     return ((Integer)i).toString();
                 }
             }
