@@ -8,7 +8,7 @@ import java.util.Scanner;
 /*
  * Static class that handles input entered by the user, it will do basic validations
  */
-class InputCollector {
+public class InputCollector {
     // Instance of java.util.Scanner that will collect input from the Console
     private static final Scanner SCANNER = new Scanner(System.in);
 
