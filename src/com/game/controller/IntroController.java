@@ -22,6 +22,7 @@ class IntroController {
         printStory();
         printObjective();
         printHowToWin();
+        enterToContinue();
 
         String aString = cv.show();
     }
@@ -56,6 +57,11 @@ class IntroController {
         String howToWin = (String) obj.get("howToWin");
         ConsoleText ctHowToWin = new ConsoleText(howToWin);
         cv.add(ctHowToWin);
+    }
+
+    private static void enterToContinue(){
+        ConsoleText pressEnter = new ConsoleText("Press enter to continue.");
+        cv.add(pressEnter);
     }
 
 }
