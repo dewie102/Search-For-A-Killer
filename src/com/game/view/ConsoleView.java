@@ -1,6 +1,7 @@
 package com.game.view;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import static com.game.view.framework.InputCollector.collectInput;
 
@@ -14,18 +15,26 @@ public class ConsoleView {
 
     // INSTANCE VARIABLES
         // text list that holds all the ConsoleText objects
-    public List<ConsoleText> text = new ArrayList<>();
+    List<ConsoleText> text = new ArrayList<>();
+
+    // CONSTRUCTORS
+    public ConsoleView(){}
+
+    public ConsoleView(ConsoleText ...textArray){
+        this();
+        this.text.addAll(Arrays.asList(textArray));
+    }
 
     // METHODS
         // Add ConsoleText to the text list
-    public void add(ConsoleText text){
+    void add(ConsoleText text){
     	this.text.add(text);
     }
 
         // For each ConsoleText in text call Console.print and pass the color and text
-        public String show(){
+    public String show(){
         for(ConsoleText t : text){
-            Console.print(t.text, t.textColor, t.backgroundColor);
+            Console.print(t);
         }
 
         // INPUT COLLECTOR
