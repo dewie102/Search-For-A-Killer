@@ -2,6 +2,7 @@ package com.game.controller;
 
 import org.json.simple.parser.ParseException;
 
+import javax.swing.text.html.Option;
 import java.io.IOException;
 
 class MainController {
@@ -17,6 +18,7 @@ class MainController {
         //call help screen here
         //start game loop
 
+        OptionsMenuController optionsMenuController = new OptionsMenuController();
+        optionsMenuController.run();
     }
-
 }
