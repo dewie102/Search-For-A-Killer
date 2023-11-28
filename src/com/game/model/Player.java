@@ -25,11 +25,6 @@ public class Player {
         setCurrentLocation(newLocation);
     }
 
-    public void look(Entity entity) {
-        //TODO: add the logic to allow the player to look at items
-        //TODO: change the argument type to match whatever is being passed in
-    }
-
     // GETTERS AND SETTERS
     public String getCurrentLocation() {
         return currentLocation;
