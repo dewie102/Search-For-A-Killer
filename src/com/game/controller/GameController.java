@@ -67,12 +67,7 @@ public class GameController {
             String userInput = consoleView.show();
             String[] parts = userInput.split(" ", 2);
             boolean result = false;
-            if(parts[0].equals(escapeCommand))
-                return;
-            if(parts[0].equals("help")) {
-                consoleView.getText().addAll(helpCommand());
-                result = true;
-            }
+
             if(parts.length > 1 && parts[1] != null) {
                 Entity entity = entityDictionary.get(parts[1]);
                 switch (parts[0]) {
@@ -85,6 +80,12 @@ public class GameController {
                 }
                 consoleView.setText(getViewText());
             }
+            if(parts[0].equals(escapeCommand))
+                return;
+            if(parts[0].equals("help")) {
+                consoleView.getText().addAll(helpCommand());
+                result = true;
+            }
             if(result){
                 consoleView.clearErrorMessage();
             }
@@ -93,7 +94,8 @@ public class GameController {
 
     private boolean goCommand(Entity target){
         if(target instanceof Room){
-            // IMPLEMENT GO TO ROOM
+            Room room = (Room)target;
+            player.setCurrentLocation(room.getName());
             return true;
         }
         consoleView.setErrorMessage(String.format("%s is not a room, you can't go there.", target.getName()));
