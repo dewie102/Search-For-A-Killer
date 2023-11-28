@@ -84,4 +84,12 @@ public class ConsoleView {
     public void clearErrorMessage(){
         this.errorMessage = null;
     }
+
+    public void setText(List<ConsoleText> text) {
+        this.text = text;
+    }
+
+    public List<ConsoleText> getText() {
+        return text;
+    }
 }

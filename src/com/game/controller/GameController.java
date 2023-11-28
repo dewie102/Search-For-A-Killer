@@ -25,7 +25,7 @@ public class GameController {
         Room kitchen = new Room("Kitchen", "This is a normal kitchen");
         Room livingRoom = new Room("Living Room", "This is a normal Living Room");
 
-        Map<String, Entity> entityDictionary = new HashMap<String, Entity>();
+        Map<String, Entity> entityDictionary = new HashMap<>();
         entityDictionary.put(kitchen.getName().toLowerCase(), kitchen);
         entityDictionary.put(livingRoom.getName().toLowerCase(), livingRoom);
         entityDictionary.put(key.getName().toLowerCase(), key);
@@ -57,27 +57,29 @@ public class GameController {
                 "the", "a", "of", "an"
         );
 
-        List<ConsoleText> text = getViewText();
         String escapeCommand = "quit";
-        consoleView = new CommandConsoleView(text, commands, standaloneCommands, entities, ignoreList, escapeCommand);
+        consoleView = new CommandConsoleView(getViewText(), commands, standaloneCommands, entities, ignoreList, escapeCommand);
         while (true){
             String userInput = consoleView.show();
             String[] parts = userInput.split(" ", 2);
+            boolean result = false;
             if(parts[0].equals(escapeCommand))
                 return;
             if(parts[0].equals("help")) {
-                text.addAll(helpCommand());
-                continue;
+                consoleView.getText().addAll(helpCommand());
+                result = true;
             }
-            Entity entity = entityDictionary.get(parts[1]);
-            boolean result = false;
-            switch (parts[0]){
-                case "go":
-                    result = goCommand(entity);
-                    break;
-                case "look":
-                    result = lookCommand(entity);
-                    break;
+            if(parts.length > 1 && parts[1] != null) {
+                Entity entity = entityDictionary.get(parts[1]);
+                switch (parts[0]) {
+                    case "go":
+                        result = goCommand(entity);
+                        break;
+                    case "look":
+                        result = lookCommand(entity);
+                        break;
+                }
+                consoleView.setText(getViewText());
             }
             if(result){
                 consoleView.clearErrorMessage();
