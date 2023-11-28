@@ -7,6 +7,7 @@ import com.game.model.Room;
 import com.game.view.AnsiTextColor;
 import com.game.view.CommandConsoleView;
 import com.game.view.ConsoleText;
+import com.google.gson.Gson;
 
 import java.util.*;
 
@@ -14,10 +15,13 @@ public class GameController {
     private CommandConsoleView consoleView;
     private Player player;
     List<Command> commandList = new ArrayList<>();
+    private final Map<String, Room> rooms = LoadController.loadRooms();
+    private final Map<String, Item> items = LoadController.loadItems();
+
 
     public void run(){
 
-        player = new Player("Kitchen");
+        player = new Player(rooms.get("Kitchen").getName()); //Kind of roundabout but you get the idea!
 
         Item key = new Item("Key", "A golden key");
         Item knife = new Item("Knife", "A very sharp knife");
