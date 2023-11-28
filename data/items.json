@@ -1,0 +1,82 @@
+[
+  {
+    "name":"Dog house",
+    "description":"The dog house is painted a classic red, with a wooden slab above the door bearing the name \"Pupperoni\"."
+  },
+  {
+    "name":"Fire pit",
+    "description":"The fire pit must have been recently used - there is a still a pile of ashes in the center."
+  },
+  {
+    "name":"Garden",
+    "description":"The garden has flowers in every color imaginable, and almost as many butterflies fluttering around them."
+  },
+  {
+    "name":"Stove",
+    "description":"The stove is spotless - either the person who cleaned it was very thorough, or else there is very little cooking that happens here."
+  },
+  {
+    "name":"Table",
+    "description":"The circular table seats four people. The only thing on it is the white tablecloth."
+  },
+  {
+    "name":"Dishwasher",
+    "description":"The dishwasher is still, but when you open it the inside is hot. A cycle must have just finished. There are a few dishes inside."
+  },
+  {
+    "name":"Trashcan",
+    "description":"The trashcan is stuffed with junk food wrappers. A man after your own heart."
+  },
+  {
+    "name":"Couch",
+    "description":"The brown leather couch is massive. You stick your hands between the cushions, but you find nothing but crumbs."
+  },
+  {
+    "name":"TV",
+    "description":"The television is a 98” Class Samsung Neo QLED 8K QN990C. Mr. Cool must have enjoyed his entertainment. Or he had vision problems. Or both."
+  },
+  {
+    "name":"Christmas Tree",
+    "description":"The Christmas Tree is fake, but you spot a few pine-scented air fresheners hidden amongst the ornaments."
+  },
+  {
+    "name":"Rug",
+    "description":"Upon closer look, you realize that what you thought was a carpet is actual just a darker spot where the floor wasn't impacted by sunlight - the actual rug is missing, leaving behind a stark outline where it likely laid for years."
+  },
+  {
+    "name":"Desk",
+    "description":"The desk is beige metal, the kind that your parents likely used in the 1970s. This is not where Mr. Cool invested his money - or his time."
+  },
+  {
+    "name":"Computer",
+    "description":"The computer looks like it's still hanging on, but the white plastic frame is yellowing and some of the letters have been worn off of the keys on the keyboard."
+  },
+  {
+    "name":"Printer",
+    "description":"There is newer printer sitting next to the computer on the desk. You doubt it works through - there is a large - fist sized dent on top."
+  },
+  {
+    "name":"Bookcase",
+    "description":"The books on the bookshelf are mainly either history texts, manuals, or phonebooks. Strange guy."
+  },
+  {
+    "name":"Billiards table",
+    "description":"This billiards table must have been well-loved - but not by anyone good at billiards. The felt lining is all scuffed up."
+  },
+  {
+    "name":"Dart board",
+    "description":"There is a dart board, but not darts to be seen. You wonder if all the tiny holes on the wall around the boards has anything to do with that."
+  },
+  {
+    "name":"Arcade machines",
+    "description":"Three arcade machines stand side-by-side: Pac-Man, Street Fighter, and Donkey Kong. You look at the high score for each of them, and the counters are all maxed out. Could it be that Mr. Cool was the best arcadist of all time?"
+  },
+  {
+    "name":"Pen",
+    "description":"A blue pen, a pen is a type of thing!"
+  },
+  {
+    "name":"Glove",
+    "description":"A bloody glove."
+  }
+]
