@@ -11,14 +11,13 @@ class MainController {
 
         // Create the titlePage and devTitlePage objects that will take in the json data and pass it
         // to the ConsoleText class and the Console class, so it's outputted.
-        SplashController titlePage = new  SplashController("data/Title.json");
-        SplashController devTitlePage = new SplashController("data/DevelopmentTitle.json");
+        GsonParserController titlePage = new GsonParserController("data/Title.json");
+        GsonParserController developmentPage = new GsonParserController("data/DevelopmentTitle.json");
+        GsonParserController introText = new GsonParserController("data/introText.json");
 
-        titlePage.displayTitle();
-        devTitlePage.displayTitle();
-
-        //call splash screen here
-        IntroController.printIntro();
+        titlePage.printJson();
+        developmentPage.printJson();
+        introText.printJson();
 
         OptionsMenuController optionsMenuController = new OptionsMenuController();
         optionsMenuController.run();
