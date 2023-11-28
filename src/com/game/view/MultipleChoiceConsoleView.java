@@ -1,5 +1,8 @@
 package com.game.view;
 
+import com.game.view.framework.InputCollector;
+import com.game.view.framework.InvalidInputException;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -20,17 +23,16 @@ public class MultipleChoiceConsoleView extends ConsoleView{
     }
 
     @Override
-    public String show(){
-        for(ConsoleText t : text){
-            Console.print(t.text, t.textColor, t.backgroundColor);
-        }
+    void executeViewLogic() {
         for (int i = 0; i < options.size(); i++){
             Console.print(Integer.toString(i + 1) + ": ");
             Console.printNewLine(this.options.get(i));
         }
-        // INPUT COLLECTOR
-        // call collectInput with an empty ignoreList
-        // returns the collected input String
-        return collectInput(options);
+    }
+
+    @Override
+    String collectInput() {
+        return InputCollector.collectInput(options);
     }
 }
+
