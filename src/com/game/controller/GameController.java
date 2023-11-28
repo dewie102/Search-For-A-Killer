@@ -30,9 +30,9 @@ public class GameController {
         entityDictionary.put(key.getName().toLowerCase(), key);
         entityDictionary.put(knife.getName().toLowerCase(), knife);
 
-        // TODO: For Robert, here you can put all the Inventory and Location information
         // View text to be passed to our view
         List<ConsoleText> text = List.of(
+                // game status area that displays the player location and inventory
                 new ConsoleText("#################################################", AnsiTextColor.BLUE),
                 new ConsoleText(String.format("Player Location: %s", player.getCurrentLocation())),
                 new ConsoleText(String.format("Inventory: %s", player.getInventory().toString())),
