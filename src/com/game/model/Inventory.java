@@ -7,7 +7,7 @@ import java.util.List;
 /*
  * An inventory is a collection of Items.
  */
-class Inventory {
+public class Inventory {
     private List<Item> inventory = new ArrayList<>();
 
     public Inventory(Item ...items){
