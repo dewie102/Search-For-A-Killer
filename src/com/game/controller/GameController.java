@@ -128,7 +128,7 @@ public class GameController {
         List<ConsoleText> result = new ArrayList<>();
         result.add(new ConsoleText("#################################################", AnsiTextColor.BLUE));
         result.add(new ConsoleText(String.format("Player Location: %s", player.getCurrentLocation())));
-        result.add(new ConsoleText(String.format("Inventory: %s", player.getInventory().toString())));
+        result.add(new ConsoleText(String.format("Inventory: %s", player.getInventory())));
         result.add(new ConsoleText("#################################################", AnsiTextColor.BLUE));
         return result;
     }

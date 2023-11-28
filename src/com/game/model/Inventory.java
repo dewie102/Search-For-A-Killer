@@ -18,4 +18,8 @@ public class Inventory {
     public Item findByName(String itemName){
         throw new NotImplementedException("findByName");
     }
+
+    public List<Item> getItems(){
+        return inventory;
+    }
 }
