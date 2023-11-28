@@ -13,6 +13,7 @@ import java.util.*;
 public class GameController {
     private CommandConsoleView consoleView;
     private Player player;
+    List<Command> commandList = new ArrayList<>();
 
     public void run(){
 
@@ -30,20 +31,21 @@ public class GameController {
         entityDictionary.put(key.getName().toLowerCase(), key);
         entityDictionary.put(knife.getName().toLowerCase(), knife);
 
-        // View text to be passed to our view
-        List<ConsoleText> text = List.of(
-                // game status area that displays the player location and inventory
-                new ConsoleText("#################################################", AnsiTextColor.BLUE),
-                new ConsoleText(String.format("Player Location: %s", player.getCurrentLocation())),
-                new ConsoleText(String.format("Inventory: %s", player.getInventory().toString())),
-                new ConsoleText("#################################################", AnsiTextColor.BLUE)
-                );
+        commandList.add(new Command("go", List.of("run", "move", "walk"), "Go to a room. e.g. go kitchen", false));
+        commandList.add(new Command("look", List.of("run", "move", "walk"), "Look at an object. e.g. look knife", false));
+        commandList.add(new Command("quit", List.of(), "Quits the game, no questions asked.", true));
+        commandList.add(new Command("help", List.of(), "It displays this menu.", true));
 
-        // Map of Commands
+        // Map of Commands that require a target Entity, for these to be valid they must have two parts, the command itself
+        // and a target. e.g. <go there>, <get that>
         Map<String, List<String>> commands = Map.of(
                 "go", List.of("run", "move", "walk"),
-                "look", List.of("see", "inspect"),
-                "exit", List.of()
+                "look", List.of("see", "inspect")
+        );
+
+        // Standalone commands, these commands don't require a target. e.g. <quit>, <help>
+        List<String> standaloneCommands = List.of(
+                "quit", "help"
         );
 
         // List of entities
@@ -55,13 +57,18 @@ public class GameController {
                 "the", "a", "of", "an"
         );
 
+        List<ConsoleText> text = getViewText();
         String escapeCommand = "quit";
-        consoleView = new CommandConsoleView(text, commands, entities, ignoreList, escapeCommand);
+        consoleView = new CommandConsoleView(text, commands, standaloneCommands, entities, ignoreList, escapeCommand);
         while (true){
             String userInput = consoleView.show();
             String[] parts = userInput.split(" ", 2);
             if(parts[0].equals(escapeCommand))
                 return;
+            if(parts[0].equals("help")) {
+                text.addAll(helpCommand());
+                continue;
+            }
             Entity entity = entityDictionary.get(parts[1]);
             boolean result = false;
             switch (parts[0]){
@@ -95,4 +102,25 @@ public class GameController {
         consoleView.setErrorMessage(String.format("%s is not an item, you can't inspect that.", target.getName()));
         return false;
     }
+
+    private List<ConsoleText> helpCommand(){
+        List<ConsoleText> result = new ArrayList<>();
+        result.add(new ConsoleText("Available commands:"));
+        for (var command : commandList){
+            result.add(new ConsoleText(String.format("%s: \t%s", command.getKeyWord(), command.getDescription())));
+        }
+        new ConsoleText("#################################################", AnsiTextColor.BLUE);
+        return result;
+    }
+
+    private List<ConsoleText> getViewText(){
+        // View text to be passed to our view
+        List<ConsoleText> result = new ArrayList<>();
+        result.add(new ConsoleText("#################################################", AnsiTextColor.BLUE));
+        result.add(new ConsoleText(String.format("Player Location: %s", player.getCurrentLocation())));
+        result.add(new ConsoleText(String.format("Inventory: %s", player.getInventory().toString())));
+        result.add(new ConsoleText("#################################################", AnsiTextColor.BLUE));
+        return result;
+    }
+
 }
