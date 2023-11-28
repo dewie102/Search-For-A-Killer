@@ -36,7 +36,7 @@ public class GameController {
         entityDictionary.put(knife.getName().toLowerCase(), knife);
 
         commandList.add(new Command("go", List.of("run", "move", "walk"), "Go to a room. e.g. go kitchen", false));
-        commandList.add(new Command("look", List.of("run", "move", "walk"), "Look at an object. e.g. look knife", false));
+        commandList.add(new Command("look", List.of("see", "inspect"), "Look at an object. e.g. look knife", false));
         commandList.add(new Command("quit", List.of(), "Quits the game, no questions asked.", true));
         commandList.add(new Command("help", List.of(), "It displays this menu.", true));
 
@@ -69,6 +69,7 @@ public class GameController {
             boolean result = false;
 
             if(parts.length > 1 && parts[1] != null) {
+                consoleView.setText(getViewText());
                 Entity entity = entityDictionary.get(parts[1]);
                 switch (parts[0]) {
                     case "go":
@@ -78,7 +79,7 @@ public class GameController {
                         result = lookCommand(entity);
                         break;
                 }
-                consoleView.setText(getViewText());
+
             }
             if(parts[0].equals(escapeCommand))
                 return;
@@ -104,7 +105,8 @@ public class GameController {
 
     private boolean lookCommand(Entity target){
         if(target instanceof Item){
-            // IMPLEMENT GO TO ROOM
+            consoleView.add(new ConsoleText(target.getDescription()));
+            consoleView.add(new ConsoleText("#################################################", AnsiTextColor.BLUE));
             return true;
         }
         consoleView.setErrorMessage(String.format("%s is not an item, you can't inspect that.", target.getName()));
@@ -117,7 +119,7 @@ public class GameController {
         for (var command : commandList){
             result.add(new ConsoleText(String.format("%s: \t%s", command.getKeyWord(), command.getDescription())));
         }
-        new ConsoleText("#################################################", AnsiTextColor.BLUE);
+        result.add(new ConsoleText("#################################################", AnsiTextColor.BLUE));
         return result;
     }
 

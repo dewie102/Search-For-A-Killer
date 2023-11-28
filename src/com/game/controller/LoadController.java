@@ -11,7 +11,6 @@ public class LoadController {
 
     public static Map<String, Room> loadRooms() {
         try (FileReader reader = new FileReader("data/rooms.json")) {
-            Gson gson = new Gson();
             Room[] rooms = new Gson().fromJson(reader, Room[].class);
             Map<String, Room> roomMap = new HashMap<>();
 
@@ -29,7 +28,6 @@ public class LoadController {
 
     public static Map<String, Item> loadItems() {
         try (FileReader reader = new FileReader("data/items.json")) {
-            Gson gson = new Gson();
             Item[] items = new Gson().fromJson(reader, Item[].class);
             Map<String, Item> itemMap = new HashMap<>();
 
