@@ -3,31 +3,36 @@
   {
     "name": "Backyard",
     "description": "The backyard is well kept, with all manner of flora lining the property \nand various stone decorations sprinkled about. It looks like a comfortable \nplace to sit in the sun with a cup of tea and a good book.",
-    "Inventory": ["Dog house","Fire pit","Garden"]
+    "Inventory": ["Dog house","Fire pit","Garden"],
+    "neighboringRooms" : ["Kitchen"]
   },
 
   {
     "name": "Kitchen",
     "description": "The kitchen is quaint. Every cabinet has intricately carved oak-wood \nfeatures and there are doilies on every surface. The few stainless \nsteel appliances clash with the rest of the interior.",
-    "Inventory": ["Stove","Table","Dishwasher","Trashcan"]
+    "Inventory": ["Stove","Table","Dishwasher","Trashcan"],
+    "neighboringRooms" : ["Backyard","Office"]
   },
 
   {
     "name": "Living Room",
     "description": "The living room is richly decorated with awards, trophies, and what \nyou find to be rather strange pieces of art. You would feel extremely \nposh relaxing in this room after a long day.",
-    "Inventory": ["Couch","TV","Christmas Tree", "Rug"]
+    "Inventory": ["Couch","TV","Christmas Tree", "Rug"],
+    "neighboringRooms" : ["Office","Game Room"]
   },
 
   {
     "name": "Office",
     "description": "The office is far more plain than the rest of the house. The interior \nwould feel oppressively corporate if it weren't for the massive window \nletting in copious natural light.",
-    "Inventory": ["Desk","Computer","Printer","Bookcase"]
+    "Inventory": ["Desk","Computer","Printer","Bookcase"],
+    "neighboringRooms" : ["Living Room", "Kitchen"]
   },
 
   {
     "name": "Game Room",
     "description": "The game room has the aura of a bar or a saloon. The room is lit by two \nhanging Tiffany lamps, the walls are dark wooden panelling, the carpet \nis a dark green. Everything you lay eyes on screams \"retro\".",
-    "Inventory": ["Billiards table","Dart board","Arcade machines"]
+    "Inventory": ["Billiards table","Dart board","Arcade machines"],
+    "neighboringRooms" : ["Living Room"]
   }
 
 ]
