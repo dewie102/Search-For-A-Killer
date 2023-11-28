@@ -1,13 +1,16 @@
 package com.game.controller;
 
+import com.game.model.Room;
 import com.game.view.ConsoleView;
 import com.game.view.ConsoleText;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.Iterator;
 
+import com.google.gson.Gson;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -60,7 +63,7 @@ class IntroController {
     }
 
     private static void enterToContinue(){
-        ConsoleText pressEnter = new ConsoleText("Press enter to continue.");
+        ConsoleText pressEnter = new ConsoleText("\nPress enter to continue.");
         cv.add(pressEnter);
     }
 
