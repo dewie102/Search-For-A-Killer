@@ -102,7 +102,9 @@ public class GameController {
 
     private boolean lookCommand(Entity target){
         if(target instanceof Item){
-            // IMPLEMENT GO TO ROOM
+            consoleView.add(new ConsoleText(target.getDescription()));
+            consoleView.add(new ConsoleText("#################################################", AnsiTextColor.BLUE));
+            consoleView.show();
             return true;
         }
         consoleView.setErrorMessage(String.format("%s is not an item, you can't inspect that.", target.getName()));
@@ -115,7 +117,7 @@ public class GameController {
         for (var command : commandList){
             result.add(new ConsoleText(String.format("%s: \t%s", command.getKeyWord(), command.getDescription())));
         }
-        new ConsoleText("#################################################", AnsiTextColor.BLUE);
+        result.add(new ConsoleText("#################################################", AnsiTextColor.BLUE));
         return result;
     }
 
