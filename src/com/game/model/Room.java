@@ -8,6 +8,7 @@ import java.util.List;
  */
 public class Room extends Entity{
     private List<Room> adjacentRooms = new ArrayList<>();
+    private List<String> jsonAdjacentRooms = new ArrayList<>();
 
     public Room(String name, String description){
         super(name, description);
@@ -30,5 +31,13 @@ public class Room extends Entity{
 
     public void setAdjacentRooms(List<Room> adjacentRooms) {
         this.adjacentRooms = adjacentRooms;
+    }
+
+    public void addAdjacentRoom(Room room){
+        this.adjacentRooms.add(room);
+    }
+
+    public List<String> getJsonAdjacentRooms() {
+        return jsonAdjacentRooms;
     }
 }

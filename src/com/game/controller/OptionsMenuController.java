@@ -59,10 +59,4 @@ class OptionsMenuController {
     private void quitGame(){
         System.exit(0);
     }
-
-    //TODO DELETE
-    public static void main(String[] args) {
-        OptionsMenuController controller = new OptionsMenuController();
-        controller.run();
-    }
 }

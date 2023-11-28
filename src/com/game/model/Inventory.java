@@ -22,4 +22,8 @@ public class Inventory {
     public List<Item> getItems(){
         return inventory;
     }
+
+    public void add(Item item){
+        this.inventory.add(item);
+    }
 }
