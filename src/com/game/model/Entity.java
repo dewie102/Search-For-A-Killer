@@ -3,7 +3,7 @@ package com.game.model;
 /*
  * The Entity class represents any Object in the game
  */
-abstract class Entity {
+public abstract class Entity {
     private String name;
     private String description;
     private Inventory inventory = new Inventory();

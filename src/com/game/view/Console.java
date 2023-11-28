@@ -5,7 +5,7 @@ package com.game.view;
  * and passing the data that was sent to it from the ConsoleView object
  */
 
-class Console {
+public class Console {
 
     // print method without a color selector
     public static void print(String message){
