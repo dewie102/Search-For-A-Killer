@@ -36,7 +36,7 @@ public class GameController {
         entityDictionary.put(knife.getName().toLowerCase(), knife);
 
         commandList.add(new Command("go", List.of("run", "move", "walk"), "Go to a room. e.g. go kitchen", false));
-        commandList.add(new Command("look", List.of("run", "move", "walk"), "Look at an object. e.g. look knife", false));
+        commandList.add(new Command("look", List.of("see", "inspect"), "Look at an object. e.g. look knife", false));
         commandList.add(new Command("quit", List.of(), "Quits the game, no questions asked.", true));
         commandList.add(new Command("help", List.of(), "It displays this menu.", true));
 
