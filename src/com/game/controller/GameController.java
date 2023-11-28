@@ -1,13 +1,9 @@
 package com.game.controller;
 
-import com.game.model.Entity;
-import com.game.model.Item;
-import com.game.model.Player;
-import com.game.model.Room;
+import com.game.model.*;
 import com.game.view.AnsiTextColor;
 import com.game.view.CommandConsoleView;
 import com.game.view.ConsoleText;
-import com.google.gson.Gson;
 
 import java.util.*;
 
@@ -18,22 +14,23 @@ public class GameController {
     private final Map<String, Room> rooms = LoadController.loadRooms();
     private final Map<String, Item> items = LoadController.loadItems();
 
+    public GameController(){
+        fixHasAs();
+    }
 
     public void run(){
 
         player = new Player(rooms.get("Kitchen").getName()); //Kind of roundabout but you get the idea!
 
-        Item key = new Item("Key", "A golden key");
-        Item knife = new Item("Knife", "A very sharp knife");
-
-        Room kitchen = new Room("Kitchen", "This is a normal kitchen");
-        Room livingRoom = new Room("Living Room", "This is a normal Living Room");
-
         Map<String, Entity> entityDictionary = new HashMap<>();
-        entityDictionary.put(kitchen.getName().toLowerCase(), kitchen);
-        entityDictionary.put(livingRoom.getName().toLowerCase(), livingRoom);
-        entityDictionary.put(key.getName().toLowerCase(), key);
-        entityDictionary.put(knife.getName().toLowerCase(), knife);
+        entityDictionary.putAll(rooms);
+        entityDictionary.putAll(items);
+
+        player.getInventory().add(items.get("Pen"));
+        player.getInventory().add(items.get("Glove"));
+        player.getInventory().add(items.get("TV"));
+
+
 
         commandList.add(new Command("go", List.of("run", "move", "walk"), "Go to a room. e.g. go kitchen", false));
         commandList.add(new Command("look", List.of("see", "inspect"), "Look at an object. e.g. look knife", false));
@@ -58,7 +55,7 @@ public class GameController {
 
         // List of entities
         List<String> ignoreList = List.of(
-                "the", "a", "of", "an"
+                "the", "at", "an", "a", "of"
         );
 
         String escapeCommand = "quit";
@@ -74,6 +71,7 @@ public class GameController {
                 switch (parts[0]) {
                     case "go":
                         result = goCommand(entity);
+                        consoleView.setText(getViewText());
                         break;
                     case "look":
                         result = lookCommand(entity);
@@ -128,9 +126,25 @@ public class GameController {
         List<ConsoleText> result = new ArrayList<>();
         result.add(new ConsoleText("#################################################", AnsiTextColor.BLUE));
         result.add(new ConsoleText(String.format("Player Location: %s", player.getCurrentLocation())));
-        result.add(new ConsoleText(String.format("Inventory: %s", player.getInventory())));
+        result.add(new ConsoleText(String.format("Inventory: %s", player.getInventoryString())));
         result.add(new ConsoleText("#################################################", AnsiTextColor.BLUE));
         return result;
+    }
+
+    private void fixHasAs(){
+        for (Room room : rooms.values()){
+            room.setInventory(new Inventory());
+            room.setAdjacentRooms(new ArrayList<>());
+            for (String key : room.getJsonInventory()){
+                Item item =  items.get(key);
+                Inventory inventory = room.getInventory();
+                inventory.add(item);
+            }
+            for (String key : room.getJsonAdjacentRooms()){
+                Room r = rooms.get(key);
+                room.addAdjacentRoom(r);
+            }
+        }
     }
 
 }

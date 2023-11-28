@@ -70,5 +70,13 @@
   {
     "name":"Arcade machines",
     "description":"Three arcade machines stand side-by-side: Pac-Man, Street Fighter, and Donkey Kong. You look at the high score for each of them, and the counters are all maxed out. Could it be that Mr. Cool was the best arcadist of all time?"
+  },
+  {
+    "name":"Pen",
+    "description":"A blue pen, a pen is a type of thing!"
+  },
+  {
+    "name":"Glove",
+    "description":"A bloody glove."
   }
 ]
