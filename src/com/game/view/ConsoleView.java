@@ -24,6 +24,13 @@ public class ConsoleView {
     // CONSTRUCTORS
     public ConsoleView(){}
 
+    // This constructor is better since it keeps the reference
+    public ConsoleView(List<ConsoleText> text){
+        this();
+        this.text = text;
+    }
+
+    // DEPRECATED
     public ConsoleView(ConsoleText ...textArray){
         this();
         this.text.addAll(Arrays.asList(textArray));
@@ -76,5 +83,13 @@ public class ConsoleView {
 
     public void clearErrorMessage(){
         this.errorMessage = null;
+    }
+
+    public void setText(List<ConsoleText> text) {
+        this.text = text;
+    }
+
+    public List<ConsoleText> getText() {
+        return text;
     }
 }

@@ -32,7 +32,7 @@ public class InputCollector {
      * The ignoreList is a list of words that will be ignored by the validation, for example "go to the kitchen" will be taken as "go kitchen"
      * The method will return a parsed string in the form of <command target>
      */
-    public static String collectInput(Map<String, List<String>> commands, List<String> entities, List<String> ignoreList, String escapeCommand) throws InvalidInputException {
+    public static String collectInput(Map<String, List<String>> commands, List<String> standaloneCommands, List<String> entities, List<String> ignoreList, String escapeCommand) throws InvalidInputException {
         String line = collectInput();
         line = line.trim().toLowerCase().replaceAll(" +", " ");
         for (var ignore : ignoreList){
@@ -45,8 +45,8 @@ public class InputCollector {
         String command = null;
         String target = null;
 
-        if(parts[0].toLowerCase().equals(escapeCommand))
-            return escapeCommand;
+        if(standaloneCommands.contains(parts[0].toLowerCase()))
+            return parts[0];
         if(parts.length != 2)
             throw new InvalidInputException("The command entered by the user is not valid.");
 
