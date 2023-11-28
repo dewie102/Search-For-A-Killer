@@ -2,7 +2,9 @@ package com.game.controller;
 
 import com.game.model.Entity;
 import com.game.model.Item;
+import com.game.model.Player;
 import com.game.model.Room;
+import com.game.view.AnsiTextColor;
 import com.game.view.CommandConsoleView;
 import com.game.view.ConsoleText;
 
@@ -10,8 +12,12 @@ import java.util.*;
 
 public class GameController {
     private CommandConsoleView consoleView;
+    private Player player;
 
     public void run(){
+
+        player = new Player("Kitchen");
+
         Item key = new Item("Key", "A golden key");
         Item knife = new Item("Knife", "A very sharp knife");
 
@@ -24,11 +30,14 @@ public class GameController {
         entityDictionary.put(key.getName().toLowerCase(), key);
         entityDictionary.put(knife.getName().toLowerCase(), knife);
 
-        // TODO: For Robert, here you can put all the Inventory and Location information
         // View text to be passed to our view
         List<ConsoleText> text = List.of(
-                new ConsoleText("Something that goes here instead of this text")
-        );
+                // game status area that displays the player location and inventory
+                new ConsoleText("#################################################", AnsiTextColor.BLUE),
+                new ConsoleText(String.format("Player Location: %s", player.getCurrentLocation())),
+                new ConsoleText(String.format("Inventory: %s", player.getInventory().toString())),
+                new ConsoleText("#################################################", AnsiTextColor.BLUE)
+                );
 
         // Map of Commands
         Map<String, List<String>> commands = Map.of(
