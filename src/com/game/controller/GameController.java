@@ -69,6 +69,7 @@ public class GameController {
             boolean result = false;
 
             if(parts.length > 1 && parts[1] != null) {
+                consoleView.setText(getViewText());
                 Entity entity = entityDictionary.get(parts[1]);
                 switch (parts[0]) {
                     case "go":
@@ -78,7 +79,7 @@ public class GameController {
                         result = lookCommand(entity);
                         break;
                 }
-                consoleView.setText(getViewText());
+
             }
             if(parts[0].equals(escapeCommand))
                 return;
@@ -106,7 +107,6 @@ public class GameController {
         if(target instanceof Item){
             consoleView.add(new ConsoleText(target.getDescription()));
             consoleView.add(new ConsoleText("#################################################", AnsiTextColor.BLUE));
-            consoleView.show();
             return true;
         }
         consoleView.setErrorMessage(String.format("%s is not an item, you can't inspect that.", target.getName()));
