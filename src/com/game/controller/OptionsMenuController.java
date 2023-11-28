@@ -57,8 +57,7 @@ class OptionsMenuController {
     }
 
     private void quitGame(){
-        //System.exit(0);
-        throw new NotImplementedException("OptionsMenuController.quitGame() is not implemented");
+        System.exit(0);
     }
 
     //TODO DELETE
