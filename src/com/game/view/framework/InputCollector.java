@@ -37,8 +37,7 @@ public class InputCollector {
         line = line.trim().toLowerCase().replaceAll(" +", " ");
         for (var ignore : ignoreList){
             line = line.replace(" " + ignore + " ", " ");
-//            line = line.replace(ignore + " ", " ");
-//            line = line.replace(" " + ignore, " ");
+
         }
         line = line.replaceAll(" +", " ");
         String[] parts = line.split(" ", 2);
