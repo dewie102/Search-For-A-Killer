@@ -28,7 +28,6 @@ public class GameController {
 
         player.getInventory().add(items.get("Pen"));
         player.getInventory().add(items.get("Glove"));
-        player.getInventory().add(items.get("TV"));
 
 
 
