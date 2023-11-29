@@ -92,11 +92,21 @@
   {
     "name":"Pen",
     "description":"A blue pen, a pen is a type of thing!",
-    "pickUpable": false
+    "pickUpable": true
   },
   {
     "name":"Glove",
     "description":"A bloody glove.",
-    "pickUpable": false
+    "pickUpable": true
+  },
+  {
+    "name": "Receipt",
+    "description": "The receipt is for the purchase of a signed baseball bat from some online store that sells collectables. Must have been signed by Babe Ruth himself at that price point.",
+    "pickUpable": true
+  },
+  {
+    "name": "Candy Wrapper",
+    "description": "A Rooso's Peanut Butter Tree, the best part of the season. The wrapper still smells like chocolate and peanut butter.",
+    "pickUpable": true
   }
 ]
