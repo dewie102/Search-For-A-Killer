@@ -127,15 +127,20 @@ public class GameController {
         return false;
     }
 
-    //TODO: Provide ability to look at Characters
     private boolean lookCommand(Entity target){
         if(target instanceof Room) {
+            //This clause is necessary to allow correct error message to print
             if (lookRoom((Room)target)){
                 return true;
-            };
+            }
         }
         else if (target instanceof Item){
             if (lookItem((Item)target)){
+                return true;
+            }
+        }
+        else if (target instanceof Character){
+            if(lookCharacter((Character)target)){
                 return true;
             }
         }
@@ -144,7 +149,6 @@ public class GameController {
         return false;
     }
 
-    //TODO: Display characters in the room that are available to speak with
     private boolean lookRoom(Room room){
         //If the room they are looking at is the currentLocation
         if(room == rooms.get(player.getCurrentLocation())){
@@ -153,6 +157,9 @@ public class GameController {
             if(!room.getInventory().getItems().isEmpty()) {
                 //print items in room if there are any
                 consoleView.add(new ConsoleText("Items you see: " + room.getInventory()));
+            }
+            if(!room.getCharactersInRoom().isEmpty()){
+                consoleView.add(new ConsoleText("You see someone you can talk to: " + room.getCharactersInRoom()));
             }
             //print adjacent rooms
             consoleView.add(new ConsoleText("Rooms you can go to: " + room.getJsonAdjacentRooms()));
@@ -170,6 +177,15 @@ public class GameController {
             if(!item.getInventory().getItems().isEmpty()) {
                 consoleView.add(new ConsoleText(String.format("The %s contains: %s",item.getName(),item.getInventory())));
             }
+            consoleView.add(new ConsoleText("#################################################", AnsiTextColor.BLUE));
+            return true;
+        }
+        return false;
+    }
+
+    private boolean lookCharacter(Character character){
+        if(player.getCurrentLocation().equals(character.getCurrentRoom().getName())){
+            consoleView.add(new ConsoleText(character.getDescription()));
             consoleView.add(new ConsoleText("#################################################", AnsiTextColor.BLUE));
             return true;
         }
@@ -202,10 +218,10 @@ public class GameController {
                 return true;
             }
             //that item is not in your inventory, so you can't drop it
-            consoleView.setErrorMessage(String.format("You can only drop Items that are in your inventory."));
+            consoleView.setErrorMessage("You can only drop Items that are in your inventory.");
             return false;
         }
-        consoleView.setErrorMessage(String.format("You can only drop Items."));
+        consoleView.setErrorMessage("You can only drop Items.");
         return false;
     }
 

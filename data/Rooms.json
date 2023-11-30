@@ -11,7 +11,8 @@
     "name": "Kitchen",
     "description": "The kitchen is quaint. Every cabinet has intricately carved oak-wood \nfeatures and there are doilies on every surface. The few stainless \nsteel appliances clash with the rest of the interior.",
     "jsonInventory": ["Stove","Table","Dishwasher","Trashcan", "Candy Wrapper"],
-    "jsonAdjacentRooms" : ["Backyard","Office"]
+    "jsonAdjacentRooms" : ["Backyard","Office"],
+    "jsonCharactersInRoom" : ["Sean Bean"]
   },
 
   {
