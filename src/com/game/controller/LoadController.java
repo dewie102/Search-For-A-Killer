@@ -1,6 +1,7 @@
 package com.game.controller;
 
 import com.game.model.Item;
+import com.game.model.Player;
 import com.game.model.Room;
 import com.google.gson.Gson;
 
@@ -37,6 +38,15 @@ public class LoadController {
 
             return itemMap;
 
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static Player loadPlayer() {
+        try (FileReader reader = new FileReader("data/Player.json")) {
+            return new Gson().fromJson(reader, Player.class);
         } catch (Exception e) {
             e.printStackTrace();
         }

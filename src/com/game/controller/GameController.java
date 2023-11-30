@@ -9,7 +9,7 @@ import java.util.*;
 
 public class GameController {
     private CommandConsoleView consoleView;
-    private Player player;
+    private Player player = LoadController.loadPlayer();
     List<Command> commandList = new ArrayList<>();
     private final Map<String, Room> rooms = LoadController.loadRooms();
     private final Map<String, Item> items = LoadController.loadItems();
@@ -20,16 +20,9 @@ public class GameController {
 
     public void run(){
 
-        player = new Player(rooms.get("Kitchen").getName()); //Kind of roundabout but you get the idea!
-
         Map<String, Entity> entityDictionary = new HashMap<>();
         entityDictionary.putAll(rooms);
         entityDictionary.putAll(items);
-
-        player.getInventory().add(items.get("Pen"));
-        player.getInventory().add(items.get("Glove"));
-
-
 
         commandList.add(new Command("go", List.of("run", "move", "walk"), "Go to a room. e.g. go kitchen", false));
         commandList.add(new Command("look", List.of("see", "inspect"), "Look at an object. e.g. look knife", false));
@@ -215,6 +208,11 @@ public class GameController {
                 Room r = rooms.get(key);
                 room.addAdjacentRoom(r);
             }
+        }
+        player.setInventory(new Inventory());
+        for (String key : player.getJsonInventory()){
+            Item item = items.get(key);
+            player.getInventory().add(item);
         }
     }
 
