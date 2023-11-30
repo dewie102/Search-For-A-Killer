@@ -1,5 +1,6 @@
 package com.game.view.framework;
 
+import com.game.controller.Command;
 import com.game.view.ConsoleText;
 import com.game.view.Console;
 
@@ -15,6 +16,7 @@ public class InputCollector {
     // Instance of java.util.Scanner that will collect input from the Console
     private static final Scanner SCANNER = new Scanner(System.in);
     private static final String PROMPT = "> ";
+    private static final String INVALID_COMMAND_ERROR_MESSAGE = "The command entered by the user is not valid.";
 
     // private constructor, class can't be instantiated
     private InputCollector(){}
@@ -32,38 +34,53 @@ public class InputCollector {
      * The ignoreList is a list of words that will be ignored by the validation, for example "go to the kitchen" will be taken as "go kitchen"
      * The method will return a parsed string in the form of <command target>
      */
-    public static String collectInput(Map<String, List<String>> commands, List<String> standaloneCommands, List<String> entities, List<String> ignoreList, String escapeCommand) throws InvalidInputException {
+    public static String collectInput(List<Command> commands, List<String> entities, List<String> ignoreList) throws InvalidInputException {
         String line = collectInput();
+
+        // Trim the input then replace multiple spaces with a single space
         line = line.trim().toLowerCase().replaceAll(" +", " ");
-        for (var ignore : ignoreList){
-            line = line.replace(" " + ignore + " ", " ");
-
+        // TODO DELETE THIS FOR LOOP, DEPRECATED
+//        for (var ignore : ignoreList){
+//            line = line.replace(" " + ignore + " ", " ");
+//        }
+        // Getting rid of any word that matches the ignoreList
+        String[] lineArray = line.split(" ");
+        line = "";
+        for (String word : lineArray){
+            if(!ignoreList.contains(word.toLowerCase())){
+                line += " " + word;
+            }
         }
-        line = line.replaceAll(" +", " ");
+        // Trimming one more time to remove the leading space we introduced
+        line = line.trim();
         String[] parts = line.split(" ", 2);
-        String command = null;
-        String target = null;
-
-        if(standaloneCommands.contains(parts[0].toLowerCase()))
-            return parts[0];
-        if(parts.length != 2)
-            throw new InvalidInputException("The command entered by the user is not valid.");
-
-        for (var com : commands.entrySet()){
-            if(com.getKey().toLowerCase().equals(parts[0]) || com.getValue().contains(parts[0])) {
-                command = com.getKey();
+        if(parts.length == 0)
+            throw new InvalidInputException(INVALID_COMMAND_ERROR_MESSAGE);
+        String commandString = parts[0];
+        String targetString = null;
+        Command command = null;
+        for (Command value : commands){
+            if(value.isAMatch(commandString)){
+                command = value;
+                commandString = command.getKeyWord();
                 break;
             }
         }
+
+        if(command == null)
+            throw new InvalidInputException(INVALID_COMMAND_ERROR_MESSAGE);
+        if(command.isStandalone())
+            return command.getKeyWord();
+
         for (var tar : entities){
             if(tar.toLowerCase().equals(parts[1])){
-                target = tar;
+                targetString = tar;
             }
         }
-        if(target == null || command == null)
+        if(targetString == null || commandString == null)
             throw new InvalidInputException("The command entered by the user is not valid.");
 
-        return command + " " + target;
+        return command.getKeyWord() + " " + targetString;
     }
 
     /*

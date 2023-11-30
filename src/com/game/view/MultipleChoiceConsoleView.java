@@ -12,11 +12,10 @@ import static com.game.view.framework.InputCollector.collectInput;
 public class MultipleChoiceConsoleView extends ConsoleView{
     private List<ConsoleText> options;
 
-    public MultipleChoiceConsoleView(List<ConsoleText> text, List<ConsoleText> options) {
-        super(text.toArray(new ConsoleText[0]));
+    public MultipleChoiceConsoleView(List<List<ConsoleText>> textList, List<ConsoleText> options) {
+        super(textList);
         this.options = options;
     }
-
 
     public void addOptions(ConsoleText ...options){
         this.options.addAll(Arrays.asList(options));

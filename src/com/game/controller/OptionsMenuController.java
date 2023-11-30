@@ -11,7 +11,7 @@ import java.util.List;
 class OptionsMenuController {
     public void run(){
         MultipleChoiceConsoleView consoleView = new MultipleChoiceConsoleView(
-                List.of(new ConsoleText("Main Menu: ")),
+                List.of(List.of(new ConsoleText("Main Menu: "))),
                 List.of(
                         new ConsoleText("Play new game."),
                         new ConsoleText("Load Saved game."),
