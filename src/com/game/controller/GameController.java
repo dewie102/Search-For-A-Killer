@@ -40,6 +40,7 @@ public class GameController {
         commandMap.put("help", new Command("help", List.of(), "It displays this menu.", true, this::helpCommand));
         commandMap.put("drop", new Command("drop", List.of("place"), "Drop an object from your inventory into your current location", false, this::dropCommand));
         commandMap.put("get", new Command("get", List.of("grab"), "Drop an object from your inventory into your current location", false, this::getCommand));
+        commandMap.put("talk", new Command("talk", List.of("chat", "speak"), "Talk to another character", false, this::talkCommand));
 
         // List of entities
         List<String> entities = new ArrayList<>(entityDictionary.keySet());
@@ -124,7 +125,7 @@ public class GameController {
                 secondaryText.add(new ConsoleText("Items you see: " + room.getInventory()));
             }
             if(!(room.getCharactersInRoom()==null) && !room.getCharactersInRoom().isEmpty()){
-                consoleView.add(new ConsoleText("You see someone you can talk to: " + room.getCharactersInRoom()));
+                secondaryText.add(new ConsoleText("You see someone you can talk to: " + room.getCharactersInRoom()));
             }
             //print adjacent rooms
             secondaryText.add(new ConsoleText("Rooms you can go to: " + room.getJsonAdjacentRooms()));
@@ -148,28 +149,23 @@ public class GameController {
         return false;
     }
 
-    private boolean helpCommand(Entity target){
+    private boolean helpCommand(Entity target) {
         secondaryText.clear();
         secondaryText.add(new ConsoleText("Available commands:"));
-        for (var command : commandMap.values()){
+        for (var command : commandMap.values()) {
             secondaryText.add(new ConsoleText(String.format("%s: \t%s", command.getKeyWord(), command.getDescription())));
-    private boolean lookCharacter(Character character){
-        if(player.getCurrentLocation().equals(character.getCurrentLocation())){
-            consoleView.add(new ConsoleText(character.getDescription()));
-            consoleView.add(new ConsoleText("#################################################", AnsiTextColor.BLUE));
-            return true;
-        }
-        return false;
-    }
-
-    private List<ConsoleText> helpCommand(){
-        List<ConsoleText> result = new ArrayList<>();
-        result.add(new ConsoleText("Available commands:"));
-        for (var command : commandList){
-            result.add(new ConsoleText(String.format("%s: \t%s", command.getKeyWord(), command.getDescription())));
         }
         secondaryText.add(new ConsoleText(GameController.DIVIDER, AnsiTextColor.BLUE));
         return true;
+    }
+
+    private boolean lookCharacter(Character character){
+        if(player.getCurrentLocation().equals(character.getCurrentLocation())){
+            secondaryText.add(new ConsoleText(character.getDescription()));
+            secondaryText.add(new ConsoleText("#################################################", AnsiTextColor.BLUE));
+            return true;
+        }
+        return false;
     }
 
     private boolean dropCommand(Entity target){
@@ -186,7 +182,7 @@ public class GameController {
                 //mainText.addAll(getViewText());
                 //Tell the player what happened
                 secondaryText.add(new ConsoleText(String.format("You dropped the %s",target.getName())));
-                secondaryText.add(new ConsoleText("#################################################", AnsiTextColor.BLUE));
+                secondaryText.add(new ConsoleText(GameController.DIVIDER, AnsiTextColor.BLUE));
                 return true;
             }
             //that item is not in your inventory, so you can't drop it
@@ -202,9 +198,9 @@ public class GameController {
         if(target instanceof Character){
             //If the target is in the same room as the player
             if (((Character) target).getCurrentLocation().equals(player.getCurrentLocation())){
-                consoleView.add(new ConsoleText(String.format("%s says:",target.getName())));
-                consoleView.add(new ConsoleText("Hello there Detective! I'm not interested in talking to you right now.", AnsiTextColor.PURPLE));
-                consoleView.add(new ConsoleText("#################################################", AnsiTextColor.BLUE));
+                secondaryText.add(new ConsoleText(String.format("%s says:",target.getName())));
+                secondaryText.add(new ConsoleText("Hello there Detective! I'm not interested in talking to you right now.", AnsiTextColor.PURPLE));
+                secondaryText.add(new ConsoleText("#################################################", AnsiTextColor.BLUE));
                 return true;
             }
             consoleView.setErrorMessage(String.format("You can't talk to Characters that are not in the same room as you."));
@@ -230,7 +226,7 @@ public class GameController {
                 mainText.clear();
                 mainText.addAll(getViewText());
                 secondaryText.add(new ConsoleText(String.format("You added %s to your inventory.",target.getName())));
-                secondaryText.add(new ConsoleText("#################################################", AnsiTextColor.BLUE));
+                secondaryText.add(new ConsoleText(GameController.DIVIDER, AnsiTextColor.BLUE));
                 return true;
             }
             consoleView.setErrorMessage("That item is not in this room.");
