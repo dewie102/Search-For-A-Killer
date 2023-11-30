@@ -4,20 +4,17 @@ import com.game.model.*;
 import com.game.view.AnsiTextColor;
 import com.game.view.CommandConsoleView;
 import com.game.view.ConsoleText;
-
-//TODO: remove import if we rename class
 import com.game.model.Character;
 
 import java.util.*;
 
 public class GameController {
     private CommandConsoleView consoleView;
-    private Player player;
+    private Player player = LoadController.loadPlayer();
     List<Command> commandList = new ArrayList<>();
     private final Map<String, Room> rooms = LoadController.loadRooms();
     private final Map<String, Item> items = LoadController.loadItems();
-    //TODO: assign to LoadController once character JSON is implemented
-    private final Map<String, Character> characters = new HashMap<>();
+    private final Map<String, Character> characters = LoadController.loadCharacters();
 
     public GameController(){
         fixHasAs();
@@ -25,21 +22,10 @@ public class GameController {
 
     public void run(){
 
-        //TODO: remove test character after NPCs loaded from JSON
-        Character testCharacter = new Character("Sean Bean", "He looks alive", rooms.get("Kitchen"));
-        characters.put(testCharacter.getName(), testCharacter);
-
-        player = new Player(rooms.get("Kitchen").getName()); //Kind of roundabout but you get the idea!
-
         Map<String, Entity> entityDictionary = new HashMap<>();
         entityDictionary.putAll(rooms);
         entityDictionary.putAll(items);
         entityDictionary.putAll(characters);
-
-        player.getInventory().add(items.get("Pen"));
-        player.getInventory().add(items.get("Glove"));
-
-
 
         commandList.add(new Command("go", List.of("run", "move", "walk"), "Go to a room. e.g. go kitchen", false));
         commandList.add(new Command("look", List.of("see", "inspect"), "Look at an object. e.g. look knife", false));
@@ -265,6 +251,21 @@ public class GameController {
                 Room r = rooms.get(key);
                 room.addAdjacentRoom(r);
             }
+        }
+        // Add the HAS-A for each character inventory item
+        for(Character character : characters.values()){
+            character.setInventory(new Inventory());
+            for (String key : character.getJsonInventory()){
+                Item item = items.get(key);
+                character.getInventory().add(item);
+            }
+        }
+
+        // Add the HAS-A for each player inventory item
+        player.setInventory(new Inventory());
+        for (String key : player.getJsonInventory()){
+            Item item = items.get(key);
+            player.getInventory().add(item);
         }
     }
 

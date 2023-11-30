@@ -5,19 +5,21 @@ package com.game.model;
  */
 public class Character extends Entity{
     // A character must be in a Room
-    private Room currentRoom;
+    private String currentLocation;
 
-    //TODO once all characters are loaded from JSON, this won't be required
-    public Character(String name, String description, Room start) {
+
+    public Character(String name, String description, String currentLocation){
         super(name, description);
-        setCurrentRoom(start);
+        setCurrentLocation(currentLocation);
     }
 
-    public Room getCurrentRoom() {
-        return currentRoom;
+    // GETTERS AND SETTERS
+
+    public String getCurrentLocation() {
+        return currentLocation;
     }
 
-    public void setCurrentRoom(Room currentRoom) {
-        this.currentRoom = currentRoom;
+    public void setCurrentLocation(String currentLocation) {
+        this.currentLocation = currentLocation;
     }
 }
