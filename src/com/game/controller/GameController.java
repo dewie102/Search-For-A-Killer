@@ -144,7 +144,7 @@ public class GameController {
                 //print items in room if there are any
                 consoleView.add(new ConsoleText("Items you see: " + room.getInventory()));
             }
-            if(!room.getCharactersInRoom().isEmpty()){
+            if(!(room.getCharactersInRoom()==null) && !room.getCharactersInRoom().isEmpty()){
                 consoleView.add(new ConsoleText("You see someone you can talk to: " + room.getCharactersInRoom()));
             }
             //print adjacent rooms
@@ -170,7 +170,7 @@ public class GameController {
     }
 
     private boolean lookCharacter(Character character){
-        if(player.getCurrentLocation().equals(character.getCurrentRoom().getName())){
+        if(player.getCurrentLocation().equals(character.getCurrentLocation())){
             consoleView.add(new ConsoleText(character.getDescription()));
             consoleView.add(new ConsoleText("#################################################", AnsiTextColor.BLUE));
             return true;
@@ -215,9 +215,9 @@ public class GameController {
         //If the target is a character
         if(target instanceof Character){
             //If the target is in the same room as the player
-            if (((Character) target).getCurrentRoom() == rooms.get(player.getCurrentLocation())){
+            if (((Character) target).getCurrentLocation().equals(player.getCurrentLocation())){
                 consoleView.add(new ConsoleText(String.format("%s says:",target.getName())));
-                consoleView.add(new ConsoleText("Oh woe is me, for I am merely a test character, and soon I will be deleted", AnsiTextColor.PURPLE));
+                consoleView.add(new ConsoleText("Hello there Detective! I'm not interested in talking to you right now.", AnsiTextColor.PURPLE));
                 consoleView.add(new ConsoleText("#################################################", AnsiTextColor.BLUE));
                 return true;
             }

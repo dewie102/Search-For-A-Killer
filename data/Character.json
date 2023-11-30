@@ -1,20 +1,20 @@
 [
   {
-    "name": "Gardner",
-    "description": "A random gardner that works around the house for free.",
+    "name": "Gardener",
+    "description": "A random gardener that works around the house for free.",
     "currentLocation": "Backyard",
     "jsonInventory": ["Glove"]
     },
     {
     "name": "Nanny",
     "description": "The live-in nanny that just submitted her two week notice a week ago.",
-    "currentLocation": "kitchen",
+    "currentLocation": "Kitchen",
     "jsonInventory": ["Pen"]
     },
     {
     "name": "Butler",
     "description": "The family butler that has been in the family for several years.",
-    "currentLocation": "office",
+    "currentLocation": "Office",
     "jsonInventory": ["Pen"]
   }
 ]
