@@ -10,7 +10,7 @@ import java.util.*;
 public class LoadController {
 
     public static Map<String, Room> loadRooms() {
-        try (FileReader reader = new FileReader("data/rooms.json")) {
+        try (FileReader reader = new FileReader("data/Rooms.json")) {
             Room[] rooms = new Gson().fromJson(reader, Room[].class);
             Map<String, Room> roomMap = new HashMap<>();
 
@@ -27,7 +27,7 @@ public class LoadController {
     }
 
     public static Map<String, Item> loadItems() {
-        try (FileReader reader = new FileReader("data/items.json")) {
+        try (FileReader reader = new FileReader("data/Items.json")) {
             Item[] items = new Gson().fromJson(reader, Item[].class);
             Map<String, Item> itemMap = new HashMap<>();
 

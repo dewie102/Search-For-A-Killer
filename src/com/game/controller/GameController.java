@@ -54,7 +54,7 @@ public class GameController {
 
         // List of entities
         List<String> ignoreList = List.of(
-                "the", "at", "an", "a", "of"
+                "the", "at", "an", "a", "of", "around", "to"
         );
 
         String escapeCommand = "quit";
@@ -101,12 +101,18 @@ public class GameController {
     }
 
     private boolean lookCommand(Entity target){
-        if(target instanceof Item){
+        if(target instanceof Item || target instanceof Room){
             consoleView.add(new ConsoleText(target.getDescription()));
+            if(!target.getInventory().getItems().isEmpty()) {
+                consoleView.add(new ConsoleText("Items you see: " + target.getInventory()));
+            }
+            if(target instanceof Room) {
+                consoleView.add(new ConsoleText("Rooms you can go to: " + ((Room) target).getJsonAdjacentRooms()));
+            }
             consoleView.add(new ConsoleText("#################################################", AnsiTextColor.BLUE));
             return true;
         }
-        consoleView.setErrorMessage(String.format("%s is not an item, you can't inspect that.", target.getName()));
+        consoleView.setErrorMessage(String.format("%s is not a valid thing for you to look at, you can't inspect that.", target.getName()));
         return false;
     }
 
@@ -125,7 +131,9 @@ public class GameController {
         List<ConsoleText> result = new ArrayList<>();
         result.add(new ConsoleText("#################################################", AnsiTextColor.BLUE));
         result.add(new ConsoleText(String.format("Player Location: %s", player.getCurrentLocation())));
-        result.add(new ConsoleText(String.format("Inventory: %s", player.getInventoryString())));
+        //result.add(new ConsoleText(rooms.get(player.getCurrentLocation()).getDescription()));
+        //result.add(new ConsoleText(rooms.get(player.getCurrentLocation()).getInventoryString()));
+        result.add(new ConsoleText(String.format("Inventory: %s", player.getInventory())));
         result.add(new ConsoleText("#################################################", AnsiTextColor.BLUE));
         return result;
     }
