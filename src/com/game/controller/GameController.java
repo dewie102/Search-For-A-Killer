@@ -28,15 +28,10 @@ public class GameController {
     }
 
     public void run(){
-        //player = new Player(rooms.get("Kitchen").getName()); //Kind of roundabout but you get the idea!
 
+        Map<String, Entity> entityDictionary = new HashMap<>();
         entityDictionary.putAll(rooms);
         entityDictionary.putAll(items);
-
-        player.getInventory().add(items.get("Pen"));
-        player.getInventory().add(items.get("Glove"));
-
-        mainText = getViewText();
         entityDictionary.putAll(characters);
         mainText = getViewText();
         commandMap.put("go", new Command("go", List.of("run", "move", "walk"), "Go to a room. e.g. go kitchen", false, this::goCommand));
@@ -52,7 +47,7 @@ public class GameController {
 
         // List of entities
         List<String> ignoreList = List.of(
-                "the", "at", "an", "a", "of", "around", "to"
+                "the", "at", "an", "a", "of", "around", "to", "with"
         );
 
         String escapeCommand = "quit";
@@ -98,12 +93,18 @@ public class GameController {
 
     private boolean lookCommand(Entity target){
         if(target instanceof Room) {
+            //This clause is necessary to allow correct error message to print
             if (lookRoom((Room)target)){
                 return true;
-            };
+            }
         }
         else if (target instanceof Item){
             if (lookItem((Item)target)){
+                return true;
+            }
+        }
+        else if (target instanceof Character){
+            if(lookCharacter((Character)target)){
                 return true;
             }
         }
@@ -121,6 +122,9 @@ public class GameController {
             if(!room.getInventory().getItems().isEmpty()) {
                 //print items in room if there are any
                 secondaryText.add(new ConsoleText("Items you see: " + room.getInventory()));
+            }
+            if(!(room.getCharactersInRoom()==null) && !room.getCharactersInRoom().isEmpty()){
+                consoleView.add(new ConsoleText("You see someone you can talk to: " + room.getCharactersInRoom()));
             }
             //print adjacent rooms
             secondaryText.add(new ConsoleText("Rooms you can go to: " + room.getJsonAdjacentRooms()));
@@ -149,6 +153,20 @@ public class GameController {
         secondaryText.add(new ConsoleText("Available commands:"));
         for (var command : commandMap.values()){
             secondaryText.add(new ConsoleText(String.format("%s: \t%s", command.getKeyWord(), command.getDescription())));
+    private boolean lookCharacter(Character character){
+        if(player.getCurrentLocation().equals(character.getCurrentLocation())){
+            consoleView.add(new ConsoleText(character.getDescription()));
+            consoleView.add(new ConsoleText("#################################################", AnsiTextColor.BLUE));
+            return true;
+        }
+        return false;
+    }
+
+    private List<ConsoleText> helpCommand(){
+        List<ConsoleText> result = new ArrayList<>();
+        result.add(new ConsoleText("Available commands:"));
+        for (var command : commandList){
+            result.add(new ConsoleText(String.format("%s: \t%s", command.getKeyWord(), command.getDescription())));
         }
         secondaryText.add(new ConsoleText(GameController.DIVIDER, AnsiTextColor.BLUE));
         return true;
@@ -172,10 +190,27 @@ public class GameController {
                 return true;
             }
             //that item is not in your inventory, so you can't drop it
-            consoleView.setErrorMessage(String.format("You can only drop Items that are in your inventory."));
+            consoleView.setErrorMessage("You can only drop Items that are in your inventory.");
             return false;
         }
-        consoleView.setErrorMessage(String.format("You can only drop Items."));
+        consoleView.setErrorMessage("You can only drop Items.");
+        return false;
+    }
+
+    private boolean talkCommand(Entity target) {
+        //If the target is a character
+        if(target instanceof Character){
+            //If the target is in the same room as the player
+            if (((Character) target).getCurrentLocation().equals(player.getCurrentLocation())){
+                consoleView.add(new ConsoleText(String.format("%s says:",target.getName())));
+                consoleView.add(new ConsoleText("Hello there Detective! I'm not interested in talking to you right now.", AnsiTextColor.PURPLE));
+                consoleView.add(new ConsoleText("#################################################", AnsiTextColor.BLUE));
+                return true;
+            }
+            consoleView.setErrorMessage(String.format("You can't talk to Characters that are not in the same room as you."));
+            return false;
+        }
+        consoleView.setErrorMessage(String.format("You can only talk to Characters."));
         return false;
     }
 

@@ -9,6 +9,7 @@ import java.util.List;
 public class Room extends Entity{
     private List<Room> adjacentRooms = new ArrayList<>();
     private List<String> jsonAdjacentRooms = new ArrayList<>();
+    private List<String> jsonCharactersInRoom = new ArrayList<>();
 
     public Room(String name, String description){
         super(name, description);
@@ -39,5 +40,13 @@ public class Room extends Entity{
 
     public List<String> getJsonAdjacentRooms() {
         return jsonAdjacentRooms;
+    }
+
+    public List<String> getCharactersInRoom() {
+        return jsonCharactersInRoom;
+    }
+
+    public void addCharacterToRoom(String name) {
+        jsonCharactersInRoom.add(name);
     }
 }
