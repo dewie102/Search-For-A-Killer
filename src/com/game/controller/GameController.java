@@ -46,13 +46,15 @@ public class GameController {
         commandList.add(new Command("quit", List.of(), "Quits the game, no questions asked.", true));
         commandList.add(new Command("help", List.of(), "It displays this menu.", true));
         commandList.add(new Command("drop", List.of("place"), "Drop an object from your inventory into your current location", false));
+        commandList.add(new Command("talk", List.of("chat", "speak"), "Talk to another character", false));
 
         // Map of Commands that require a target Entity, for these to be valid they must have two parts, the command itself
         // and a target. e.g. <go there>, <get that>
         Map<String, List<String>> commands = Map.of(
                 "go", List.of("run", "move", "walk"),
                 "look", List.of("see", "inspect"),
-                "drop", List.of()
+                "drop", List.of(),
+                "talk", List.of("chat", "speak")
         );
 
         // Standalone commands, these commands don't require a target. e.g. <quit>, <help>
@@ -66,7 +68,7 @@ public class GameController {
 
         // List of entities
         List<String> ignoreList = List.of(
-                "the", "at", "an", "a", "of", "around", "to"
+                "the", "at", "an", "a", "of", "around", "to", "with"
         );
 
         String escapeCommand = "quit";
