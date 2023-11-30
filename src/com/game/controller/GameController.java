@@ -41,7 +41,8 @@ public class GameController {
         // and a target. e.g. <go there>, <get that>
         Map<String, List<String>> commands = Map.of(
                 "go", List.of("run", "move", "walk"),
-                "look", List.of("see", "inspect")
+                "look", List.of("see", "inspect"),
+                "drop", List.of()
         );
 
         // Standalone commands, these commands don't require a target. e.g. <quit>, <help>
@@ -75,6 +76,9 @@ public class GameController {
                         break;
                     case "look":
                         result = lookCommand(entity);
+                        break;
+                    case "drop":
+                        result = dropCommand(entity);
                         break;
                 }
 
@@ -176,7 +180,7 @@ public class GameController {
                 //remove item from player inventory
                 player.getInventory().getItems().remove((Item)target);
                 //Tell the player what happened
-                consoleView.add(new ConsoleText(String.format("You dropped the ",target.getName())));
+                consoleView.add(new ConsoleText(String.format("You dropped the %s",target.getName())));
                 consoleView.add(new ConsoleText("#################################################", AnsiTextColor.BLUE));
                 return true;
             }
