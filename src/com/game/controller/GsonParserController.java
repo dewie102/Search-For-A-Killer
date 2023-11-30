@@ -4,6 +4,8 @@ import com.game.view.ConsoleText;
 import com.game.view.ConsoleView;
 import com.google.gson.*;
 import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -34,7 +36,8 @@ public class GsonParserController {
             // Check if the root element is an object
             if (jsonElement.isJsonObject()) {
                 JsonObject jsonObject = jsonElement.getAsJsonObject();
-                ConsoleView consoleView = new ConsoleView();
+                List<ConsoleText> mainText = new ArrayList<>();
+                ConsoleView consoleView = new ConsoleView(List.of(mainText));
 
                 // Iterate through the JSON object
                 Set<Map.Entry<String, JsonElement>> entries = jsonObject.entrySet();
@@ -44,12 +47,12 @@ public class GsonParserController {
 
                     // Check the value type and print accordingly
                     if (value.isJsonPrimitive()) {
-                        consoleView.add(new ConsoleText(value.getAsString()));
+                        mainText.add(new ConsoleText(value.getAsString()));
                     } else if (value.isJsonObject()) {
                         JsonObject nestedObject = value.getAsJsonObject();
-                        consoleView.add(new ConsoleText(nestedObject.toString()));
+                        mainText.add(new ConsoleText(nestedObject.toString()));
                     } else {
-                        consoleView.add(new ConsoleText(value.toString()));
+                        mainText.add(new ConsoleText(value.toString()));
                     }
                 }
                 consoleView.show();

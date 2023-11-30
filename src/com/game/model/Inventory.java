@@ -27,6 +27,14 @@ public class Inventory {
         this.inventory.add(item);
     }
 
+    public boolean contains(Item item){
+        return inventory.contains(item);
+    }
+
+    public boolean remove(Item item){
+        return inventory.remove(item);
+    }
+
     @Override
     public String toString(){
         String returnString = "";

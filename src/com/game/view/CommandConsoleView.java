@@ -1,5 +1,6 @@
 package com.game.view;
 
+import com.game.controller.Command;
 import com.game.view.framework.InputCollector;
 
 import java.util.ArrayList;
@@ -8,24 +9,22 @@ import java.util.Map;
 import java.util.TreeMap;
 
 public class CommandConsoleView extends ConsoleView{
-    private Map<String, java.util.List<String>> commands = new TreeMap<>();
+    //private Map<String, java.util.List<String>> commands = new TreeMap<>();
+    List<Command> commands = new ArrayList<>();
     private List<String> entities = new ArrayList<>();
     private List<String> ignoreList = new ArrayList<>();
     private List<String> standaloneCommands = new ArrayList<>();
     private String escapeCommand = "quit";
 
-    public CommandConsoleView(List<ConsoleText> text, Map<String, List<String>> commands, List<String> standaloneCommands, List<String> entities, List<String> ignoreList, String escapeCommand) {
-        //super(text.toArray(new ConsoleText[0]));
+    public CommandConsoleView(List<List<ConsoleText>> text, List<Command> commands, List<String> entities, List<String> ignoreList){
         super(text);
         this.commands = commands;
         this.entities = entities;
         this.ignoreList = ignoreList;
-        this.standaloneCommands = standaloneCommands;
     }
-
 
     @Override
     String collectInput() {
-        return InputCollector.collectInput(commands, standaloneCommands, entities, ignoreList, escapeCommand);
+        return InputCollector.collectInput(commands, entities, ignoreList);
     }
 }
