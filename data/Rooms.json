@@ -10,7 +10,7 @@
   {
     "name": "Kitchen",
     "description": "The kitchen is quaint. Every cabinet has intricately carved oak-wood \nfeatures and there are doilies on every surface. The few stainless \nsteel appliances clash with the rest of the interior.",
-    "jsonInventory": ["Stove","Table","Dishwasher","Trashcan"],
+    "jsonInventory": ["Stove","Table","Dishwasher","Trashcan", "Candy Wrapper"],
     "jsonAdjacentRooms" : ["Backyard","Office"]
   },
 
@@ -24,7 +24,7 @@
   {
     "name": "Office",
     "description": "The office is far more plain than the rest of the house. The interior \nwould feel oppressively corporate if it weren't for the massive window \nletting in copious natural light.",
-    "jsonInventory": ["Desk","Computer","Printer","Bookcase"],
+    "jsonInventory": ["Desk","Computer","Printer","Bookcase", "Receipt"],
     "jsonAdjacentRooms" : ["Living Room", "Kitchen"]
   },
 
