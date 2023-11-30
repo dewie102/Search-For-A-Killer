@@ -92,6 +92,9 @@ public class GameController {
                     case "drop":
                         result = dropCommand(entity);
                         break;
+                    case "talk":
+                        result = talkCommand(entity);
+                        break;
                 }
 
             }
@@ -124,6 +127,7 @@ public class GameController {
         return false;
     }
 
+    //TODO: Provide ability to look at Characters
     private boolean lookCommand(Entity target){
         if(target instanceof Room) {
             if (lookRoom((Room)target)){
@@ -140,6 +144,7 @@ public class GameController {
         return false;
     }
 
+    //TODO: Display characters in the room that are available to speak with
     private boolean lookRoom(Room room){
         //If the room they are looking at is the currentLocation
         if(room == rooms.get(player.getCurrentLocation())){
@@ -201,6 +206,23 @@ public class GameController {
             return false;
         }
         consoleView.setErrorMessage(String.format("You can only drop Items."));
+        return false;
+    }
+
+    private boolean talkCommand(Entity target) {
+        //If the target is a character
+        if(target instanceof Character){
+            //If the target is in the same room as the player
+            if (((Character) target).getCurrentRoom() == rooms.get(player.getCurrentLocation())){
+                consoleView.add(new ConsoleText(String.format("%s says:",target.getName())));
+                consoleView.add(new ConsoleText("Oh woe is me, for I am merely a test character, and soon I will be deleted", AnsiTextColor.PURPLE));
+                consoleView.add(new ConsoleText("#################################################", AnsiTextColor.BLUE));
+                return true;
+            }
+            consoleView.setErrorMessage(String.format("You can't talk to Characters that are not in the same room as you."));
+            return false;
+        }
+        consoleView.setErrorMessage(String.format("You can only talk to Characters."));
         return false;
     }
 
