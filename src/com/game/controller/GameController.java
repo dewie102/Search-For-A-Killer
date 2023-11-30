@@ -4,6 +4,7 @@ import com.game.model.*;
 import com.game.view.AnsiTextColor;
 import com.game.view.CommandConsoleView;
 import com.game.view.ConsoleText;
+import com.game.model.Character;
 
 import java.util.*;
 
@@ -13,6 +14,7 @@ public class GameController {
     List<Command> commandList = new ArrayList<>();
     private final Map<String, Room> rooms = LoadController.loadRooms();
     private final Map<String, Item> items = LoadController.loadItems();
+    private final Map<String, Character> characters = LoadController.loadCharacters();
 
     public GameController(){
         fixHasAs();
@@ -23,6 +25,7 @@ public class GameController {
         Map<String, Entity> entityDictionary = new HashMap<>();
         entityDictionary.putAll(rooms);
         entityDictionary.putAll(items);
+        entityDictionary.putAll(characters);
 
         commandList.add(new Command("go", List.of("run", "move", "walk"), "Go to a room. e.g. go kitchen", false));
         commandList.add(new Command("look", List.of("see", "inspect"), "Look at an object. e.g. look knife", false));
@@ -209,6 +212,16 @@ public class GameController {
                 room.addAdjacentRoom(r);
             }
         }
+        // Add the HAS-A for each character inventory item
+        for(Character character : characters.values()){
+            character.setInventory(new Inventory());
+            for (String key : character.getJsonInventory()){
+                Item item = items.get(key);
+                character.getInventory().add(item);
+            }
+        }
+
+        // Add the HAS-A for each player inventory item
         player.setInventory(new Inventory());
         for (String key : player.getJsonInventory()){
             Item item = items.get(key);
