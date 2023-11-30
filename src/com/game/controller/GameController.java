@@ -177,16 +177,15 @@ public class GameController {
                 player.getInventory().getItems().remove((Item)target);
                 //Tell the player what happened
                 consoleView.add(new ConsoleText(String.format("You dropped the ",target.getName())));
-                consoleView.add(new ConsoleText("#################################################", AnsiTextColor.BLUE))
+                consoleView.add(new ConsoleText("#################################################", AnsiTextColor.BLUE));
                 return true;
             }
+            //that item is not in your inventory, so you can't drop it
+            consoleView.setErrorMessage(String.format("You can only drop Items that are in your inventory."));
+            return false;
         }
-
-        //that item is not in your inventory, so you can't drop it
-        //that is not an item
-
-
-        return true;
+        consoleView.setErrorMessage(String.format("You can only drop Items."));
+        return false;
     }
 
     private List<ConsoleText> getViewText(){
