@@ -5,6 +5,9 @@ import com.game.view.AnsiTextColor;
 import com.game.view.CommandConsoleView;
 import com.game.view.ConsoleText;
 
+//TODO: remove import if we rename class
+import com.game.model.Character;
+
 import java.util.*;
 
 public class GameController {
@@ -13,6 +16,8 @@ public class GameController {
     List<Command> commandList = new ArrayList<>();
     private final Map<String, Room> rooms = LoadController.loadRooms();
     private final Map<String, Item> items = LoadController.loadItems();
+    //TODO: assign to LoadController once character JSON is implemented
+    private final Map<String, Character> characters = new HashMap<>();
 
     public GameController(){
         fixHasAs();
@@ -20,11 +25,16 @@ public class GameController {
 
     public void run(){
 
+        //TODO: remove test character after NPCs loaded from JSON
+        Character testCharacter = new Character("Sean Bean", "He looks alive", rooms.get("Kitchen"));
+        characters.put(testCharacter.getName(), testCharacter);
+
         player = new Player(rooms.get("Kitchen").getName()); //Kind of roundabout but you get the idea!
 
         Map<String, Entity> entityDictionary = new HashMap<>();
         entityDictionary.putAll(rooms);
         entityDictionary.putAll(items);
+        entityDictionary.putAll(characters);
 
         player.getInventory().add(items.get("Pen"));
         player.getInventory().add(items.get("Glove"));
