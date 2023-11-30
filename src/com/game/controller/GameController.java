@@ -35,12 +35,14 @@ public class GameController {
         commandList.add(new Command("look", List.of("see", "inspect"), "Look at an object. e.g. look knife", false));
         commandList.add(new Command("quit", List.of(), "Quits the game, no questions asked.", true));
         commandList.add(new Command("help", List.of(), "It displays this menu.", true));
+        commandList.add(new Command("drop", List.of("place"), "Drop an object from your inventory into your current location", false));
 
         // Map of Commands that require a target Entity, for these to be valid they must have two parts, the command itself
         // and a target. e.g. <go there>, <get that>
         Map<String, List<String>> commands = Map.of(
                 "go", List.of("run", "move", "walk"),
-                "look", List.of("see", "inspect")
+                "look", List.of("see", "inspect"),
+                "drop", List.of()
         );
 
         // Standalone commands, these commands don't require a target. e.g. <quit>, <help>
@@ -74,6 +76,9 @@ public class GameController {
                         break;
                     case "look":
                         result = lookCommand(entity);
+                        break;
+                    case "drop":
+                        result = dropCommand(entity);
                         break;
                 }
 
@@ -162,6 +167,29 @@ public class GameController {
         }
         result.add(new ConsoleText("#################################################", AnsiTextColor.BLUE));
         return result;
+    }
+
+    private boolean dropCommand(Entity target){
+
+        //if target is instance of Item
+        if (target instanceof Item){
+            //if target Item is in your inventory
+            if (player.getInventory().getItems().contains(target)){
+                //add item to current location inventory
+                rooms.get(player.getCurrentLocation()).getInventory().add((Item)target);
+                //remove item from player inventory
+                player.getInventory().getItems().remove((Item)target);
+                //Tell the player what happened
+                consoleView.add(new ConsoleText(String.format("You dropped the %s",target.getName())));
+                consoleView.add(new ConsoleText("#################################################", AnsiTextColor.BLUE));
+                return true;
+            }
+            //that item is not in your inventory, so you can't drop it
+            consoleView.setErrorMessage(String.format("You can only drop Items that are in your inventory."));
+            return false;
+        }
+        consoleView.setErrorMessage(String.format("You can only drop Items."));
+        return false;
     }
 
     private List<ConsoleText> getViewText(){
