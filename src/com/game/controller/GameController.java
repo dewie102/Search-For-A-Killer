@@ -92,19 +92,21 @@ public class GameController {
 
     private boolean goCommand(Entity target){
         if(target instanceof Room){
-            Room room = (Room)target;
-            player.setCurrentLocation(room.getName());
-            return true;
+            //if the room they are trying to go to is in current location's adjacent rooms
+            if (rooms.get(player.getCurrentLocation()).getAdjacentRooms().contains(target)) {
+                Room room = (Room) target;
+                player.setCurrentLocation(room.getName());
+                return true;
+            }
+            //if they are trying to go to a room, but not an adjacent one
+            consoleView.setErrorMessage(String.format("You can't get to the %s from here.", target.getName()));
+            return false;
         }
+        //if they are not trying to go to a valid room
         consoleView.setErrorMessage(String.format("%s is not a room, you can't go there.", target.getName()));
         return false;
     }
 
-    /*TODO: Can only look at items in
-           your inventory
-           your currentLocation's inventory
-           Can only look at the room you are in
-    * */
     private boolean lookCommand(Entity target){
         if(target instanceof Room) {
             if (lookRoom((Room)target)){
@@ -167,8 +169,6 @@ public class GameController {
         List<ConsoleText> result = new ArrayList<>();
         result.add(new ConsoleText("#################################################", AnsiTextColor.BLUE));
         result.add(new ConsoleText(String.format("Player Location: %s", player.getCurrentLocation())));
-        //result.add(new ConsoleText(rooms.get(player.getCurrentLocation()).getDescription()));
-        //result.add(new ConsoleText(rooms.get(player.getCurrentLocation()).getInventoryString()));
         result.add(new ConsoleText(String.format("Inventory: %s", player.getInventory())));
         result.add(new ConsoleText("#################################################", AnsiTextColor.BLUE));
         return result;
