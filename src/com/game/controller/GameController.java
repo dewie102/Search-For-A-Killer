@@ -1,5 +1,6 @@
 package com.game.controller;
 
+import com.game.controller.commands.CommandType;
 import com.game.model.*;
 import com.game.view.AnsiTextColor;
 import com.game.view.CommandConsoleView;
@@ -34,13 +35,13 @@ public class GameController {
         entityDictionary.putAll(items);
         entityDictionary.putAll(characters);
         mainText = getViewText();
-        commandMap.put("go", new Command("go", List.of("run", "move", "walk", "travel"), "Go to a room. e.g. go kitchen", false, this::goCommand));
-        commandMap.put("look", new Command("look", List.of("see", "inspect"), "Look at an object or room. e.g. look knife", false, this::lookCommand));
-        commandMap.put("quit", new Command("quit", List.of("exit"), "Quits the game, no questions asked.", true));
-        commandMap.put("help", new Command("help", List.of(), "It displays this menu.", true, this::helpCommand));
-        commandMap.put("drop", new Command("drop", List.of("place", "put"), "Drop an object from your inventory into your current location", false, this::dropCommand));
-        commandMap.put("get", new Command("get", List.of("grab", "pickup", "take"), "Drop an object from your inventory into your current location", false, this::getCommand));
-        commandMap.put("talk", new Command("talk", List.of("chat", "speak"), "Talk to another character", false, this::talkCommand));
+        commandMap.put("go", new Command("go", List.of("run", "move", "walk", "travel"), "Go to a room. e.g. go kitchen", CommandType.TWO_PARTS, this::goCommand));
+        commandMap.put("look", new Command("look", List.of("see", "inspect"), "Look at an object or room. e.g. look knife", CommandType.HYBRID, this::lookCommand));
+        commandMap.put("quit", new Command("quit", List.of("exit"), "Quits the game, no questions asked.", CommandType.STANDALONE, this::quitCommand));
+        commandMap.put("help", new Command("help", List.of(), "It displays this menu.", CommandType.STANDALONE, this::helpCommand));
+        commandMap.put("drop", new Command("drop", List.of("place", "put"), "Drop an object from your inventory into your current location", CommandType.TWO_PARTS, this::dropCommand));
+        commandMap.put("get", new Command("get", List.of("grab", "pickup", "take"), "Drop an object from your inventory into your current location", CommandType.TWO_PARTS, this::getCommand));
+        commandMap.put("talk", new Command("talk", List.of("chat", "speak"), "Talk to another character", CommandType.TWO_PARTS, this::talkCommand));
 
         // List of entities
         List<String> entities = new ArrayList<>(entityDictionary.keySet());
@@ -93,6 +94,10 @@ public class GameController {
     }
 
     private boolean lookCommand(Entity target){
+        if(target == null){
+            if(lookRoom(rooms.get(player.getCurrentLocation())))
+                return true;
+        }
         if(target instanceof Room) {
             //This clause is necessary to allow correct error message to print
             if (lookRoom((Room)target)){
@@ -233,6 +238,10 @@ public class GameController {
         }
         consoleView.setErrorMessage("That is not an item.");
         return false;
+    }
+
+    private boolean quitCommand(Entity target){
+        return true;
     }
 
     private List<ConsoleText> getViewText(){
