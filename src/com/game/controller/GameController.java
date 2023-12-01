@@ -242,6 +242,8 @@ public class GameController {
         result.add(new ConsoleText(String.format("Player Location: %s", player.getCurrentLocation())));
         result.add(new ConsoleText(String.format("Inventory: %s", player.getInventory())));
         result.add(new ConsoleText(GameController.DIVIDER, AnsiTextColor.BLUE));
+        result.add(new ConsoleText(String.format("Connected Rooms: %s", rooms.get(player.getCurrentLocation()).adjacentRoomToString())));
+        result.add(new ConsoleText(GameController.DIVIDER, AnsiTextColor.BLUE));
         return result;
     }
 

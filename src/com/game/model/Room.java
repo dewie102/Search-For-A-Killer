@@ -49,4 +49,13 @@ public class Room extends Entity{
     public void addCharacterToRoom(String name) {
         jsonCharactersInRoom.add(name);
     }
+
+    // returns a formatted StringBuilder String with commas
+    public StringBuilder adjacentRoomToString(){
+        StringBuilder sb = new StringBuilder();
+        for (var room : adjacentRooms){
+            sb.append(room.getName()).append(", ");
+        }
+        return sb.deleteCharAt(sb.length() - 2); // removes the last comma for formatting purposes
+    }
 }
