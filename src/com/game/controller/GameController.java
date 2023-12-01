@@ -1,5 +1,7 @@
 package com.game.controller;
 
+import com.game.controller.commands.CommandType;
+import com.game.controller.controllers.QuitGameController;
 import com.game.model.*;
 import com.game.view.AnsiTextColor;
 import com.game.view.CommandConsoleView;
@@ -12,19 +14,20 @@ public class GameController {
     private CommandConsoleView consoleView;
     //private Player player;
 //    List<Command> commandList = new ArrayList<>();
-    private Player player = LoadController.loadPlayer();
+    private Player player = LoadController.getPlayer();
     //List<Command> commandList = new ArrayList<>();
-    private final Map<String, Room> rooms = LoadController.loadRooms();
-    private final Map<String, Item> items = LoadController.loadItems();
+    private final Map<String, Room> rooms = LoadController.getRooms();
+    private final Map<String, Item> items = LoadController.getItems();
+    private final Map<String, Character> characters = LoadController.getCharacters();
     private static final String DIVIDER = "#################################################";
     private List<ConsoleText> mainText = new ArrayList<>();
     private List<ConsoleText> secondaryText = new ArrayList<>();
     private final Map<String, Command> commandMap = new TreeMap<>();
     private final Map<String, Entity> entityDictionary = new HashMap<>();
-    private final Map<String, Character> characters = LoadController.loadCharacters();
+
 
     public GameController(){
-        fixHasAs();
+
     }
 
     public void run(){
@@ -34,13 +37,13 @@ public class GameController {
         entityDictionary.putAll(items);
         entityDictionary.putAll(characters);
         mainText = getViewText();
-        commandMap.put("go", new Command("go", List.of("run", "move", "walk", "travel"), "Go to a room. e.g. go kitchen", false, this::goCommand));
-        commandMap.put("look", new Command("look", List.of("see", "inspect"), "Look at an object or room. e.g. look knife", false, this::lookCommand));
-        commandMap.put("quit", new Command("quit", List.of("exit"), "Quits the game, no questions asked.", true));
-        commandMap.put("help", new Command("help", List.of(), "It displays this menu.", true, this::helpCommand));
-        commandMap.put("drop", new Command("drop", List.of("place", "put"), "Drop an object from your inventory into your current location", false, this::dropCommand));
-        commandMap.put("get", new Command("get", List.of("grab", "pickup", "take"), "Drop an object from your inventory into your current location", false, this::getCommand));
-        commandMap.put("talk", new Command("talk", List.of("chat", "speak"), "Talk to another character", false, this::talkCommand));
+        commandMap.put("go", new Command("go", List.of("run", "move", "walk", "travel"), "Go to a room. e.g. go kitchen", CommandType.TWO_PARTS, this::goCommand));
+        commandMap.put("look", new Command("look", List.of("see", "inspect"), "Look at an object or room. e.g. look knife", CommandType.HYBRID, this::lookCommand));
+        commandMap.put("quit", new Command("quit", List.of("exit"), "Quits the game, no questions asked.", CommandType.STANDALONE, this::quitCommand));
+        commandMap.put("help", new Command("help", List.of(), "It displays this menu.", CommandType.STANDALONE, this::helpCommand));
+        commandMap.put("drop", new Command("drop", List.of("place", "put"), "Drop an object from your inventory into your current location", CommandType.TWO_PARTS, this::dropCommand));
+        commandMap.put("get", new Command("get", List.of("grab", "pickup", "take"), "Drop an object from your inventory into your current location", CommandType.TWO_PARTS, this::getCommand));
+        commandMap.put("talk", new Command("talk", List.of("chat", "speak"), "Talk to another character", CommandType.TWO_PARTS, this::talkCommand));
 
         // List of entities
         List<String> entities = new ArrayList<>(entityDictionary.keySet());
@@ -64,8 +67,6 @@ public class GameController {
             mainText.clear();
             mainText.addAll(getViewText());
 
-            if(parts[0].equals(escapeCommand))
-                return;
             if(result){
                 consoleView.clearErrorMessage();
             }
@@ -93,6 +94,10 @@ public class GameController {
     }
 
     private boolean lookCommand(Entity target){
+        if(target == null){
+            if(lookRoom(rooms.get(player.getCurrentLocation())))
+                return true;
+        }
         if(target instanceof Room) {
             //This clause is necessary to allow correct error message to print
             if (lookRoom((Room)target)){
@@ -235,6 +240,14 @@ public class GameController {
         return false;
     }
 
+    private boolean quitCommand(Entity target){
+        QuitGameController quitGameController = new QuitGameController(mainText, secondaryText);
+        if(quitGameController.run()){
+            System.exit(0);
+        }
+        return true;
+    }
+
     private List<ConsoleText> getViewText(){
         // View text to be passed to our view
         List<ConsoleText> result = new ArrayList<>();
@@ -244,36 +257,4 @@ public class GameController {
         result.add(new ConsoleText(GameController.DIVIDER, AnsiTextColor.BLUE));
         return result;
     }
-
-    private void fixHasAs(){
-        for (Room room : rooms.values()){
-            room.setInventory(new Inventory());
-            room.setAdjacentRooms(new ArrayList<>());
-            for (String key : room.getJsonInventory()){
-                Item item =  items.get(key);
-                Inventory inventory = room.getInventory();
-                inventory.add(item);
-            }
-            for (String key : room.getJsonAdjacentRooms()){
-                Room r = rooms.get(key);
-                room.addAdjacentRoom(r);
-            }
-        }
-        // Add the HAS-A for each character inventory item
-        for(Character character : characters.values()){
-            character.setInventory(new Inventory());
-            for (String key : character.getJsonInventory()){
-                Item item = items.get(key);
-                character.getInventory().add(item);
-            }
-        }
-
-        // Add the HAS-A for each player inventory item
-        player.setInventory(new Inventory());
-        for (String key : player.getJsonInventory()){
-            Item item = items.get(key);
-            player.getInventory().add(item);
-        }
-    }
-
 }

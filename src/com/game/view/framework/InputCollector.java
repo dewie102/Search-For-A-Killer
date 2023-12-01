@@ -1,6 +1,7 @@
 package com.game.view.framework;
 
 import com.game.controller.Command;
+import com.game.controller.commands.CommandType;
 import com.game.view.ConsoleText;
 import com.game.view.Console;
 
@@ -46,8 +47,8 @@ public class InputCollector {
         // Getting rid of any word that matches the ignoreList
         String[] lineArray = line.split(" ");
         line = "";
-        for (String word : lineArray){
-            if(!ignoreList.contains(word.toLowerCase())){
+        for (String word : lineArray) {
+            if (ignoreList == null || !ignoreList.contains(word.toLowerCase())) {
                 line += " " + word;
             }
         }
@@ -66,21 +67,29 @@ public class InputCollector {
                 break;
             }
         }
-
+        // Making sure the command is not null
         if(command == null)
             throw new InvalidInputException(INVALID_COMMAND_ERROR_MESSAGE);
-        if(command.isStandalone())
-            return command.getKeyWord();
-
-        for (var tar : entities){
-            if(tar.toLowerCase().equals(parts[1])){
-                targetString = tar;
+        if(parts.length > 1 && entities != null){
+            for (var tar : entities){
+                if(tar.toLowerCase().equals(parts[1])){
+                    targetString = tar;
+                    break;
+                }
             }
         }
-        if(targetString == null || commandString == null)
-            throw new InvalidInputException("The command entered by the user is not valid.");
+        // If the command is standalone, but we got two parts then we throw an exception
+        if(parts.length > 1 && command.getCommandType() == CommandType.STANDALONE)
+            throw new InvalidInputException(INVALID_COMMAND_ERROR_MESSAGE);
+        // If the command is two parts, but the user only entered one then we also throw an exception
+        if(parts.length < 2 && command.getCommandType() == CommandType.TWO_PARTS)
+            throw new InvalidInputException(INVALID_COMMAND_ERROR_MESSAGE);
 
-        return command.getKeyWord() + " " + targetString;
+        String result = commandString;
+        if(targetString != null)
+            result += " " + targetString;
+
+        return result;
     }
 
     /*
