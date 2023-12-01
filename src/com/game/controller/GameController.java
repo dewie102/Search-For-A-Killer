@@ -35,7 +35,7 @@ public class GameController {
         entityDictionary.putAll(characters);
         mainText = getViewText();
         commandMap.put("go", new Command("go", List.of("run", "move", "walk"), "Go to a room. e.g. go kitchen", false, this::goCommand));
-        commandMap.put("look", new Command("look", List.of("see", "inspect"), "Look at an object. e.g. look knife", false, this::lookCommand));
+        commandMap.put("look", new Command("look", List.of("see", "inspect"), "Look at an object or room. e.g. look knife", false, this::lookCommand));
         commandMap.put("quit", new Command("quit", List.of(), "Quits the game, no questions asked.", true));
         commandMap.put("help", new Command("help", List.of(), "It displays this menu.", true, this::helpCommand));
         commandMap.put("drop", new Command("drop", List.of("place"), "Drop an object from your inventory into your current location", false, this::dropCommand));
@@ -162,7 +162,7 @@ public class GameController {
     private boolean lookCharacter(Character character){
         if(player.getCurrentLocation().equals(character.getCurrentLocation())){
             secondaryText.add(new ConsoleText(character.getDescription()));
-            secondaryText.add(new ConsoleText("#################################################", AnsiTextColor.BLUE));
+            secondaryText.add(new ConsoleText(GameController.DIVIDER, AnsiTextColor.BLUE));
             return true;
         }
         return false;
@@ -200,7 +200,7 @@ public class GameController {
             if (((Character) target).getCurrentLocation().equals(player.getCurrentLocation())){
                 secondaryText.add(new ConsoleText(String.format("%s says:",target.getName())));
                 secondaryText.add(new ConsoleText("Hello there Detective! I'm not interested in talking to you right now.", AnsiTextColor.PURPLE));
-                secondaryText.add(new ConsoleText("#################################################", AnsiTextColor.BLUE));
+                secondaryText.add(new ConsoleText(GameController.DIVIDER, AnsiTextColor.BLUE));
                 return true;
             }
             consoleView.setErrorMessage(String.format("You can't talk to Characters that are not in the same room as you."));
