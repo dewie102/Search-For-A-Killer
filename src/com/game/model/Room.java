@@ -9,6 +9,7 @@ import java.util.List;
 public class Room extends Entity{
     private List<Room> adjacentRooms = new ArrayList<>();
     private List<String> jsonAdjacentRooms = new ArrayList<>();
+    private List<String> jsonCharactersInRoom = new ArrayList<>();
 
     public Room(String name, String description){
         super(name, description);
@@ -39,5 +40,22 @@ public class Room extends Entity{
 
     public List<String> getJsonAdjacentRooms() {
         return jsonAdjacentRooms;
+    }
+
+    public List<String> getCharactersInRoom() {
+        return jsonCharactersInRoom;
+    }
+
+    public void addCharacterToRoom(String name) {
+        jsonCharactersInRoom.add(name);
+    }
+
+    // returns a formatted StringBuilder String with commas
+    public StringBuilder adjacentRoomToString(){
+        StringBuilder sb = new StringBuilder();
+        for (var room : adjacentRooms){
+            sb.append(room.getName()).append(", ");
+        }
+        return sb.deleteCharAt(sb.length() - 2); // removes the last comma for formatting purposes
     }
 }

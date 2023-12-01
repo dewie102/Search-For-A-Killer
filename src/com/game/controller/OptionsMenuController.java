@@ -11,12 +11,12 @@ import java.util.List;
 class OptionsMenuController {
     public void run(){
         MultipleChoiceConsoleView consoleView = new MultipleChoiceConsoleView(
-                List.of(new ConsoleText("Main Menu: ")),
+                List.of(List.of(new ConsoleText("Main Menu: "))),
                 List.of(
                         new ConsoleText("Play new game."),
-                        new ConsoleText("Load Saved game."),
-                        new ConsoleText("How to play?"),
-                        new ConsoleText("About this game."),
+//                        new ConsoleText("Load Saved game."),
+//                        new ConsoleText("How to play?"),
+//                        new ConsoleText("About this game."),
                         new ConsoleText("Quit Game.")
         ));
         String userInput = consoleView.show();
@@ -24,15 +24,15 @@ class OptionsMenuController {
             case "0":
                 newGame();
                 break;
-            case "1":
-                loadSavedGame();
-                break;
-            case "2":
-                howToPlay();
-                break;
-            case "3":
-                aboutThisGame();
-                break;
+//            case "1":
+//                loadSavedGame();
+//                break;
+//            case "2":
+//                howToPlay();
+//                break;
+//            case "3":
+//                aboutThisGame();
+//                break;
             case "4":
                 quitGame();
                 break;

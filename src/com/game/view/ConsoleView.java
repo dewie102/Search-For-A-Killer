@@ -15,34 +15,21 @@ import java.util.List;
  */
 
 public class ConsoleView {
-
     // INSTANCE VARIABLES
-        // text list that holds all the ConsoleText objects
-    public List<ConsoleText> text = new ArrayList<>();
+    // This holds the text that will be presented in the screen, a List of List of Strings so we can individualy manage each list
+    public List<List<ConsoleText>> textList = new ArrayList<>();
     public String errorMessage;
 
     // CONSTRUCTORS
     public ConsoleView(){}
 
     // This constructor is better since it keeps the reference
-    public ConsoleView(List<ConsoleText> text){
+    public ConsoleView(List<List<ConsoleText>> textList){
         this();
-        this.text = text;
+        this.textList = textList;
     }
 
-    // DEPRECATED
-    public ConsoleView(ConsoleText ...textArray){
-        this();
-        this.text.addAll(Arrays.asList(textArray));
-    }
-
-    // METHODS
-        // Add ConsoleText to the text list
-    public void add(ConsoleText text){
-    	this.text.add(text);
-    }
-
-        // For each ConsoleText in text call Console.print and pass the color and text
+    // For each ConsoleText in text call Console.print and pass the color and text
     public String show(){
         while (true){
             displayText();
@@ -61,8 +48,12 @@ public class ConsoleView {
 
     void displayText(){
         // Print all the text on this View
-        for(ConsoleText t : text){
-            Console.printNewLine(t);
+        for(var list : textList) {
+            if(list != null) {
+                for (ConsoleText t : list) {
+                    Console.printNewLine(t);
+                }
+            }
         }
         // Print any error message
         if(errorMessage != null)
@@ -85,11 +76,15 @@ public class ConsoleView {
         this.errorMessage = null;
     }
 
-    public void setText(List<ConsoleText> text) {
-        this.text = text;
+    public void setText(List<List<ConsoleText>> text) {
+        this.textList = text;
     }
 
-    public List<ConsoleText> getText() {
-        return text;
+    public List<List<ConsoleText>> getText() {
+        return textList;
+    }
+
+    public List<List<ConsoleText>> getTextList() {
+        return textList;
     }
 }

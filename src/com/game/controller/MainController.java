@@ -12,7 +12,7 @@ class MainController {
         // to the ConsoleText class and the Console class, so it's outputted.
         GsonParserController titlePage = new GsonParserController("data/Title.json");
         GsonParserController developmentPage = new GsonParserController("data/DevelopmentTitle.json");
-        GsonParserController introText = new GsonParserController("data/introText.json");
+        GsonParserController introText = new GsonParserController("data/IntroText.json");
 
         titlePage.printJson();
         developmentPage.printJson();
