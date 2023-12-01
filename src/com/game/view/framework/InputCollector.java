@@ -47,8 +47,8 @@ public class InputCollector {
         // Getting rid of any word that matches the ignoreList
         String[] lineArray = line.split(" ");
         line = "";
-        for (String word : lineArray){
-            if(!ignoreList.contains(word.toLowerCase())){
+        for (String word : lineArray) {
+            if (ignoreList == null || !ignoreList.contains(word.toLowerCase())) {
                 line += " " + word;
             }
         }
@@ -70,7 +70,7 @@ public class InputCollector {
         // Making sure the command is not null
         if(command == null)
             throw new InvalidInputException(INVALID_COMMAND_ERROR_MESSAGE);
-        if(parts.length > 1){
+        if(parts.length > 1 && entities != null){
             for (var tar : entities){
                 if(tar.toLowerCase().equals(parts[1])){
                     targetString = tar;
