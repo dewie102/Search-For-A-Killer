@@ -34,12 +34,12 @@ public class GameController {
         entityDictionary.putAll(items);
         entityDictionary.putAll(characters);
         mainText = getViewText();
-        commandMap.put("go", new Command("go", List.of("run", "move", "walk"), "Go to a room. e.g. go kitchen", false, this::goCommand));
+        commandMap.put("go", new Command("go", List.of("run", "move", "walk", "travel"), "Go to a room. e.g. go kitchen", false, this::goCommand));
         commandMap.put("look", new Command("look", List.of("see", "inspect"), "Look at an object or room. e.g. look knife", false, this::lookCommand));
-        commandMap.put("quit", new Command("quit", List.of(), "Quits the game, no questions asked.", true));
+        commandMap.put("quit", new Command("quit", List.of("exit"), "Quits the game, no questions asked.", true));
         commandMap.put("help", new Command("help", List.of(), "It displays this menu.", true, this::helpCommand));
-        commandMap.put("drop", new Command("drop", List.of("place"), "Drop an object from your inventory into your current location", false, this::dropCommand));
-        commandMap.put("get", new Command("get", List.of("grab"), "Drop an object from your inventory into your current location", false, this::getCommand));
+        commandMap.put("drop", new Command("drop", List.of("place", "put"), "Drop an object from your inventory into your current location", false, this::dropCommand));
+        commandMap.put("get", new Command("get", List.of("grab", "pickup", "take"), "Drop an object from your inventory into your current location", false, this::getCommand));
         commandMap.put("talk", new Command("talk", List.of("chat", "speak"), "Talk to another character", false, this::talkCommand));
 
         // List of entities
