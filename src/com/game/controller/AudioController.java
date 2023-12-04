@@ -7,6 +7,7 @@ import java.io.File;
 
 public class AudioController {
 
+    //musicPaths[1] is an alternative
     private static final String[] musicPaths =  {
             "audio/jazz-loop-7163.wav",
             "audio/sazzy-71792.wav"};
@@ -40,8 +41,8 @@ public class AudioController {
             try {
                 file[i] = new File(musicPaths[i]);
                 inputStream[i] = AudioSystem.getAudioInputStream(file[i]);
-                music [i] = AudioSystem.getClip();
-                music [i].open(inputStream[i]);
+                music[i] = AudioSystem.getClip();
+                music[i].open(inputStream[i]);
             } catch (Exception e) {
                 System.out.println(e.getLocalizedMessage());
             }
