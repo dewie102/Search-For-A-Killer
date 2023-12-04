@@ -14,9 +14,26 @@ public class AudioController {
     private static File[] file = new File[musicPaths.length];
     private static Clip[] music = new Clip[musicPaths.length];
 
-    public static void loopMusic(int soundNum){
-        music[soundNum].loop(Clip.LOOP_CONTINUOUSLY);
+    public static void loopMusic(){
+        music[0].loop(Clip.LOOP_CONTINUOUSLY);
     }
+
+    public static void volumeDown(){
+
+    }
+
+    public static void volumeUp(){
+
+    }
+
+    public static void playMusic() {
+
+    }
+
+    public static void stopMusic() {
+
+    }
+
 
     public static void loadMusic() {
         for (int i = 0; i <musicPaths.length; i++) {
