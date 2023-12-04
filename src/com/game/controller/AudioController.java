@@ -11,13 +11,13 @@ public class AudioController {
     private static final String[] musicPaths =  {
             "audio/jazz-loop-7163.wav",
             "audio/sazzy-71792.wav",
-            "audio/walking-2seconds.wav"};
+            "audio/walking-3seconds.wav"};
     private static AudioInputStream[] inputStream = new AudioInputStream[musicPaths.length];
     private static File[] file = new File[musicPaths.length];
-    private static Clip[] music = new Clip[musicPaths.length];
+    private static Clip[] sound = new Clip[musicPaths.length];
 
     public static void loopMusic(){
-        music[0].loop(Clip.LOOP_CONTINUOUSLY);
+        sound[0].loop(Clip.LOOP_CONTINUOUSLY);
     }
 
     public static void volumeDown(){
@@ -28,16 +28,18 @@ public class AudioController {
 
     }
 
-    public static void playMusic() {
+    public static void playLoop() {
 
     }
 
-    public static void stopMusic() {
-
+    public static void stopSound(int soundIndex) {
+        sound[soundIndex].stop();
+        sound[soundIndex].setFramePosition(0);
     }
 
-    public void playSFX(){
-
+    public static void playSFX(int soundIndex){
+        stopSound(soundIndex);
+        sound[soundIndex].start();
     }
 
     public static void loadMusic() {
@@ -45,8 +47,8 @@ public class AudioController {
             try {
                 file[i] = new File(musicPaths[i]);
                 inputStream[i] = AudioSystem.getAudioInputStream(file[i]);
-                music[i] = AudioSystem.getClip();
-                music[i].open(inputStream[i]);
+                sound[i] = AudioSystem.getClip();
+                sound[i].open(inputStream[i]);
             } catch (Exception e) {
                 System.out.println(e.getLocalizedMessage());
             }

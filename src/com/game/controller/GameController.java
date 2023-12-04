@@ -83,6 +83,7 @@ public class GameController {
             //if the room they are trying to go to is in current location's adjacent rooms
             if (rooms.get(player.getCurrentLocation()).getAdjacentRooms().contains(target)) {
                 //mainText.clear();
+                AudioController.playSFX(2);
                 secondaryText.clear();
                 Room room = (Room) target;
                 player.setCurrentLocation(room.getName());
