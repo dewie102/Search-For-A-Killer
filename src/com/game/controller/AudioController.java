@@ -3,6 +3,7 @@ package com.game.controller;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.FloatControl;
 import java.io.File;
 
 public class AudioController {
@@ -18,16 +19,31 @@ public class AudioController {
     private static File[] file = new File[musicPaths.length];
     private static Clip[] sound = new Clip[musicPaths.length];
 
+
     public static void loopMusic(){
         sound[0].loop(Clip.LOOP_CONTINUOUSLY);
     }
 
-    public static void volumeDown(){
-
+    //No argument version decreases by 10
+    public static void musicVolDown(){
+        FloatControl gainControl = (FloatControl) sound[0].getControl(FloatControl.Type.MASTER_GAIN);
+        gainControl.setValue(-10.0f);
     }
 
-    public static void volumeUp(){
+    public static void musicVolDown(float downBy){
+        FloatControl gainControl = (FloatControl) sound[0].getControl(FloatControl.Type.MASTER_GAIN);
+        gainControl.setValue(-downBy);
+    }
 
+    //No argument version increases by 10
+    public static void musicVolUp(){
+        FloatControl gainControl = (FloatControl) sound[0].getControl(FloatControl.Type.MASTER_GAIN);
+        gainControl.setValue(10.0f);
+    }
+
+    public static void musicVolUp(float upBy){
+        FloatControl gainControl = (FloatControl) sound[0].getControl(FloatControl.Type.MASTER_GAIN);
+        gainControl.setValue(upBy);
     }
 
     public static void playLoop() {

@@ -10,6 +10,7 @@ class MainController {
     public static void main(String[] args) throws  IOException {
 
         AudioController.loadMusic();
+        AudioController.musicVolDown(30f);
         AudioController.loopMusic();
         // Create the titlePage and devTitlePage objects that will take in the json data and pass it
         // to the ConsoleText class and the Console class, so it's outputted.
