@@ -1,4 +1,5 @@
 {
   "greetings": ["Hello.", "Hi.", "Howdy.", "Hey."],
-  "introductions": ["My name is $name.", "I am $name.", "My name is $name, and you can call me $name."]
+  "introductions": ["My name is $name.", "I am $name.", "My name is $name, and you can call me $name."],
+  "farewells": ["Bye.", "See ya!", "Later.", "Good bye."]
 }

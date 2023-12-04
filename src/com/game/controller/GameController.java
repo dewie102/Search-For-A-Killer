@@ -1,6 +1,7 @@
 package com.game.controller;
 
 import com.game.controller.commands.CommandType;
+import com.game.controller.controllers.ConversationController;
 import com.game.controller.controllers.QuitGameController;
 import com.game.model.*;
 import com.game.view.AnsiTextColor;
@@ -26,6 +27,7 @@ public class GameController {
     private final Map<String, Command> commandMap = new TreeMap<>();
     private final Map<String, Entity> entityDictionary = new HashMap<>();
     private final MapLoaderController mapLoaderController = new MapLoaderController();
+    private final ConversationController conversationController = new ConversationController(mainText);
 
 
 
@@ -69,6 +71,10 @@ public class GameController {
             boolean result = false;
 
             Entity entity = parts.length > 1 ? entityDictionary.get(parts[1]) : null;
+            if(entity == null) {
+                consoleView.setErrorMessage("You can't do that.");
+                continue;
+            }
             result = commandMap.get(parts[0]).executeCommand(entity);
             mainText.clear();
             mainText.addAll(getViewText());
@@ -97,7 +103,7 @@ public class GameController {
             return false;
         }
         //if they are not trying to go to a valid room
-        consoleView.setErrorMessage(String.format("%s is not a room, you can't go there.", target.getName()));
+        consoleView.setErrorMessage(String.format("%s is not a room, you can't go there.", target != null ? target.getName() : "That"));
         return false;
     }
 
@@ -209,11 +215,13 @@ public class GameController {
     private boolean talkCommand(Entity target) {
         //If the target is a character
         if(target instanceof Character){
+            Character character = (Character) target;
             //If the target is in the same room as the player
             if (((Character) target).getCurrentLocation().equals(player.getCurrentLocation())){
-                secondaryText.add(new ConsoleText(String.format("%s says:",target.getName())));
-                secondaryText.add(new ConsoleText("Hello there Detective! I'm not interested in talking to you right now.", AnsiTextColor.PURPLE));
-                secondaryText.add(new ConsoleText(GameController.DIVIDER, AnsiTextColor.BLUE));
+                conversationController.run(player, character);
+//                secondaryText.add(new ConsoleText(String.format("%s says:",target.getName())));
+//                secondaryText.add(new ConsoleText("Hello there Detective! I'm not interested in talking to you right now.", AnsiTextColor.PURPLE));
+//                secondaryText.add(new ConsoleText(GameController.DIVIDER, AnsiTextColor.BLUE));
                 return true;
             }
             consoleView.setErrorMessage(String.format("You can't talk to Characters that are not in the same room as you."));

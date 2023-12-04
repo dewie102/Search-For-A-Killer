@@ -21,6 +21,7 @@ public class LoadController {
         items = loadItems();
         characters = loadCharacters();
         player = loadPlayer();
+        loadConversations();
 
         fixAllHasAs();
     }
@@ -115,8 +116,15 @@ public class LoadController {
     }
 
     private static JsonConversation loadConversations(){
+        JsonConversation conversations;
         try (FileReader reader = new FileReader("data/Conversation.json")) {
-            return new Gson().fromJson(reader, JsonConversation.class);
+            conversations = new Gson().fromJson(reader, JsonConversation.class);
+            for (Character character : getCharacters().values()){
+                character.setConversation(new Conversation());
+                character.getConversation().addDialog(new Dialog(conversations.getRandomGreeting(player), conversations.getRandomGreeting(character)));
+                character.getConversation().addDialog(new Dialog(conversations.getRandomIntroduction(player), conversations.getRandomIntroduction(character)));
+                character.getConversation().addDialog(new Dialog(conversations.getRandomFarewell(player), conversations.getRandomFarewell(character)));
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

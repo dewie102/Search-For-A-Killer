@@ -6,7 +6,7 @@ package com.game.model;
 public class Character extends Entity{
     // A character must be in a Room
     private String currentLocation;
-    private Conversation conversation;
+    private Conversation conversation = new Conversation();
 
 
     public Character(String name, String description, String currentLocation){

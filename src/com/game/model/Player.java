@@ -10,7 +10,7 @@ import java.util.List;
 
 public class Player extends Character {
     // INSTANCE VARIABLES
-    private String currentLocation;
+    //private String currentLocation;
     private List<String> playerHistory = new ArrayList<>();
 
     // CONSTRUCTOR
@@ -27,13 +27,13 @@ public class Player extends Character {
     }
 
     // GETTERS AND SETTERS
-    public String getCurrentLocation() {
-        return currentLocation;
-    }
-
-    public void setCurrentLocation(String currentLocation) {
-        this.currentLocation = currentLocation;
-    }
+//    public String getCurrentLocation() {
+//        return currentLocation;
+//    }
+//
+//    public void setCurrentLocation(String currentLocation) {
+//        this.currentLocation = currentLocation;
+//    }
 
     public StringBuilder getInventoryString() {
         // builds a string with all items in the inventory separated by a comma and a space.

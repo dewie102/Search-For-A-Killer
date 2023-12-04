@@ -1,5 +1,6 @@
 package com.game.controller.controllers;
 
+import com.game.controller.LoadController;
 import com.game.model.Conversation;
 import com.game.model.Dialog;
 import com.game.model.Player;
@@ -27,6 +28,7 @@ public class ConversationController {
         int result = Integer.parseInt(consoleView.show());
         while (result != questions.size() - 1) {
             secondaryText.clear();
+            secondaryText.add(new ConsoleText(String.format("This is a conversation between you and %s:", character.getName())));
             secondaryText.add(new ConsoleText(String.format("%s: %s", player.getName(), questions.get(result))));
             secondaryText.add(new ConsoleText(String.format("%s: %s", character.getName(), character.getConversation().getDialog(result).getResponse())));
             result = Integer.parseInt(consoleView.show());
@@ -35,18 +37,27 @@ public class ConversationController {
 
     // TODO DELETE
     public static void main(String[] args) {
-        List<ConsoleText> mainText = new ArrayList<>();
-        mainText.add(new ConsoleText("Menu and options blah blah blah"));
+        while (true) {
+            Player player = LoadController.getPlayer();
 
-        ConversationController controller = new ConversationController(mainText);
-        Character character = new Character("Bob", "This is Bob", "Kitchen");
-        Conversation conversation = new Conversation();
-        conversation.addDialog(new Dialog("Hi how are you?", "I am fine."));
-        conversation.addDialog(new Dialog("Bye!", "See ya!"));
 
-        Player player = new Player("Player Name", "This is you bud", "Kitchen");
+            List<ConsoleText> mainText = new ArrayList<>();
+            mainText.add(new ConsoleText("This is a conversation between"));
 
-        character.setConversation(conversation);
-        controller.run(player, character);
+            ConversationController controller = new ConversationController(mainText);
+
+            controller.run(player, LoadController.getCharacters().get("Gardener"));
+        }
+
+
+//        Character character = new Character("Bob", "This is Bob", "Kitchen");
+//        Conversation conversation = new Conversation();
+//        conversation.addDialog(new Dialog("Hi how are you?", "I am fine."));
+//        conversation.addDialog(new Dialog("Bye!", "See ya!"));
+//
+//        player = new Player("Player Name", "This is you bud", "Kitchen");
+//
+//        character.setConversation(conversation);
+//        controller.run(player, character);
     }
 }
