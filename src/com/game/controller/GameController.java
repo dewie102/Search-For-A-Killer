@@ -52,6 +52,8 @@ public class GameController {
         commandMap.put("drop", new Command("drop", List.of("place", "put"), "Drop an object from your inventory into your current location", CommandType.TWO_PARTS, this::dropCommand));
         commandMap.put("get", new Command("get", List.of("grab", "pickup", "take"), "Drop an object from your inventory into your current location", CommandType.TWO_PARTS, this::getCommand));
         commandMap.put("talk", new Command("talk", List.of("chat", "speak"), "Talk to another character", CommandType.TWO_PARTS, this::talkCommand));
+        commandMap.put("volume", new Command("volume", List.of("sound", "vol"), "Change the volume settings", CommandType.STANDALONE, this::volCommand));
+
 
         // List of entities
         List<String> entities = new ArrayList<>(entityDictionary.keySet());
@@ -267,6 +269,11 @@ public class GameController {
             System.exit(0);
         }
         return true;
+    }
+
+    //TODO: Implement
+    private boolean volCommand(Entity target){
+        return false;
     }
 
     private List<ConsoleText> getViewText(){
