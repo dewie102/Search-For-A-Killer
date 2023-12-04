@@ -1,5 +1,8 @@
 package com.game.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Player class that is used to create the player object for the game.
  * The player will have a current location and an inventory relationship.
@@ -9,6 +12,7 @@ public class Player extends Entity {
 
     // INSTANCE VARIABLES
     private String currentLocation;
+    private List<String> playerHistory = new ArrayList<>();
 
     // CONSTRUCTOR
     public Player(String name, String description, String currentLocation) {
@@ -41,5 +45,17 @@ public class Player extends Entity {
         }
         // removes the last coma for formatting purposes
         return sb.deleteCharAt(sb.length() - 2);
+    }
+
+    public List<String> getPlayerHistory() {
+        return playerHistory;
+    }
+
+    public void setPlayerHistory(List<String> playerHistory) {
+        this.playerHistory = playerHistory;
+    }
+
+    public void addToPlayerHistory(String history){
+        playerHistory.add(history);
     }
 }

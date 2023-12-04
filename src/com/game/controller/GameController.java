@@ -9,6 +9,7 @@ import com.game.view.ConsoleText;
 import com.game.model.Character;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class GameController {
     private CommandConsoleView consoleView;
@@ -24,6 +25,7 @@ public class GameController {
     private List<ConsoleText> secondaryText = new ArrayList<>();
     private final Map<String, Command> commandMap = new TreeMap<>();
     private final Map<String, Entity> entityDictionary = new HashMap<>();
+    private final MapLoaderController mapLoaderController = new MapLoaderController();
 
 
     public GameController(){
@@ -31,6 +33,9 @@ public class GameController {
     }
 
     public void run(){
+
+        // load the game map from json
+        mapLoaderController.loadMap();
 
         Map<String, Entity> entityDictionary = new HashMap<>();
         entityDictionary.putAll(rooms);
@@ -81,6 +86,8 @@ public class GameController {
                 secondaryText.clear();
                 Room room = (Room) target;
                 player.setCurrentLocation(room.getName());
+                // add the new room to the player's location history for map rendering
+                player.addToPlayerHistory(room.getName());
                 //mainText.addAll(getViewText());
                 return true;
             }
@@ -249,8 +256,15 @@ public class GameController {
     }
 
     private List<ConsoleText> getViewText(){
+
         // View text to be passed to our view
         List<ConsoleText> result = new ArrayList<>();
+
+        // build the map based on the player location history and current location
+        mapLoaderController.buildMap(player.getCurrentLocation(), player.getPlayerHistory());
+        // display the updated map that was built using the buildMap method
+        mapLoaderController.displayMap();
+
         result.add(new ConsoleText(GameController.DIVIDER, AnsiTextColor.BLUE));
         result.add(new ConsoleText(String.format("Player Location: %s", player.getCurrentLocation())));
         result.add(new ConsoleText(String.format("Inventory: %s", player.getInventory())));
