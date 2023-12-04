@@ -194,6 +194,7 @@ public class GameController {
         if (target instanceof Item){
             //if target Item is in your inventory
             if (player.getInventory().getItems().contains(target)){
+                AudioController.playSFX(4);
                 //add item to current location inventory
                 rooms.get(player.getCurrentLocation()).getInventory().add((Item)target);
                 //remove item from player inventory
@@ -243,6 +244,7 @@ public class GameController {
                 return false;
             }
             if(currentRoom.getInventory().contains(item)){
+                AudioController.playSFX(3);
                 player.getInventory().add(item);
                 currentRoom.getInventory().remove(item);
                 mainText.clear();

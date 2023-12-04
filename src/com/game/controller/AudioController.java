@@ -11,7 +11,9 @@ public class AudioController {
     private static final String[] musicPaths =  {
             "audio/jazz-loop-7163.wav",
             "audio/sazzy-71792.wav",
-            "audio/walking-3seconds.wav"};
+            "audio/walking-3seconds.wav",
+            "audio/item-pick-up-38258.wav",
+            "audio/wooden-thud-mono-6244.wav"};
     private static AudioInputStream[] inputStream = new AudioInputStream[musicPaths.length];
     private static File[] file = new File[musicPaths.length];
     private static Clip[] sound = new Clip[musicPaths.length];
