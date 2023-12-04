@@ -10,7 +10,8 @@ public class AudioController {
     //musicPaths[1] is an alternative
     private static final String[] musicPaths =  {
             "audio/jazz-loop-7163.wav",
-            "audio/sazzy-71792.wav"};
+            "audio/sazzy-71792.wav",
+            "audio/walking-2seconds.wav"};
     private static AudioInputStream[] inputStream = new AudioInputStream[musicPaths.length];
     private static File[] file = new File[musicPaths.length];
     private static Clip[] music = new Clip[musicPaths.length];
@@ -35,6 +36,9 @@ public class AudioController {
 
     }
 
+    public void playSFX(){
+
+    }
 
     public static void loadMusic() {
         for (int i = 0; i <musicPaths.length; i++) {
