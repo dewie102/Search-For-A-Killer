@@ -1,5 +1,6 @@
 package com.game.controller;
 
+import com.game.controller.io.JsonConversation;
 import com.game.model.*;
 import com.game.model.Character;
 import com.google.gson.Gson;
@@ -107,6 +108,15 @@ public class LoadController {
     private static Player loadPlayer() {
         try (FileReader reader = new FileReader("data/Player.json")) {
             return new Gson().fromJson(reader, Player.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private static JsonConversation loadConversations(){
+        try (FileReader reader = new FileReader("data/Conversation.json")) {
+            return new Gson().fromJson(reader, JsonConversation.class);
         } catch (Exception e) {
             e.printStackTrace();
         }
