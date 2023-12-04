@@ -42,6 +42,11 @@ public class ConsoleView {
         }
     }
 
+    // show map
+    public void showMap(){
+        displayText();
+    }
+
     void executeViewLogic(){
         // EMPTY ON PURPOSE :D
     }
