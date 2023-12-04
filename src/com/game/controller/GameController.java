@@ -94,7 +94,9 @@ public class GameController {
                 Room room = (Room) target;
                 player.setCurrentLocation(room.getName());
                 // add the new room to the player's location history for map rendering
-                player.addToPlayerHistory(room.getName());
+                if(!player.getPlayerHistory().contains(room.getName())) {
+                    player.addToPlayerHistory(room.getName());
+                }
                 //mainText.addAll(getViewText());
                 return true;
             }
