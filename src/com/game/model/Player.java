@@ -8,16 +8,15 @@ import java.util.List;
  * The player will have a current location and an inventory relationship.
  */
 
-public class Player extends Entity {
-
+public class Player extends Character {
     // INSTANCE VARIABLES
-    private String currentLocation;
+    //private String currentLocation;
     private List<String> playerHistory = new ArrayList<>();
 
     // CONSTRUCTOR
     public Player(String name, String description, String currentLocation) {
-        super(name, description);
-        setCurrentLocation(currentLocation);
+        super(name, description, currentLocation);
+        //setCurrentLocation(currentLocation);
     }
 
     // METHODS
@@ -28,13 +27,13 @@ public class Player extends Entity {
     }
 
     // GETTERS AND SETTERS
-    public String getCurrentLocation() {
-        return currentLocation;
-    }
-
-    public void setCurrentLocation(String currentLocation) {
-        this.currentLocation = currentLocation;
-    }
+//    public String getCurrentLocation() {
+//        return currentLocation;
+//    }
+//
+//    public void setCurrentLocation(String currentLocation) {
+//        this.currentLocation = currentLocation;
+//    }
 
     public StringBuilder getInventoryString() {
         // builds a string with all items in the inventory separated by a comma and a space.
