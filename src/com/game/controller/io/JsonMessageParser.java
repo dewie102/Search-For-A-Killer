@@ -19,6 +19,8 @@ public class JsonMessageParser {
     private static Map<String, String> errorMessages = new HashMap<>();
     private static Map<String, String> infoMessages = new HashMap<>();
     private static List<String> ignoreList =  new ArrayList<>();
+    private static List<String> playerOptions =  new ArrayList<>();
+    private static List<String> audioOptions = new ArrayList<>();
 
     // CONSTRUCTORS
     public JsonMessageParser(){
@@ -59,6 +61,31 @@ public class JsonMessageParser {
         }
     }
 
+    public static List<String> loadPlayerOptions(){
+        String filePath = "data/PlayerOptions.json";
+
+        try (FileReader reader = new FileReader(filePath)) {
+            Gson gson = new Gson();
+            Map<String, List<String>> options = gson.fromJson(reader, Map.class);
+            getPlayerOptions().addAll(options.get("Main Menu"));
+        } catch (Exception e) {
+            System.out.println("Error loading the ignore file " + e.getMessage());
+        }
+        return null;
+    }
+
+    public static void loadAudioOptions(){
+        String filePath = "data/AudioOptions.json";
+
+        try (FileReader reader = new FileReader(filePath)) {
+            Gson gson = new Gson();
+            Map<String, List<String>> options = gson.fromJson(reader, Map.class);
+            audioOptions.addAll(options.get("Audio Options"));
+        } catch (Exception e) {
+            System.out.println("Error loading the audio file: " + e.getMessage());
+        }
+    }
+
     // GETTERS AND SETTERS
     public Map<String, String> getGeneralMessages() {
         return generalMessages;
@@ -91,11 +118,30 @@ public class JsonMessageParser {
     public static void setIgnoreList(List<String> ignoreList) {
         JsonMessageParser.ignoreList = ignoreList;
     }
+
+    public static List<String> getPlayerOptions() {
+        return playerOptions;
+    }
+
+    public static void setPlayerOptions(List<String> playerOptions) {
+        JsonMessageParser.playerOptions = playerOptions;
+    }
+
+    public static List<String> getAudioOptions() {
+        return audioOptions;
+    }
+
+    public static void setAudioOptions(List<String> audioOptions) {
+        JsonMessageParser.audioOptions = audioOptions;
+    }
 }
 
+//TODO: remove
 class TestMain{
     public static void main(String[] args) {
-        JsonMessageParser parser = new JsonMessageParser();
-        System.out.println(parser.getIgnoreList());
+        JsonMessageParser.loadAudioOptions();
+        JsonMessageParser.loadPlayerOptions();
+        System.out.println(JsonMessageParser.getPlayerOptions());
+        System.out.println(JsonMessageParser.getAudioOptions());
     }
 }
