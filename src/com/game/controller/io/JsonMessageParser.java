@@ -136,12 +136,3 @@ public class JsonMessageParser {
     }
 }
 
-//TODO: remove
-class TestMain{
-    public static void main(String[] args) {
-        JsonMessageParser.loadAudioOptions();
-        JsonMessageParser.loadPlayerOptions();
-        System.out.println(JsonMessageParser.getPlayerOptions());
-        System.out.println(JsonMessageParser.getAudioOptions());
-    }
-}

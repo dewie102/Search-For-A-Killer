@@ -8,6 +8,7 @@ public class JsonConversation {
     private List<String> greetings;
     private List<String> introductions;
     private List<String> farewells;
+    private List<String> inquiries;
 
     public String getRandomGreeting(Character character){
         return getRandomElement(greetings).replace("$name", character.getName());
@@ -19,6 +20,10 @@ public class JsonConversation {
 
     public String getRandomFarewell(Character character){
         return getRandomElement(farewells).replace("$name", character.getName());
+    }
+
+    public String getRandomInquiry(){
+        return getRandomElement(inquiries);
     }
 
     private String getRandomElement(List<String> list){
@@ -53,5 +58,13 @@ public class JsonConversation {
 
     public void setFarewells(List<String> farewells) {
         this.farewells = farewells;
+    }
+
+    public List<String> getInquiries() {
+        return inquiries;
+    }
+
+    public void setInquiries(List<String> inquiries) {
+        this.inquiries = inquiries;
     }
 }
