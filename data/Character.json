@@ -3,18 +3,30 @@
     "name": "Gardener",
     "description": "A random gardener that works around the house for free.",
     "currentLocation": "Backyard",
-    "jsonInventory": ["Glove"]
-    },
-    {
+    "jsonInventory": ["Glove"],
+    "isSuspect":  "true"
+  },
+  {
     "name": "Nanny",
     "description": "The live-in nanny that just submitted her two week notice a week ago.",
     "currentLocation": "Kitchen",
-    "jsonInventory": ["Pen"]
-    },
-    {
+    "jsonInventory": ["Pen"],
+    "isSuspect":  "true"
+  },
+  {
     "name": "Butler",
     "description": "The family butler that has been in the family for several years.",
     "currentLocation": "Office",
-    "jsonInventory": ["Pen"]
+    "jsonInventory": ["Pen"],
+    "isSuspect":  "true",
+    "isMurderer": "true"
+  },
+  {
+    "name": "Sergeant",
+    "description": "The police sergeant in charge of the case and your training.",
+    "currentLocation": "Backyard",
+    "jsonInventory": [],
+    "isSuspect":  "false",
+    "isSergeant": "true"
   }
 ]
