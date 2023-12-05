@@ -1,12 +1,13 @@
-[
-  {
+{
     "general": {
       "divider": "#################################################",
       "quit": "quit"
     },
     "error": {
+      "invalidAction": "You can't do that.",
       "invalidRoomTravers": "You can't get to the %s from here",
       "invalidRoomName": "Invalid room name. There is no room with that name.",
+      "invalidRoomNameDefault": "That",
       "invalidInventoryDropItem": "You can only drop \"Items\" that are in your inventory.",
       "invalidTypeDropItem": "You can only drop \"Items\"",
       "invalidCharacterPresence": "you can't speak to characters that are not in the same room as you.",
@@ -18,6 +19,7 @@
     "info": {
       "invalidLook": "%s is not a valid item for you to look at.",
       "personVisible": "You see someone you can speak to: ",
+      "visibleItems": "Items you see: ",
       "traversableRooms": "Rooms you can go to: ",
       "observeItem": "The %s contains: %s",
       "availableCommands": "Available commands: ",
@@ -28,4 +30,3 @@
       "connectedRooms": "Connected Rooms: %s"
     }
   }
-]
