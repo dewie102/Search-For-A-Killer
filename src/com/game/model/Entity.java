@@ -48,4 +48,9 @@ public abstract class Entity {
     public List<String> getJsonInventory() {
         return jsonInventory;
     }
+
+    @Override
+    public String toString(){
+        return this.getName();
+    }
 }

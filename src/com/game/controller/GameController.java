@@ -26,9 +26,16 @@ public class GameController {
     private List<ConsoleText> secondaryText = new ArrayList<>();
     private final Map<String, Command> commandMap = new TreeMap<>();
     private final MapLoaderController mapLoaderController = new MapLoaderController();
-    private final ConversationController conversationController = new ConversationController(mainText);
+    private final ConversationController conversationController = new ConversationController(mainText, this::checkForWinningConditions);
+    private Character reportedMurder = null;
+    private Item reportedMurderWeapon = null;
 
-    public void run(){
+
+    public GameController(){
+        setDetectiveEndGameConversation();
+    }
+
+    public GameResult run(){
 
         // load the game map from json
         mapLoaderController.loadMap();
@@ -39,7 +46,7 @@ public class GameController {
         entityDictionary.putAll(characters);
         mainText = getViewText();
         commandMap.put("go", new Command("go", List.of("run", "move", "walk", "travel"), "Go to a room. e.g. go kitchen", CommandType.TWO_PARTS, this::goCommand));
-        commandMap.put("look", new Command("look", List.of("see", "inspect"), "Look at an object or room. e.g. look knife", CommandType.HYBRID, this::lookCommand));
+        commandMap.put("look", new Command("look", List.of("see", "inspect", "read"), "Look at an object or room. e.g. look knife", CommandType.HYBRID, this::lookCommand));
         commandMap.put("quit", new Command("quit", List.of("exit"), "Quits the game, no questions asked.", CommandType.STANDALONE, this::quitCommand));
         commandMap.put("help", new Command("help", List.of(), "It displays this menu.", CommandType.STANDALONE, this::helpCommand));
         commandMap.put("drop", new Command("drop", List.of("place", "put"), "Drop an object from your inventory into your current location", CommandType.TWO_PARTS, this::dropCommand));
@@ -56,14 +63,15 @@ public class GameController {
         String escapeCommand = gameText.getGeneralMessages().get("quit");
 
         consoleView = new CommandConsoleView(List.of(mainText, secondaryText), new ArrayList<>(commandMap.values()), entities, ignoreList);
-        while (true){
+        GameResult gameResult = GameResult.UNDEFINED;
+        while (gameResult == GameResult.UNDEFINED){
             String userInput = consoleView.show();
             String[] parts = userInput.split(" ", 2);
             boolean result = false;
 
             Entity entity = parts.length > 1 ? entityDictionary.get(parts[1]) : null;
 
-            if(!(commandMap.get(parts[0]).getCommandType()==CommandType.STANDALONE)) {
+            if((commandMap.get(parts[0]).getCommandType() == CommandType.TWO_PARTS)) {
                 if (entity == null) {
                     consoleView.setErrorMessage(gameText.getErrorMessages().get("invalidAction"));
                     continue;
@@ -76,7 +84,11 @@ public class GameController {
             if(result){
                 consoleView.clearErrorMessage();
             }
+
+            gameResult = checkForWinningConditions();
         }
+
+        return gameResult;
     }
 
     private boolean goCommand(Entity target){
@@ -140,10 +152,10 @@ public class GameController {
                 secondaryText.add(new ConsoleText(gameText.getInfoMessages().get("visibleItems") + room.getInventory()));
             }
             if(!(room.getCharactersInRoom()==null) && !room.getCharactersInRoom().isEmpty()){
-                secondaryText.add(new ConsoleText(gameText.getInfoMessages().get("personVisible") + room.getCharactersInRoom()));
+                secondaryText.add(new ConsoleText(gameText.getInfoMessages().get("personVisible"), room.getCharactersInRoomToString()));
             }
             //print adjacent rooms
-            secondaryText.add(new ConsoleText(gameText.getInfoMessages().get("traversableRooms") + room.getJsonAdjacentRooms()));
+            secondaryText.add(new ConsoleText(gameText.getInfoMessages().get("traversableRooms"), room.getJsonAdjacentRooms()));
             secondaryText.add(new ConsoleText(gameText.getGeneralMessages().get("divider"), AnsiTextColor.BLUE));
             return true;
         }
@@ -152,7 +164,8 @@ public class GameController {
 
     private boolean lookItem(Item item){
         secondaryText.clear();
-        //if the item is in your inventory or in the inventory of the room are you currently in
+        //if the item is in your inventory
+        // or in the inventory of the room are you currently in
         if (player.getInventory().getItems().contains(item) || rooms.get(player.getCurrentLocation()).getInventory().getItems().contains(item)) {
             secondaryText.add(new ConsoleText(item.getDescription()));
             if(!item.getInventory().getItems().isEmpty()) {
@@ -290,5 +303,56 @@ public class GameController {
         result.add(new ConsoleText(String.format(gameText.getInfoMessages().get("connectedRooms"), rooms.get(player.getCurrentLocation()).adjacentRoomToString())));
         result.add(new ConsoleText(gameText.getGeneralMessages().get("divider"), AnsiTextColor.BLUE));
         return result;
+    }
+
+    private boolean reportCommand(Entity target){
+        if(target instanceof Item){
+            reportedMurderWeapon = (Item)target;
+        }
+        if(target instanceof Character){
+            reportedMurder = (Character)target;
+        }
+        return true;
+    }
+
+    private GameResult checkForWinningConditions(){
+        if(reportedMurder == null || reportedMurderWeapon == null)
+            return GameResult.UNDEFINED;
+        else{
+            return (reportedMurder == LoadController.getMurderer() && reportedMurderWeapon == LoadController.getMurderWeapon())
+                    ? GameResult.WIN : GameResult.LOSS;
+        }
+    }
+
+    private void setDetectiveEndGameConversation(){
+        Conversation mainConversation = new Conversation();
+        Dialog murdererDialog = new Dialog("I know who the murderer is", "Perfect, who do you think committed the murder?");
+        Dialog murdererWeaponDialog = new Dialog("I know which one was the murder weapon", "Perfect, which was the murder weapon?");
+
+        Character detective = LoadController.getDetective();
+
+        Conversation murdererConversation = new Conversation();
+        for (var suspect : LoadController.getSuspects().values()) {
+            Dialog dialog = new Dialog(suspect.getName(), "Noted, you think the murderer was " + suspect.getName());
+            dialog.setReport(suspect);
+            dialog.setCallBack(this::reportCommand);
+            murdererConversation.addDialog(dialog);
+        }
+        murdererConversation.addDialog(new Dialog("On the other hand.", ""));
+        murdererDialog.setFollowUpConversation(murdererConversation);
+
+        Conversation murdererWeaponConversation = new Conversation();
+        for (var weapon : LoadController.getWeapons().values()) {
+            Dialog dialog = new Dialog(weapon.getName(), "Noted, you think the murder weapon was " + weapon.getName());
+            dialog.setReport(weapon);
+            dialog.setCallBack(this::reportCommand);
+            murdererWeaponConversation.addDialog(dialog);
+        }
+        murdererWeaponConversation.addDialog(new Dialog("On the other hand.", ""));
+        murdererWeaponDialog.setFollowUpConversation(murdererWeaponConversation);
+
+        detective.getConversation().insertDialog(murdererDialog);
+        detective.getConversation().insertDialog(murdererWeaponDialog);
+
     }
 }

@@ -112,7 +112,6 @@ public class AudioController {
     }
 
     //SFX volume controls -
-    //TODO: change sound[0] to sounds that are SFX
     public static void sfxVolDown(){
         sfxVolDelta-=10.0f;
         FloatControl gainControl1 = (FloatControl) sound[2].getControl(FloatControl.Type.MASTER_GAIN);
