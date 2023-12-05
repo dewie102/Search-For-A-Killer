@@ -7,6 +7,7 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.FloatControl;
+import javax.swing.*;
 import java.io.File;
 import java.util.List;
 
@@ -26,7 +27,7 @@ public class AudioController {
     private static final File[] file = new File[soundPaths.length];
     private static final Clip[] sound = new Clip[soundPaths.length];
 
-    public static void volMenu(){
+    public static boolean volMenu(){
         MultipleChoiceConsoleView consoleView = new MultipleChoiceConsoleView(
                 List.of(List.of(new ConsoleText("What would you like to do? Type 'exit' to exit the menu."))),
                 List.of(
@@ -37,37 +38,40 @@ public class AudioController {
                         new ConsoleText("Sound Effects ON"),
                         new ConsoleText("Sound Effects OFF"),
                         new ConsoleText("Sound Effects UP"),
-                        new ConsoleText("Sound Effects DOWN")
+                        new ConsoleText("Sound Effects DOWN"),
+                        new ConsoleText("Exit audio menu")
 
                 ));
         String userInput = consoleView.show();
         switch (userInput){
             case "0": // M on
                 System.out.println("You entered 0");
-                break;
+                return false;
             case "1": // M off
                 System.out.println("You entered 1");
-                break;
+                return false;
             case "2": // M up
                 musicVolUp();
-                break;
+                return true;
             case "3": // M down
                 musicVolDown();
-                break;
+                return true;
             case "4":
                 System.out.println("You entered 4");
-                break;
+                return false;
             case "5":
                 System.out.println("You entered 5");
-                break;
+                return false;
             case "6":
                 System.out.println("You entered 6");
-                break;
+                return false;
             case "7":
                 System.out.println("You entered 7");
-                break;
-            case "exit":
-                break;
+                return false;
+            case "8":
+                return true;
+            default:
+                return false;
         }
 
     }

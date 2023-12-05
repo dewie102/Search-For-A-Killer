@@ -73,10 +73,13 @@ public class GameController {
             boolean result = false;
 
             Entity entity = parts.length > 1 ? entityDictionary.get(parts[1]) : null;
-//            if(entity == null) {
-//                consoleView.setErrorMessage("You can't do that.");
-//                continue;
-//            }
+
+            if(!(commandMap.get(parts[0]).getCommandType()==CommandType.STANDALONE)) {
+                if (entity == null) {
+                    consoleView.setErrorMessage("You can't do that.");
+                    continue;
+                }
+            }
             result = commandMap.get(parts[0]).executeCommand(entity);
             mainText.clear();
             mainText.addAll(getViewText());
@@ -273,7 +276,11 @@ public class GameController {
 
     //TODO: Implement
     private boolean volCommand(Entity target){
-        AudioController.volMenu();
+        boolean success = AudioController.volMenu();
+        if(success){
+            return true;
+        }
+        consoleView.setErrorMessage("User input invalid");
         return false;
     }
 
