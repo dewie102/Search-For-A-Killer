@@ -18,9 +18,11 @@ public class JsonMessageParser {
     private static Map<String, String> generalMessages = new HashMap<>();
     private static Map<String, String> errorMessages = new HashMap<>();
     private static Map<String, String> infoMessages = new HashMap<>();
+    private static Map<String, String> endGameMessages = new HashMap<>();
     private static List<String> ignoreList =  new ArrayList<>();
     private static List<String> playerOptions =  new ArrayList<>();
     private static List<String> audioOptions = new ArrayList<>();
+
 
     // CONSTRUCTORS
     public JsonMessageParser(){
@@ -44,6 +46,8 @@ public class JsonMessageParser {
             getErrorMessages().putAll(messages.get("error"));
             // add all the info messages to the infoMessages map
             getInfoMessages().putAll(messages.get("info"));
+            // add endGame messages
+            endGameMessages.putAll(messages.get("endgame"));
         } catch (Exception e) {
             System.out.println("Error reading the Message.json file: " + e.getMessage());
         }
@@ -133,6 +137,10 @@ public class JsonMessageParser {
 
     public static void setAudioOptions(List<String> audioOptions) {
         JsonMessageParser.audioOptions = audioOptions;
+    }
+
+    public static Map<String, String> getEndGameMessages(){
+        return endGameMessages;
     }
 }
 
