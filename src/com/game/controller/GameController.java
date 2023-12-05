@@ -21,6 +21,7 @@ public class GameController {
     private final Map<String, Room> rooms = LoadController.getRooms();
     private final Map<String, Item> items = LoadController.getItems();
     private final Map<String, Character> characters = LoadController.getCharacters();
+    //TODO: replace with general.get("divider").value()
     private static final String DIVIDER = "#################################################";
     private List<ConsoleText> mainText = new ArrayList<>();
     private List<ConsoleText> secondaryText = new ArrayList<>();
@@ -62,6 +63,7 @@ public class GameController {
                 "the", "at", "an", "a", "of", "around", "to", "with"
         );
 
+        //TODO: replace with general.get("quit").value()
         String escapeCommand = "quit";
 
         consoleView = new CommandConsoleView(List.of(mainText, secondaryText), new ArrayList<>(commandMap.values()), entities, ignoreList);
@@ -102,10 +104,12 @@ public class GameController {
                 return true;
             }
             //if they are trying to go to a room, but not an adjacent one
+            //TODO: replace with error.get("notTraversable").value()
             consoleView.setErrorMessage(String.format("You can't get to the %s from here.", target.getName()));
             return false;
         }
         //if they are not trying to go to a valid room
+        //TODO: replace with error.get("notARoom").value()
         consoleView.setErrorMessage(String.format("%s is not a room, you can't go there.", target != null ? target.getName() : "That"));
         return false;
     }
@@ -131,6 +135,7 @@ public class GameController {
                 return true;
             }
         }
+        //TODO: replace with error.get("invalidLook").value()
         consoleView.setErrorMessage(String.format("%s is not a valid thing for you to look at" +
                 ".", target.getName()));
         return false;
@@ -144,12 +149,15 @@ public class GameController {
             secondaryText.add(new ConsoleText(room.getDescription()));
             if(!room.getInventory().getItems().isEmpty()) {
                 //print items in room if there are any
+                //TODO: replace with info.get(visibleItems).value()
                 secondaryText.add(new ConsoleText("Items you see: " + room.getInventory()));
             }
             if(!(room.getCharactersInRoom()==null) && !room.getCharactersInRoom().isEmpty()){
+                //TODO: info.get("personVisible").value()
                 secondaryText.add(new ConsoleText("You see someone you can talk to: " + room.getCharactersInRoom()));
             }
             //print adjacent rooms
+            //TODO: replace with info.get("traversableRooms").value()
             secondaryText.add(new ConsoleText("Rooms you can go to: " + room.getJsonAdjacentRooms()));
             secondaryText.add(new ConsoleText(GameController.DIVIDER, AnsiTextColor.BLUE));
             return true;
@@ -163,6 +171,7 @@ public class GameController {
         if (player.getInventory().getItems().contains(item) || rooms.get(player.getCurrentLocation()).getInventory().getItems().contains(item)) {
             secondaryText.add(new ConsoleText(item.getDescription()));
             if(!item.getInventory().getItems().isEmpty()) {
+                //TODO: replace with info.get(visibleItems).value()
                 secondaryText.add(new ConsoleText(String.format("The %s contains: %s",item.getName(),item.getInventory())));
             }
             secondaryText.add(new ConsoleText(GameController.DIVIDER, AnsiTextColor.BLUE));
@@ -173,6 +182,7 @@ public class GameController {
 
     private boolean helpCommand(Entity target) {
         secondaryText.clear();
+        //TODO: replacd with info.get("availableCommands").value()
         secondaryText.add(new ConsoleText("Available commands:"));
         for (var command : commandMap.values()) {
             secondaryText.add(new ConsoleText(String.format("%s: \t%s", command.getKeyWord(), command.getDescription())));
@@ -204,14 +214,17 @@ public class GameController {
                 //mainText.clear();
                 //mainText.addAll(getViewText());
                 //Tell the player what happened
+                //TODO: replace with info.get("dropItem").value()
                 secondaryText.add(new ConsoleText(String.format("You dropped the %s",target.getName())));
                 secondaryText.add(new ConsoleText(GameController.DIVIDER, AnsiTextColor.BLUE));
                 return true;
             }
             //that item is not in your inventory, so you can't drop it
+            //TODO: replace with error.get("dropItem").value()
             consoleView.setErrorMessage("You can only drop Items that are in your inventory.");
             return false;
         }
+        //TODO: replace with error.get("invalidTypeDropItem").value()
         consoleView.setErrorMessage("You can only drop Items.");
         return false;
     }
@@ -228,9 +241,11 @@ public class GameController {
 //                secondaryText.add(new ConsoleText(GameController.DIVIDER, AnsiTextColor.BLUE));
                 return true;
             }
+            //TODO: replace with error.get("invalidCharacterPresence").value()
             consoleView.setErrorMessage(String.format("You can't talk to Characters that are not in the same room as you."));
             return false;
         }
+        //TODO: replace with error.get("invalidCharacterType").value()
         consoleView.setErrorMessage(String.format("You can only talk to Characters."));
         return false;
     }
@@ -242,6 +257,7 @@ public class GameController {
             Item item = (Item)target;
             if(!item.isPickUpable())
             {
+                //TODO: replace with error.get("invalidItemPickup").value()
                 consoleView.setErrorMessage(String.format("Nice try, but no, you can't pick up %s", item.getName()));
                 return false;
             }
@@ -251,12 +267,15 @@ public class GameController {
                 currentRoom.getInventory().remove(item);
                 mainText.clear();
                 mainText.addAll(getViewText());
+                //TODO: replace with info.get("itemPickup").value()
                 secondaryText.add(new ConsoleText(String.format("You added %s to your inventory.",target.getName())));
                 secondaryText.add(new ConsoleText(GameController.DIVIDER, AnsiTextColor.BLUE));
                 return true;
             }
+            //TODO: replace with error.get("itemNotInRoom").value()
             consoleView.setErrorMessage("That item is not in this room.");
         }
+        //TODO: replace with error.get("invalidNotAnItem").value()
         consoleView.setErrorMessage("That is not an item.");
         return false;
     }
@@ -280,9 +299,12 @@ public class GameController {
         mapLoaderController.displayMap();
 
         result.add(new ConsoleText(GameController.DIVIDER, AnsiTextColor.BLUE));
+        //TODO: replace with info.get("playerLocation").value()
         result.add(new ConsoleText(String.format("Player Location: %s", player.getCurrentLocation())));
+        //TODO: replace with info.get("playerInventory").value()
         result.add(new ConsoleText(String.format("Inventory: %s", player.getInventory())));
         result.add(new ConsoleText(GameController.DIVIDER, AnsiTextColor.BLUE));
+        //TODO: replace with info.get("connectedRooms").value()
         result.add(new ConsoleText(String.format("Connected Rooms: %s", rooms.get(player.getCurrentLocation()).adjacentRoomToString())));
         result.add(new ConsoleText(GameController.DIVIDER, AnsiTextColor.BLUE));
         return result;

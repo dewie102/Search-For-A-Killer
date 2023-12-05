@@ -1,0 +1,31 @@
+[
+  {
+    "general": {
+      "divider": "#################################################",
+      "quit": "quit"
+    },
+    "error": {
+      "invalidRoomTravers": "You can't get to the %s from here",
+      "invalidRoomName": "Invalid room name. There is no room with that name.",
+      "invalidInventoryDropItem": "You can only drop \"Items\" that are in your inventory.",
+      "invalidTypeDropItem": "You can only drop \"Items\"",
+      "invalidCharacterPresence": "you can't speak to characters that are not in the same room as you.",
+      "invalidCharacterType": "You can only speak to \"Characters\"",
+      "invalidItemPickup": "Nice try, but no, you can't pickup %s.",
+      "invalidItemNotPresent": "That \"Item\" is not present in this room",
+      "invalidNotAnItem": "That is not an \"Item\""
+    },
+    "info": {
+      "invalidLook": "%s is not a valid item for you to look at.",
+      "personVisible": "You see someone you can speak to: ",
+      "traversableRooms": "Rooms you can go to: ",
+      "observeItem": "The %s contains: %s",
+      "availableCommands": "Available commands: ",
+      "dropItem": "You dropped the %s",
+      "itemPickup": "You added %s to your inventory.",
+      "playerLocation": "Player Location: %s",
+      "playerInventory": "Player Inventory: %s",
+      "connectedRooms": "Connected Rooms: %s"
+    }
+  }
+]
