@@ -136,6 +136,7 @@ public class LoadController {
                 character.setConversation(new Conversation());
                 character.getConversation().addDialog(new Dialog(conversations.getRandomGreeting(player), conversations.getRandomGreeting(character)));
                 character.getConversation().addDialog(new Dialog(conversations.getRandomIntroduction(player), conversations.getRandomIntroduction(character)));
+                character.getConversation().addDialog(new Dialog(conversations.getRandomInquiry(), character.getClue()));
                 character.getConversation().addDialog(new Dialog(conversations.getRandomFarewell(player), conversations.getRandomFarewell(character)));
             }
         } catch (Exception e) {

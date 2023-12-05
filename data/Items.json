@@ -81,7 +81,7 @@
   },
   {
     "name":"Dart board",
-    "description":"There is a dart board, but not darts to be seen. You wonder if all the tiny holes on the wall around the boards has anything to do with that.",
+    "description":"There is a dart board, but no darts to be seen. You wonder if all the tiny holes on the wall around the boards has anything to do with that.",
     "pickUpable": false
   },
   {
@@ -124,7 +124,7 @@
   },
   {
     "name": "Note #3",
-    "description": "The note reads:\n\"I saw the Butler digging in the garden this morning. How peculiar!\nNote to self, search backyard after tending to the lawn\nto see what he was looking for - or trying to hide\"",
+    "description": "The note reads:\n\"I saw the Butler digging in the garden this morning. How peculiar!\nNote to self, search backyard after tending to the lawn\nto see what he was looking for - or trying to hide.\"",
     "pickUpable": true
   },
   {
