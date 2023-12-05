@@ -138,6 +138,11 @@
     "name": "Note #6",
     "description": "The letter R is written on the paper  in red ink",
     "pickUpable": true
+  },
+  {
+    "name": "Crime Report",
+    "description": "The report reads: \" The victim was punctured in the jugular with a small pointy object.\"",
+    "pickUpable" : false
   }
 
 ]
