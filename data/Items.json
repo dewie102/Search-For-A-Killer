@@ -108,5 +108,36 @@
     "name": "Candy Wrapper",
     "description": "A Rooso's Peanut Butter Tree, the best part of the season. The wrapper still smells like chocolate and peanut butter.",
     "pickUpable": true
+  },
+  {
+    "name": "Note #1",
+    "description": "The letter B is written on the letter in red ink",
+    "pickUpable": true
+  },
+  {
+    "name": "Note #2",
+    "description": "The letter U is written on the paper in red ink",
+    "pickUpable": true
+  },
+  {
+    "name": "Note #3",
+    "description": "The letter T is written on the paper  in red ink",
+    "pickUpable": true
+  },
+  {
+    "name": "Note #4",
+    "description": "The letter L is written on the paper in red ink",
+    "pickUpable": true
+  },
+  {
+    "name": "Note #5",
+    "description": "The letter E is written on the paper  in red ink",
+    "pickUpable": true
+  },
+  {
+    "name": "Note #6",
+    "description": "The letter R is written on the paper  in red ink",
+    "pickUpable": true
   }
+
 ]
