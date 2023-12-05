@@ -69,8 +69,12 @@ public class AudioController {
                 setSfxOn(false);
                 return true;
             case "6"://SFX up
-                sfxVolUp();
-                return true;
+                try {
+                    sfxVolUp();
+                    return true;
+                } catch (IllegalArgumentException e){
+                    return false;
+                }
             case "7"://SFX down
                 sfxVolDown();
                 return true;
