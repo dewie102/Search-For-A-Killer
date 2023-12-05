@@ -19,7 +19,7 @@ public class ConsoleText {
 
     // CONSTRUCTOR
     // builds a new ConsoleText object with the given text, text color, and background color.
-    ConsoleText(String text, AnsiTextColor textColor, AnsiBackgroundColor backgroundColor) {
+    public ConsoleText(String text, AnsiTextColor textColor, AnsiBackgroundColor backgroundColor) {
         setText(text);
         setBackgroundColor(backgroundColor);
         setTextColor(textColor);

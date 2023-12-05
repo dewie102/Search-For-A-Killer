@@ -87,7 +87,9 @@ public class GameController {
 
             gameResult = checkForWinningConditions();
         }
-
+        player.getPlayerHistory().clear();
+        mapLoaderController.buildMap(player.getCurrentLocation(), player.getPlayerHistory());
+        mapLoaderController.displayMap();
         return gameResult;
     }
 
@@ -353,6 +355,5 @@ public class GameController {
 
         detective.getConversation().insertDialog(murdererDialog);
         detective.getConversation().insertDialog(murdererWeaponDialog);
-
     }
 }

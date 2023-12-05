@@ -2,15 +2,15 @@ package com.game.controller;
 
 import com.game.controller.io.JsonMessageParser;
 import com.game.model.NotImplementedException;
-import com.game.view.Console;
-import com.game.view.ConsoleText;
-import com.game.view.MultipleChoiceConsoleView;
+import com.game.view.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 class OptionsMenuController {
     List<ConsoleText> options = new ArrayList<>();
+    private List<ConsoleText> mainText = new ArrayList<>();
+    private List<ConsoleText> secondaryText = new ArrayList<>();
 
     private final List<ConsoleText> gameResult = new ArrayList<>();
 
@@ -21,8 +21,10 @@ class OptionsMenuController {
                 options.add(new ConsoleText(option));
             }
         }
-        MultipleChoiceConsoleView consoleView = new MultipleChoiceConsoleView(
-                List.of(List.of(new ConsoleText("Main Menu: "))), options);
+//        MultipleChoiceConsoleView consoleView = new MultipleChoiceConsoleView(List.of(List.of(new ConsoleText("Main Menu: "))), options);
+        secondaryText = new ArrayList<>();
+        secondaryText.add(new ConsoleText("Main Menu:", AnsiTextColor.BLUE));
+        MultipleChoiceConsoleView consoleView = new MultipleChoiceConsoleView(List.of(mainText, secondaryText), options);
         while (true) {
             String userInput = consoleView.show();
             switch (userInput) {
@@ -37,25 +39,15 @@ class OptionsMenuController {
     }
 
     private void newGame(){
+        LoadController.loadAllEntities();
+        mainText.clear();
         GameController gameController = new GameController();
         GameResult gameResult = gameController.run();
         if (gameResult == GameResult.LOSS){
-            Console.print("You lost the game");
+            mainText.add(new ConsoleText(JsonMessageParser.getEndGameMessages().get("lose"), AnsiTextColor.RED));
         }else {
-            Console.print("You won");
+            mainText.add(new ConsoleText(JsonMessageParser.getEndGameMessages().get("win"), AnsiTextColor.GREEN));
         }
-    }
-
-    private void loadSavedGame(){
-        throw new NotImplementedException("OptionsMenuController.loadSavedGame() is not implemented");
-    }
-
-    private void howToPlay(){
-        throw new NotImplementedException("OptionsMenuController.howToPlay() is not implemented");
-    }
-
-    private void aboutThisGame(){
-        throw new NotImplementedException("OptionsMenuController.aboutThisGame() is not implemented");
     }
 
     private void quitGame(){

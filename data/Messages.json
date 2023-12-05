@@ -28,5 +28,9 @@
       "playerLocation": "Player Location: %s",
       "playerInventory": "Player Inventory: %s",
       "connectedRooms": "Connected Rooms: %s"
+    },
+  "endgame": {
+    "win": "Congratulations, you found the murderer and the murder weapon. You won the game!",
+    "lose": "Too bad, you failed in your quest to resolve the murder. Try again."
     }
   }
