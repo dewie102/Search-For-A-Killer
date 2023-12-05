@@ -3,6 +3,7 @@ package com.game.controller;
 import com.game.controller.commands.CommandType;
 import com.game.controller.controllers.ConversationController;
 import com.game.controller.controllers.QuitGameController;
+import com.game.controller.io.JsonMessageParser;
 import com.game.model.*;
 import com.game.view.AnsiTextColor;
 import com.game.view.CommandConsoleView;
@@ -162,8 +163,8 @@ public class GameController {
                 secondaryText.add(new ConsoleText(gameText.getInfoMessages().get("personVisible"), room.getCharactersInRoomToString()));
             }
             //print adjacent rooms
-            secondaryText.add(new ConsoleText("Rooms you can go to: ", room.getJsonAdjacentRooms()));
-            secondaryText.add(new ConsoleText(GameController.DIVIDER, AnsiTextColor.BLUE));
+            secondaryText.add(new ConsoleText(gameText.getInfoMessages().get("traversableRooms"), room.getJsonAdjacentRooms()));
+            secondaryText.add(new ConsoleText(gameText.getGeneralMessages().get("divider"), AnsiTextColor.BLUE));
             return true;
         }
         return false;
