@@ -3,7 +3,7 @@
   {
     "name": "Backyard",
     "description": "The backyard is well kept, with all manner of flora lining the property \nand various stone decorations sprinkled about. It looks like a comfortable \nplace to sit in the sun with a cup of tea and a good book.",
-    "jsonInventory": ["Dog house","Fire pit","Garden"],
+    "jsonInventory": ["Dog house","Fire pit","Garden", "Note #5"],
     "jsonAdjacentRooms" : ["Kitchen"],
     "jsonCharactersInRoom" : ["Gardener"]
   },
@@ -11,7 +11,7 @@
   {
     "name": "Kitchen",
     "description": "The kitchen is quaint. Every cabinet has intricately carved oak-wood \nfeatures and there are doilies on every surface. The few stainless \nsteel appliances clash with the rest of the interior.",
-    "jsonInventory": ["Stove","Table","Dishwasher","Trashcan", "Candy Wrapper"],
+    "jsonInventory": ["Stove","Table","Dishwasher","Trashcan", "Candy Wrapper","Note #4"],
     "jsonAdjacentRooms" : ["Backyard","Office"],
     "jsonCharactersInRoom" : ["Nanny"]
   },
@@ -19,14 +19,14 @@
   {
     "name": "Living Room",
     "description": "The living room is richly decorated with awards, trophies, and what \nyou find to be rather strange pieces of art. You would feel extremely \nposh relaxing in this room after a long day.",
-    "jsonInventory": ["Couch","TV","Christmas Tree", "Rug"],
+    "jsonInventory": ["Couch","TV","Christmas Tree", "Rug", "Note #2"],
     "jsonAdjacentRooms" : ["Office","Game Room"]
   },
 
   {
     "name": "Office",
-    "description": "The office is far more plain than the rest of the house. The interior \nwould feel oppressively corporate if it weren't for the massive window \nletting in copious natural light.",
-    "jsonInventory": ["Desk","Computer","Printer","Bookcase", "Receipt"],
+    "description": "The office is far more plain than the rest of the house. The interior \nwould feel oppressively corporate if it weren't for the massive window \nletting in copious natural light. \nThere is a white tarp on the floor cover the spot the body was found.",
+    "jsonInventory": ["Desk","Computer","Printer","Bookcase", "Receipt", "Note #1"],
     "jsonAdjacentRooms" : ["Living Room", "Kitchen"],
     "jsonCharactersInRoom" : ["Butler"]
   },
@@ -34,7 +34,7 @@
   {
     "name": "Game Room",
     "description": "The game room has the aura of a bar or a saloon. The room is lit by two \nhanging Tiffany lamps, the walls are dark wooden panelling, the carpet \nis a dark green. Everything you lay eyes on screams \"retro\".",
-    "jsonInventory": ["Billiards table","Dart board","Arcade machines"],
+    "jsonInventory": ["Billiards table","Dart board","Arcade machines", "Note #3"],
     "jsonAdjacentRooms" : ["Living Room"]
   }
 
