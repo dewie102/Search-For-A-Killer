@@ -15,18 +15,16 @@ import java.util.stream.Collectors;
 
 public class GameController {
     private CommandConsoleView consoleView;
-    //private Player player;
-//    List<Command> commandList = new ArrayList<>();
-    private Player player = LoadController.getPlayer();
-    //List<Command> commandList = new ArrayList<>();
+    private final Player player = LoadController.getPlayer();
     private final Map<String, Room> rooms = LoadController.getRooms();
     private final Map<String, Item> items = LoadController.getItems();
     private final Map<String, Character> characters = LoadController.getCharacters();
+    // gameText is an object that has multiple Lists/Maps [general, error, info]
+    //      that contain text used in the game
     private static final JsonMessageParser gameText = new JsonMessageParser();
     private List<ConsoleText> mainText = new ArrayList<>();
     private List<ConsoleText> secondaryText = new ArrayList<>();
     private final Map<String, Command> commandMap = new TreeMap<>();
-    private final Map<String, Entity> entityDictionary = new HashMap<>();
     private final MapLoaderController mapLoaderController = new MapLoaderController();
     private final ConversationController conversationController = new ConversationController(mainText, this::checkForWinningConditions);
     private Character reportedMurder = null;
@@ -56,15 +54,10 @@ public class GameController {
         commandMap.put("talk", new Command("talk", List.of("chat", "speak"), "Talk to another character", CommandType.TWO_PARTS, this::talkCommand));
         commandMap.put("volume", new Command("volume", List.of("sound", "vol"), "Change the volume settings", CommandType.STANDALONE, this::volCommand));
 
-
         // List of entities
         List<String> entities = new ArrayList<>(entityDictionary.keySet());
 
-
         // List of entities
-//        List<String> ignoreList = List.of(
-//                "the", "at", "an", "a", "of", "around", "to", "with"
-//        );
         List<String> ignoreList = gameText.getIgnoreList();
 
         String escapeCommand = gameText.getGeneralMessages().get("quit");
@@ -119,7 +112,7 @@ public class GameController {
             return false;
         }
         //if they are not trying to go to a valid room
-        consoleView.setErrorMessage(String.format(gameText.getErrorMessages().get("invalidRoomName"), target != null ? target.getName() : gameText.getErrorMessages().get("invalidRoomNameDefault")));
+        consoleView.setErrorMessage(String.format(gameText.getErrorMessages().get("invalidRoomName"), target != null ? target.getName() : gameText.getErrorMessages().get("invalidDefaultThat")));
         return false;
     }
 
@@ -144,8 +137,7 @@ public class GameController {
                 return true;
             }
         }
-        consoleView.setErrorMessage(String.format(gameText.getErrorMessages().get("invalidLook") +
-                ".", target.getName()));
+        consoleView.setErrorMessage(String.format(gameText.getErrorMessages().get("invalidLook"), target != null ? target.getName() : gameText.getErrorMessages().get("invalidDefaultThat")));
         return false;
     }
 
