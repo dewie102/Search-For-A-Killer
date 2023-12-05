@@ -1,5 +1,7 @@
 package com.game.model;
 
+import com.game.controller.commands.CommandCallBack;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -7,6 +9,7 @@ import java.util.stream.Collectors;
 public class Conversation {
     private List<Dialog> conversation = new ArrayList<>();
     private int count = 0;
+
 
     public List<Dialog> getConversation(){
         return this.conversation.stream()
@@ -32,5 +35,14 @@ public class Conversation {
     public void addDialog(Dialog dialog){
         conversation.add(dialog);
     }
+
+    public void insertDialog(Dialog dialog){
+        if(conversation.size() == 0){
+            addDialog(dialog);
+        }else{
+            conversation.add(conversation.size() - 1, dialog);
+        }
+    }
+
 
 }

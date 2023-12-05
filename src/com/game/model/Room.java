@@ -2,6 +2,7 @@ package com.game.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /*
  * Room represents a room in the game, like the Kitchen, the Living Room etc
@@ -10,6 +11,7 @@ public class Room extends Entity{
     private List<Room> adjacentRooms = new ArrayList<>();
     private List<String> jsonAdjacentRooms = new ArrayList<>();
     private List<String> jsonCharactersInRoom = new ArrayList<>();
+    private List<Character> charactersInRoom;
 
     public Room(String name, String description){
         super(name, description);
@@ -42,8 +44,14 @@ public class Room extends Entity{
         return jsonAdjacentRooms;
     }
 
-    public List<String> getCharactersInRoom() {
-        return jsonCharactersInRoom;
+    public List<Character> getCharactersInRoom() {
+        return charactersInRoom;
+    }
+
+    public List<String> getCharactersInRoomToString() {
+        return charactersInRoom.stream()
+                .map(Character::toString)
+                .collect(Collectors.toList());
     }
 
     public void addCharacterToRoom(String name) {
@@ -57,5 +65,9 @@ public class Room extends Entity{
             sb.append(room.getName()).append(", ");
         }
         return sb.deleteCharAt(sb.length() - 2); // removes the last comma for formatting purposes
+    }
+
+    public void setCharactersInRoom(List<Character> charactersInRoom) {
+        this.charactersInRoom = charactersInRoom;
     }
 }

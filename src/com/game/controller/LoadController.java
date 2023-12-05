@@ -14,7 +14,7 @@ public class LoadController {
     private static Map<String, Item> items;
     private static Map<String, Character> characters;
     private static Player player;
-    private static Character sergeant;
+    private static Character detective;
     private static Item murderWeapon;
     private static Character murderer;
     // Making this class fully static
@@ -34,6 +34,7 @@ public class LoadController {
         for (Room room : rooms.values()){
             room.setInventory(new Inventory());
             room.setAdjacentRooms(new ArrayList<>());
+            room.setCharactersInRoom(new ArrayList<>());
             for (String key : room.getJsonInventory()){
                 Item item =  items.get(key);
                 Inventory inventory = room.getInventory();
@@ -47,6 +48,8 @@ public class LoadController {
         // Add the HAS-A for each character inventory item
         for(Character character : characters.values()){
             character.setInventory(new Inventory());
+            character.setRoom(rooms.get(character.getCurrentLocation()));
+            character.getRoom().getCharactersInRoom().add(character);
             for (String key : character.getJsonInventory()){
                 Item item = items.get(key);
                 character.getInventory().add(item);
@@ -85,6 +88,8 @@ public class LoadController {
 
             for (Item item : items) {
                 itemMap.put(item.getName(), item);
+                if(item.isMurderWeapon())
+                    murderWeapon = item;
             }
 
             return itemMap;
@@ -103,7 +108,9 @@ public class LoadController {
             for (Character character : characters) {
                 characterMap.put(character.getName(), character);
                 if(character.isSergeant())
-                    sergeant = character;
+                    detective = character;
+                if(character.isMurderer())
+                    murderer = character;
             }
             return characterMap;
         } catch (Exception e) {
@@ -177,10 +184,10 @@ public class LoadController {
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
-    public static Character getSergeant() {
-        if(sergeant == null)
+    public static Character getDetective() {
+        if(detective == null)
             loadAllEntities();
-        return sergeant;
+        return detective;
     }
 
     public static Item getMurderWeapon() {

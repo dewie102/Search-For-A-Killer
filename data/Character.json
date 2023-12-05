@@ -19,7 +19,7 @@
     "currentLocation": "Office",
     "jsonInventory": ["Pen"],
     "isSuspect":  "true",
-    "isMurder": "true"
+    "isMurderer": "true"
   },
   {
     "name": "Sergeant",

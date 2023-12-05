@@ -22,7 +22,6 @@ class MainController {
         titlePage.printJson();
         developmentPage.printJson();
         introText.printJson();
-
         OptionsMenuController optionsMenuController = new OptionsMenuController();
         optionsMenuController.run();
     }
