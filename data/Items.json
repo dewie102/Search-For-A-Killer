@@ -92,12 +92,15 @@
   {
     "name":"Pen",
     "description":"A blue pen, a pen is a type of thing!",
-    "pickUpable": true
+    "pickUpable": true,
+    "isWeapon": true,
+    "isMurderWeapon": true
   },
   {
     "name":"Glove",
     "description":"A bloody glove.",
-    "pickUpable": true
+    "pickUpable": true,
+    "isWeapon": true
   },
   {
     "name": "Receipt",
@@ -108,5 +111,11 @@
     "name": "Candy Wrapper",
     "description": "A Rooso's Peanut Butter Tree, the best part of the season. The wrapper still smells like chocolate and peanut butter.",
     "pickUpable": true
+  },
+  {
+    "name": "Knife",
+    "description": "A sharp knife",
+    "pickUpable": true,
+    "isWeapon": true
   }
 ]

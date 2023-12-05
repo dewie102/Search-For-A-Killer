@@ -22,15 +22,23 @@ public class ConversationController {
     }
 
     public void run(Player player, Character character){
+        run(player, character, character.getConversation());
+    }
+
+    private void run(Player player, Character character, Conversation currentConversation){
         this.character = character;
-        List<String> questions = character.getConversation().getConversationQuestions();
+        List<String> questions = currentConversation.getConversationQuestions();
         consoleView = new MultipleChoiceConsoleView(List.of(mainText, secondaryText), questions, false);
         int result = Integer.parseInt(consoleView.show());
         while (result != questions.size() - 1) {
             secondaryText.clear();
             secondaryText.add(new ConsoleText(String.format("This is a conversation between you and %s:", character.getName())));
             secondaryText.add(new ConsoleText(String.format("%s: %s", player.getName(), questions.get(result))));
-            secondaryText.add(new ConsoleText(String.format("%s: %s", character.getName(), character.getConversation().getDialog(result).getResponse())));
+            secondaryText.add(new ConsoleText(String.format("%s: %s", character.getName(), currentConversation.getDialog(result).getResponse())));
+            // We check if the option selected has follow-up questions/dialog
+            if(currentConversation.getDialog(result).getFollowUpConversation() != null){
+                run(player, character, currentConversation.getDialog(result).getFollowUpConversation());
+            }
             result = Integer.parseInt(consoleView.show());
         }
     }

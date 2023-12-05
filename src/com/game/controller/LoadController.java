@@ -7,12 +7,16 @@ import com.google.gson.Gson;
 
 import java.io.FileReader;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class LoadController {
     private static Map<String, Room> rooms;
     private static Map<String, Item> items;
     private static Map<String, Character> characters;
     private static Player player;
+    private static Character sergeant;
+    private static Item murderWeapon;
+    private static Character murderer;
     // Making this class fully static
     private LoadController(){}
 
@@ -98,6 +102,8 @@ public class LoadController {
 
             for (Character character : characters) {
                 characterMap.put(character.getName(), character);
+                if(character.isSergeant())
+                    sergeant = character;
             }
             return characterMap;
         } catch (Exception e) {
@@ -153,5 +159,39 @@ public class LoadController {
         if(player == null)
             loadAllEntities();
         return player;
+    }
+
+    public static Map<String, Character> getSuspects(){
+        if(characters == null)
+            loadAllEntities();
+        return characters.entrySet().stream()
+                .filter(character -> character.getValue().isSuspect())
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    }
+
+    public static Map<String, Item> getWeapons(){
+        if(items == null)
+            loadAllEntities();
+        return items.entrySet().stream()
+                .filter(entry -> entry.getValue().isWeapon())
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    }
+
+    public static Character getSergeant() {
+        if(sergeant == null)
+            loadAllEntities();
+        return sergeant;
+    }
+
+    public static Item getMurderWeapon() {
+        if(murderWeapon == null)
+            loadAllEntities();
+        return murderWeapon;
+    }
+
+    public static Character getMurderer() {
+        if(murderer == null)
+            loadAllEntities();
+        return murderer;
     }
 }

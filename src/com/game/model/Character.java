@@ -7,7 +7,8 @@ public class Character extends Entity{
     // A character must be in a Room
     private String currentLocation;
     private Conversation conversation = new Conversation();
-
+    private boolean isSuspect;
+    private boolean isSergeant;
 
     public Character(String name, String description, String currentLocation){
         super(name, description);
@@ -30,5 +31,13 @@ public class Character extends Entity{
 
     public void setConversation(Conversation conversation) {
         this.conversation = conversation;
+    }
+
+    public boolean isSuspect() {
+        return isSuspect;
+    }
+
+    public boolean isSergeant() {
+        return isSergeant;
     }
 }
