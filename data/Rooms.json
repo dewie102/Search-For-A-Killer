@@ -25,7 +25,7 @@
 
   {
     "name": "Office",
-    "description": "The office is far more plain than the rest of the house. The interior \nwould feel oppressively corporate if it weren't for the massive window \nletting in copious natural light.",
+    "description": "The office is far more plain than the rest of the house. The interior \nwould feel oppressively corporate if it weren't for the massive window \nletting in copious natural light. \nThere is a white tarp on the floor cover the spot the body was found.",
     "jsonInventory": ["Desk","Computer","Printer","Bookcase", "Receipt", "Note #1"],
     "jsonAdjacentRooms" : ["Living Room", "Kitchen"],
     "jsonCharactersInRoom" : ["Butler"]

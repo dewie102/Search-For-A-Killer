@@ -11,7 +11,7 @@ class MainController {
 
         AudioController.loadMusic();
         AudioController.musicVolDown(30f);
-        AudioController.loopMusic();
+        //AudioController.loopMusic(); //<<<<Uncomment to have music play by default
 
         // Create the titlePage and devTitlePage objects that will take in the json data and pass it
         // to the ConsoleText class and the Console class, so it's outputted.
