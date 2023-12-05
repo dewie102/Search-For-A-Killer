@@ -92,12 +92,15 @@
   {
     "name":"Pen",
     "description":"A blue pen, a pen is a type of thing!",
-    "pickUpable": true
+    "pickUpable": true,
+    "isWeapon": true,
+    "isMurderWeapon": true
   },
   {
     "name":"Glove",
     "description":"A white glove, covered in blood and dirt. Someone tried to bury this.",
-    "pickUpable": true
+    "pickUpable": true,
+    "isWeapon": true
   },
   {
     "name": "Receipt",
@@ -138,6 +141,11 @@
     "name": "Crime Report",
     "description": "The report reads: \n\"The victim was punctured in the jugular with a small pointy object.\nThere are traces of ink on the victim's neck near the wound.\"",
     "pickUpable" : false
+  },
+  {
+    "name": "Knife",
+    "description": "A sharp knife",
+    "pickUpable": true,
+    "isWeapon": true
   }
-
 ]

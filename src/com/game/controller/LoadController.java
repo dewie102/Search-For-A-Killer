@@ -7,12 +7,16 @@ import com.google.gson.Gson;
 
 import java.io.FileReader;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class LoadController {
     private static Map<String, Room> rooms;
     private static Map<String, Item> items;
     private static Map<String, Character> characters;
     private static Player player;
+    private static Character detective;
+    private static Item murderWeapon;
+    private static Character murderer;
     // Making this class fully static
     private LoadController(){}
 
@@ -30,6 +34,7 @@ public class LoadController {
         for (Room room : rooms.values()){
             room.setInventory(new Inventory());
             room.setAdjacentRooms(new ArrayList<>());
+            room.setCharactersInRoom(new ArrayList<>());
             for (String key : room.getJsonInventory()){
                 Item item =  items.get(key);
                 Inventory inventory = room.getInventory();
@@ -43,6 +48,8 @@ public class LoadController {
         // Add the HAS-A for each character inventory item
         for(Character character : characters.values()){
             character.setInventory(new Inventory());
+            character.setRoom(rooms.get(character.getCurrentLocation()));
+            character.getRoom().getCharactersInRoom().add(character);
             for (String key : character.getJsonInventory()){
                 Item item = items.get(key);
                 character.getInventory().add(item);
@@ -81,6 +88,8 @@ public class LoadController {
 
             for (Item item : items) {
                 itemMap.put(item.getName(), item);
+                if(item.isMurderWeapon())
+                    murderWeapon = item;
             }
 
             return itemMap;
@@ -98,6 +107,10 @@ public class LoadController {
 
             for (Character character : characters) {
                 characterMap.put(character.getName(), character);
+                if(character.isSergeant())
+                    detective = character;
+                if(character.isMurderer())
+                    murderer = character;
             }
             return characterMap;
         } catch (Exception e) {
@@ -153,5 +166,39 @@ public class LoadController {
         if(player == null)
             loadAllEntities();
         return player;
+    }
+
+    public static Map<String, Character> getSuspects(){
+        if(characters == null)
+            loadAllEntities();
+        return characters.entrySet().stream()
+                .filter(character -> character.getValue().isSuspect())
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    }
+
+    public static Map<String, Item> getWeapons(){
+        if(items == null)
+            loadAllEntities();
+        return items.entrySet().stream()
+                .filter(entry -> entry.getValue().isWeapon())
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    }
+
+    public static Character getDetective() {
+        if(detective == null)
+            loadAllEntities();
+        return detective;
+    }
+
+    public static Item getMurderWeapon() {
+        if(murderWeapon == null)
+            loadAllEntities();
+        return murderWeapon;
+    }
+
+    public static Character getMurderer() {
+        if(murderer == null)
+            loadAllEntities();
+        return murderer;
     }
 }

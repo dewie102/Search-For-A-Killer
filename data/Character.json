@@ -3,6 +3,10 @@
     "name": "Gardener",
     "description": "A random gardener that works around the house for free. He looks like he is in a hurry.",
     "currentLocation": "Backyard",
+    "jsonInventory": ["Glove"],
+    "isSuspect":  "true"
+  },
+  {
     "clue": "I don't want to go pointing fingers now, but if I find anything I'll let you know.",
     "jsonInventory": ["Glove"]
     },
@@ -10,6 +14,10 @@
     "name": "Nanny",
     "description": "The live-in nanny that just submitted her two week notice a week ago. She looks distraught.",
     "currentLocation": "Kitchen",
+    "jsonInventory": ["Pen"],
+    "isSuspect":  "true"
+  },
+  {
     "clue": "I'm so sad! The poor children, without their father! Who would do such a thing?? *sniffle* I have no idea!",
     "jsonInventory": ["Pen"]
     },
@@ -17,6 +25,17 @@
     "name": "Butler",
     "description": "The family butler that has been in the family for several years. He looks frazzled.",
     "currentLocation": "Office",
+    "jsonInventory": ["Pen"],
+    "isSuspect":  "true",
+    "isMurderer": "true"
+  },
+  {
+    "name": "Sergeant",
+    "description": "The police sergeant in charge of the case and your training.",
+    "currentLocation": "Backyard",
+    "jsonInventory": [],
+    "isSuspect":  "false",
+    "isSergeant": "true"
     "clue": "It - it wasn't me!! That's all I know, not me at all! Certainly not!",
     "jsonInventory": ["Pen"]
   }

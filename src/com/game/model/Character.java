@@ -6,7 +6,11 @@ package com.game.model;
 public class Character extends Entity{
     // A character must be in a Room
     private String currentLocation;
+    private Room room;
     private Conversation conversation = new Conversation();
+    private boolean isSuspect;
+    private boolean isSergeant;
+    private boolean isMurderer;
     private String clue;
 
     public Character(String name, String description, String currentLocation){
@@ -38,5 +42,25 @@ public class Character extends Entity{
 
     public void setClue(String clue) {
         this.clue = clue;
+    }
+
+    public boolean isSuspect() {
+        return isSuspect;
+    }
+
+    public boolean isSergeant() {
+        return isSergeant;
+    }
+
+    public Room getRoom() {
+        return room;
+    }
+
+    public void setRoom(Room room) {
+        this.room = room;
+    }
+
+    public boolean isMurderer() {
+        return isMurderer;
     }
 }

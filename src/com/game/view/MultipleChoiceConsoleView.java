@@ -41,5 +41,14 @@ public class MultipleChoiceConsoleView extends ConsoleView{
     String collectInput() {
         return InputCollector.collectInput(options);
     }
+
+    public List<ConsoleText> getOptions() {
+        return options;
+    }
+
+    public void setOptions(List<ConsoleText> options) {
+        this.options.clear();
+        this.options.addAll(options);
+    }
 }
 
