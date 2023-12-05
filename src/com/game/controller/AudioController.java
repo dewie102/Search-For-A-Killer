@@ -1,10 +1,14 @@
 package com.game.controller;
 
+import com.game.view.ConsoleText;
+import com.game.view.MultipleChoiceConsoleView;
+
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.FloatControl;
 import java.io.File;
+import java.util.List;
 
 public class AudioController {
 
@@ -12,19 +16,62 @@ public class AudioController {
     private static Float musicVolDelta = 0f;
 
     //musicPaths[1] is an alternative
-    private static final String[] musicPaths =  {
+    private static final String[] soundPaths =  {
             "audio/jazz-loop-7163.wav",
             "audio/sazzy-71792.wav",
             "audio/walking-3seconds.wav",
             "audio/item-pick-up-38258.wav",
             "audio/wooden-thud-mono-6244.wav"};
-    private static final String[] sfxPaths = {
+    private static final AudioInputStream[] inputStream = new AudioInputStream[soundPaths.length];
+    private static final File[] file = new File[soundPaths.length];
+    private static final Clip[] sound = new Clip[soundPaths.length];
 
-    };
-    private static final String[] soundPaths = new String[musicPaths.length + sfxPaths.length];
-    private static final AudioInputStream[] inputStream = new AudioInputStream[musicPaths.length];
-    private static final File[] file = new File[musicPaths.length];
-    private static final Clip[] sound = new Clip[musicPaths.length];
+    public static void volMenu(){
+        MultipleChoiceConsoleView consoleView = new MultipleChoiceConsoleView(
+                List.of(List.of(new ConsoleText("What would you like to do? Type 'exit' to exit the menu."))),
+                List.of(
+                        new ConsoleText("Music ON"),
+                        new ConsoleText("Music OFF"),
+                        new ConsoleText("Music UP"),
+                        new ConsoleText("Music DOWN"),
+                        new ConsoleText("Sound Effects ON"),
+                        new ConsoleText("Sound Effects OFF"),
+                        new ConsoleText("Sound Effects UP"),
+                        new ConsoleText("Sound Effects DOWN")
+
+                ));
+        String userInput = consoleView.show();
+        switch (userInput){
+            case "0": // M on
+                System.out.println("You entered 0");
+                break;
+            case "1": // M off
+                System.out.println("You entered 1");
+                break;
+            case "2": // M up
+                musicVolUp();
+                break;
+            case "3": // M down
+                musicVolDown();
+                break;
+            case "4":
+                System.out.println("You entered 4");
+                break;
+            case "5":
+                System.out.println("You entered 5");
+                break;
+            case "6":
+                System.out.println("You entered 6");
+                break;
+            case "7":
+                System.out.println("You entered 7");
+                break;
+            case "exit":
+                break;
+        }
+
+    }
+
 
     //BACKGROUND music volume controls -
 
@@ -98,9 +145,9 @@ public class AudioController {
     }
 
     public static void loadMusic() {
-        for (int i = 0; i <musicPaths.length; i++) {
+        for (int i = 0; i < soundPaths.length; i++) {
             try {
-                file[i] = new File(musicPaths[i]);
+                file[i] = new File(soundPaths[i]);
                 inputStream[i] = AudioSystem.getAudioInputStream(file[i]);
                 sound[i] = AudioSystem.getClip();
                 sound[i].open(inputStream[i]);
