@@ -53,6 +53,8 @@ public class GameController {
         commandMap.put("drop", new Command("drop", List.of("place", "put"), "Drop an object from your inventory into your current location", CommandType.TWO_PARTS, this::dropCommand));
         commandMap.put("get", new Command("get", List.of("grab", "pickup", "take"), "Drop an object from your inventory into your current location", CommandType.TWO_PARTS, this::getCommand));
         commandMap.put("talk", new Command("talk", List.of("chat", "speak"), "Talk to another character", CommandType.TWO_PARTS, this::talkCommand));
+        commandMap.put("volume", new Command("volume", List.of("sound", "vol"), "Change the volume settings", CommandType.STANDALONE, this::volCommand));
+
 
         // List of entities
         List<String> entities = new ArrayList<>(entityDictionary.keySet());
@@ -73,9 +75,12 @@ public class GameController {
             boolean result = false;
 
             Entity entity = parts.length > 1 ? entityDictionary.get(parts[1]) : null;
-            if(entity == null) {
-                consoleView.setErrorMessage(gameText.getErrorMessages().get("invalidAction"));
-                continue;
+
+            if(!(commandMap.get(parts[0]).getCommandType()==CommandType.STANDALONE)) {
+                if (entity == null) {
+                    consoleView.setErrorMessage(gameText.getErrorMessages().get("invalidAction"));
+                    continue;
+                }
             }
             result = commandMap.get(parts[0]).executeCommand(entity);
             mainText.clear();
@@ -269,6 +274,17 @@ public class GameController {
             System.exit(0);
         }
         return true;
+    }
+
+    //TODO: Implement
+    private boolean volCommand(Entity target){
+        boolean success = AudioController.volMenu();
+        if(success){
+            return true;
+        }
+        consoleView.setErrorMessage("The action could not be taken.");
+        return false;
+
     }
 
     private List<ConsoleText> getViewText(){
