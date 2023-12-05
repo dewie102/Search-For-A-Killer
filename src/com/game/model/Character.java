@@ -7,7 +7,7 @@ public class Character extends Entity{
     // A character must be in a Room
     private String currentLocation;
     private Conversation conversation = new Conversation();
-
+    private String clue;
 
     public Character(String name, String description, String currentLocation){
         super(name, description);
@@ -30,5 +30,13 @@ public class Character extends Entity{
 
     public void setConversation(Conversation conversation) {
         this.conversation = conversation;
+    }
+
+    public String getClue() {
+        return clue;
+    }
+
+    public void setClue(String clue) {
+        this.clue = clue;
     }
 }
