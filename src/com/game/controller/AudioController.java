@@ -15,6 +15,7 @@ public class AudioController {
 
     private static Float sfxVolDelta = 0f;
     private static Float musicVolDelta = 0f;
+    private static boolean sfxOn = true;
 
     //musicPaths[1] is an alternative
     private static final String[] soundPaths =  {
@@ -48,7 +49,7 @@ public class AudioController {
                 System.out.println("You entered 0");
                 return false;
             case "1": // M off
-                System.out.println("You entered 1");
+                stopSound(0);
                 return false;
             case "2": // M up
                 musicVolUp();
@@ -56,17 +57,17 @@ public class AudioController {
             case "3": // M down
                 musicVolDown();
                 return true;
-            case "4":
-                System.out.println("You entered 4");
+            case "4": //SFX on
+                setSfxOn(true);
                 return false;
-            case "5":
-                System.out.println("You entered 5");
+            case "5": //SFX off
+                setSfxOn(false);
                 return false;
-            case "6":
-                System.out.println("You entered 6");
+            case "6"://SFX up
+                sfxVolUp();
                 return false;
-            case "7":
-                System.out.println("You entered 7");
+            case "7"://SFX down
+                sfxVolDown();
                 return false;
             case "8":
                 return true;
@@ -159,9 +160,29 @@ public class AudioController {
                 System.out.println(e.getLocalizedMessage());
             }
         }
-
-
-
     }
 
+    public static Float getSfxVolDelta() {
+        return sfxVolDelta;
+    }
+
+    public static void setSfxVolDelta(Float sfxVolDelta) {
+        AudioController.sfxVolDelta = sfxVolDelta;
+    }
+
+    public static Float getMusicVolDelta() {
+        return musicVolDelta;
+    }
+
+    public static void setMusicVolDelta(Float musicVolDelta) {
+        AudioController.musicVolDelta = musicVolDelta;
+    }
+
+    public static boolean isSfxOn() {
+        return sfxOn;
+    }
+
+    public static void setSfxOn(boolean sfxOn) {
+        AudioController.sfxOn = sfxOn;
+    }
 }
