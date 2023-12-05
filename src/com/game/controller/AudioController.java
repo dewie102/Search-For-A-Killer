@@ -1,5 +1,6 @@
 package com.game.controller;
 
+import com.game.controller.io.JsonMessageParser;
 import com.game.view.ConsoleText;
 import com.game.view.MultipleChoiceConsoleView;
 
@@ -9,6 +10,7 @@ import javax.sound.sampled.Clip;
 import javax.sound.sampled.FloatControl;
 import javax.swing.*;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 public class AudioController {
@@ -27,22 +29,17 @@ public class AudioController {
     private static final AudioInputStream[] inputStream = new AudioInputStream[soundPaths.length];
     private static final File[] file = new File[soundPaths.length];
     private static final Clip[] sound = new Clip[soundPaths.length];
+    private static final List<ConsoleText> audioOptions = new ArrayList<>();
 
     public static boolean volMenu(){
-        MultipleChoiceConsoleView consoleView = new MultipleChoiceConsoleView(
-                List.of(List.of(new ConsoleText("What would you like to do? Type 'exit' to exit the menu."))),
-                List.of(
-                        new ConsoleText("Music ON"),
-                        new ConsoleText("Music OFF"),
-                        new ConsoleText("Music UP"),
-                        new ConsoleText("Music DOWN"),
-                        new ConsoleText("Sound Effects ON"),
-                        new ConsoleText("Sound Effects OFF"),
-                        new ConsoleText("Sound Effects UP"),
-                        new ConsoleText("Sound Effects DOWN"),
-                        new ConsoleText("Exit audio menu")
+        //TODO: pull option data for volume
+        JsonMessageParser.loadAudioOptions();
+        for(String option : JsonMessageParser.getAudioOptions()){
+            audioOptions.add(new ConsoleText(option));
+        }
 
-                ));
+        MultipleChoiceConsoleView consoleView = new MultipleChoiceConsoleView(
+                List.of(List.of(new ConsoleText("What would you like to do? Type 'exit' to exit the menu."))), audioOptions);
         String userInput = consoleView.show();
         switch (userInput){
             case "0": // M on

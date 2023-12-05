@@ -1,24 +1,28 @@
 package com.game.controller;
 
+import com.game.controller.io.JsonMessageParser;
 import com.game.model.NotImplementedException;
 import com.game.view.ConsoleText;
 import com.game.view.ConsoleView;
 import com.game.view.MultipleChoiceConsoleView;
 import jdk.jshell.spi.ExecutionControl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 class OptionsMenuController {
+    List<ConsoleText> options = new ArrayList<>();
+
     public void run(){
+
+        // load the player options for the main menu
+        JsonMessageParser.loadPlayerOptions();
+        for(String option : JsonMessageParser.getPlayerOptions()){
+            options.add(new ConsoleText(option));
+        }
         MultipleChoiceConsoleView consoleView = new MultipleChoiceConsoleView(
-                List.of(List.of(new ConsoleText("Main Menu: "))),
-                List.of(
-                        new ConsoleText("Play new game."),
-//                        new ConsoleText("Load Saved game."),
-//                        new ConsoleText("How to play?"),
-//                        new ConsoleText("About this game."),
-                        new ConsoleText("Quit Game.")
-        ));
+                List.of(List.of(new ConsoleText("Main Menu: "))), options);
+
         String userInput = consoleView.show();
         switch (userInput){
             case "0":
