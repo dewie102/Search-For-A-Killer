@@ -145,8 +145,10 @@ public class AudioController {
     }
 
     public static void playSFX(int soundIndex){
-        stopSound(soundIndex);
-        sound[soundIndex].start();
+        if(isSfxOn()) {
+            stopSound(soundIndex);
+            sound[soundIndex].start();
+        }
     }
 
     public static void loadMusic() {
