@@ -131,17 +131,12 @@
   },
   {
     "name": "Note #5",
-    "description": "The letter E is written on the paper  in red ink",
-    "pickUpable": true
-  },
-  {
-    "name": "Note #6",
-    "description": "The letter R is written on the paper  in red ink",
+    "description": "The letters ER are written on the paper  in red ink",
     "pickUpable": true
   },
   {
     "name": "Crime Report",
-    "description": "The report reads: \" The victim was punctured in the jugular with a small pointy object.\"",
+    "description": "The report reads: \n\"The victim was punctured in the jugular with a small pointy object.\nThere are traces of ink on the victim's neck near the wound.\"",
     "pickUpable" : false
   }
 

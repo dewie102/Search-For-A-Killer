@@ -47,7 +47,7 @@ public class GameController {
         entityDictionary.putAll(characters);
         mainText = getViewText();
         commandMap.put("go", new Command("go", List.of("run", "move", "walk", "travel"), "Go to a room. e.g. go kitchen", CommandType.TWO_PARTS, this::goCommand));
-        commandMap.put("look", new Command("look", List.of("see", "inspect"), "Look at an object or room. e.g. look knife", CommandType.HYBRID, this::lookCommand));
+        commandMap.put("look", new Command("look", List.of("see", "inspect", "read"), "Look at an object or room. e.g. look knife", CommandType.HYBRID, this::lookCommand));
         commandMap.put("quit", new Command("quit", List.of("exit"), "Quits the game, no questions asked.", CommandType.STANDALONE, this::quitCommand));
         commandMap.put("help", new Command("help", List.of(), "It displays this menu.", CommandType.STANDALONE, this::helpCommand));
         commandMap.put("drop", new Command("drop", List.of("place", "put"), "Drop an object from your inventory into your current location", CommandType.TWO_PARTS, this::dropCommand));
@@ -166,7 +166,8 @@ public class GameController {
 
     private boolean lookItem(Item item){
         secondaryText.clear();
-        //if the item is in your inventory or in the inventory of the room are you currently in
+        //if the item is in your inventory
+        // or in the inventory of the room are you currently in
         if (player.getInventory().getItems().contains(item) || rooms.get(player.getCurrentLocation()).getInventory().getItems().contains(item)) {
             secondaryText.add(new ConsoleText(item.getDescription()));
             if(!item.getInventory().getItems().isEmpty()) {
