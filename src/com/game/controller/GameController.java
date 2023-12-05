@@ -280,8 +280,9 @@ public class GameController {
         if(success){
             return true;
         }
-        consoleView.setErrorMessage("User input invalid");
+        consoleView.setErrorMessage("The action could not be taken.");
         return false;
+
     }
 
     private List<ConsoleText> getViewText(){

@@ -47,34 +47,38 @@ public class AudioController {
         switch (userInput){
             case "0": // M on
                 loopMusic();
-                return false;
+                return true;
             case "1": // M off
                 stopSound(0);
-                return false;
-            case "2": // M up
-                musicVolUp();
                 return true;
+            case "2": // M up
+                try {
+                    musicVolUp();
+                    return true;
+                } catch (IllegalArgumentException e){
+                    return false;
+                }
+
             case "3": // M down
                 musicVolDown();
                 return true;
             case "4": //SFX on
                 setSfxOn(true);
-                return false;
+                return true;
             case "5": //SFX off
                 setSfxOn(false);
-                return false;
+                return true;
             case "6"://SFX up
                 sfxVolUp();
-                return false;
+                return true;
             case "7"://SFX down
                 sfxVolDown();
-                return false;
+                return true;
             case "8":
                 return true;
             default:
                 return false;
         }
-
     }
 
 
@@ -110,27 +114,43 @@ public class AudioController {
     //TODO: change sound[0] to sounds that are SFX
     public static void sfxVolDown(){
         sfxVolDelta-=10.0f;
-        FloatControl gainControl = (FloatControl) sound[0].getControl(FloatControl.Type.MASTER_GAIN);
-        gainControl.setValue(sfxVolDelta);
+        FloatControl gainControl1 = (FloatControl) sound[2].getControl(FloatControl.Type.MASTER_GAIN);
+        FloatControl gainControl2 = (FloatControl) sound[3].getControl(FloatControl.Type.MASTER_GAIN);
+        FloatControl gainControl3 = (FloatControl) sound[4].getControl(FloatControl.Type.MASTER_GAIN);
+        gainControl1.setValue(sfxVolDelta);
+        gainControl2.setValue(sfxVolDelta);
+        gainControl3.setValue(sfxVolDelta);
     }
 
     public static void sfxVolDown(float downBy){
         sfxVolDelta-=downBy;
-        FloatControl gainControl = (FloatControl) sound[0].getControl(FloatControl.Type.MASTER_GAIN);
-        gainControl.setValue(sfxVolDelta);
+        FloatControl gainControl1 = (FloatControl) sound[2].getControl(FloatControl.Type.MASTER_GAIN);
+        FloatControl gainControl2 = (FloatControl) sound[3].getControl(FloatControl.Type.MASTER_GAIN);
+        FloatControl gainControl3 = (FloatControl) sound[4].getControl(FloatControl.Type.MASTER_GAIN);
+        gainControl1.setValue(sfxVolDelta);
+        gainControl2.setValue(sfxVolDelta);
+        gainControl3.setValue(sfxVolDelta);
     }
 
     //No argument version increases by 10
     public static void sfxVolUp(){
         sfxVolDelta+=10.0f;
-        FloatControl gainControl = (FloatControl) sound[0].getControl(FloatControl.Type.MASTER_GAIN);
-        gainControl.setValue(sfxVolDelta);
+        FloatControl gainControl1 = (FloatControl) sound[2].getControl(FloatControl.Type.MASTER_GAIN);
+        FloatControl gainControl2 = (FloatControl) sound[3].getControl(FloatControl.Type.MASTER_GAIN);
+        FloatControl gainControl3 = (FloatControl) sound[4].getControl(FloatControl.Type.MASTER_GAIN);
+        gainControl1.setValue(sfxVolDelta);
+        gainControl2.setValue(sfxVolDelta);
+        gainControl3.setValue(sfxVolDelta);
     }
 
     public static void sfxVolUp(float upBy){
         sfxVolDelta+=upBy;
-        FloatControl gainControl = (FloatControl) sound[0].getControl(FloatControl.Type.MASTER_GAIN);
-        gainControl.setValue(sfxVolDelta);
+        FloatControl gainControl1 = (FloatControl) sound[2].getControl(FloatControl.Type.MASTER_GAIN);
+        FloatControl gainControl2 = (FloatControl) sound[3].getControl(FloatControl.Type.MASTER_GAIN);
+        FloatControl gainControl3 = (FloatControl) sound[4].getControl(FloatControl.Type.MASTER_GAIN);
+        gainControl1.setValue(sfxVolDelta);
+        gainControl2.setValue(sfxVolDelta);
+        gainControl3.setValue(sfxVolDelta);
     }
 
     //General controls
