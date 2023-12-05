@@ -1,6 +1,6 @@
 {
     "story" : "================The Story================\nYou are the newest detective to join Cool Town Detective Agency and you’ve just been called out to investigate \na reported murder at the Old Manor in town. It seems that the town’s founder, Mr. Cool, has been killed.\n",
     "objective" : "================Your Mission================\nYour Mission: Solve the case by figuring out who the murderer is and what the murder weapon was. \nInvestigate the house, talk to witnesses and suspects, and find evidence to piece together what happened.\n",
-    "howToWin" : "================Winning================\nOnce you think you know the answer, call in to the Police Department to report your findings. \nIf you solve the case correctly – you win! If not, your first case at the agency might be your last.\n",
+    "howToWin" : "================Winning================\nOnce you think you know the answer, talk to the Police Sergeant to report your findings. \nIf you solve the case correctly – you win! If not, your first case at the agency might be your last.\n",
     "enter" : "Press 'Enter' to continue"
 }

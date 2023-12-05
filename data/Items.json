@@ -56,7 +56,7 @@
   },
   {
     "name":"Desk",
-    "description":"The desk is beige metal, the kind that your parents likely used in the 1970s. This is not where Mr. Cool invested his money - or his time.",
+    "description":"The desk is beige metal, the kind that your parents likely used in the 1970s. This is not where Mr. Cool invested his money - or his time. \nA pencil holder was knocked over and pens are strewn across the desk.",
     "pickUpable": false
   },
   {
@@ -96,17 +96,48 @@
   },
   {
     "name":"Glove",
-    "description":"A bloody glove.",
+    "description":"A white glove, covered in blood and dirt. Someone tried to bury this.",
     "pickUpable": true
   },
   {
     "name": "Receipt",
-    "description": "The receipt is for the purchase of a signed baseball bat from some online store that sells collectables. Must have been signed by Babe Ruth himself at that price point.",
+    "description": "The receipt is for the purchase of a spade early this morning. The transaction was made in cash - there is no credit trail.",
     "pickUpable": true
   },
   {
     "name": "Candy Wrapper",
     "description": "A Rooso's Peanut Butter Tree, the best part of the season. The wrapper still smells like chocolate and peanut butter.",
     "pickUpable": true
+  },
+  {
+    "name": "Note #1",
+    "description": "The note reads:\n\"Thank goodness I was out at the movies with the children last night!\nHow scary to think I would otherwise have been home when the murder\ntook place.\"",
+    "pickUpable": true
+  },
+  {
+    "name": "Note #2",
+    "description": "The note reads:\n\"I have no further need of your Butlering services. \nYour employment will be ended effective next week.\"",
+    "pickUpable": true
+  },
+  {
+    "name": "Note #3",
+    "description": "The note reads:\n\"I saw the Butler digging in the garden this morning. How peculiar!\nNote to self, search backyard after tending to the lawn\nto see what he was looking for - or trying to hide\"",
+    "pickUpable": true
+  },
+  {
+    "name": "Note #4",
+    "description": "It looks like this was a confession letter, but there is blood smeared on the paper and so you cannot make out any of the words.",
+    "pickUpable": true
+  },
+  {
+    "name": "Note #5",
+    "description": "The note reads:\n\"I think it was the Butler, personally! He's always disliked Mr. Cool, \nhe'd have quit a long time ago if he didn't need the money.\"",
+    "pickUpable": true
+  },
+  {
+    "name": "Crime Report",
+    "description": "The report reads: \n\"The victim was punctured in the jugular with a small pointy object.\nThere are traces of ink on the victim's neck near the wound.\"",
+    "pickUpable" : false
   }
+
 ]
