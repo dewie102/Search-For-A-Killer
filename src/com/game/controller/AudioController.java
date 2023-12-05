@@ -46,7 +46,7 @@ public class AudioController {
         String userInput = consoleView.show();
         switch (userInput){
             case "0": // M on
-                System.out.println("You entered 0");
+                loopMusic();
                 return false;
             case "1": // M off
                 stopSound(0);
