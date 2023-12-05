@@ -34,8 +34,10 @@ public class AudioController {
     public static boolean volMenu(){
         //TODO: pull option data for volume
         JsonMessageParser.loadAudioOptions();
-        for(String option : JsonMessageParser.getAudioOptions()){
-            audioOptions.add(new ConsoleText(option));
+        if(audioOptions.isEmpty()) {
+            for (String option : JsonMessageParser.getAudioOptions()) {
+                audioOptions.add(new ConsoleText(option));
+            }
         }
 
         MultipleChoiceConsoleView consoleView = new MultipleChoiceConsoleView(

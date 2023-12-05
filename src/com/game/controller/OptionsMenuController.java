@@ -4,9 +4,7 @@ import com.game.controller.io.JsonMessageParser;
 import com.game.model.NotImplementedException;
 import com.game.view.Console;
 import com.game.view.ConsoleText;
-import com.game.view.ConsoleView;
 import com.game.view.MultipleChoiceConsoleView;
-import jdk.jshell.spi.ExecutionControl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,9 +12,15 @@ import java.util.List;
 class OptionsMenuController {
     List<ConsoleText> options = new ArrayList<>();
 
-    private List<ConsoleText> gameResult = new ArrayList<>();
+    private final List<ConsoleText> gameResult = new ArrayList<>();
 
     public void run(){
+        JsonMessageParser.loadPlayerOptions();
+        if(options.isEmpty()) {
+            for (String option : JsonMessageParser.getPlayerOptions()) {
+                options.add(new ConsoleText(option));
+            }
+        }
         MultipleChoiceConsoleView consoleView = new MultipleChoiceConsoleView(
                 List.of(List.of(new ConsoleText("Main Menu: "))), options);
         while (true) {
