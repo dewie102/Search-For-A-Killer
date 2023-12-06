@@ -41,6 +41,7 @@ public class InputCollector {
         // Trim the input then replace multiple spaces with a single space
         line = line.trim().toLowerCase().replaceAll(" +", " ");
 
+        // Getting rid of any word that matches the ignoreList
         String[] lineArray = line.split(" ");
         line = "";
         for (String word : lineArray) {

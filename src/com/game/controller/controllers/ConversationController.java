@@ -20,9 +20,6 @@ public class ConversationController {
     private Character character;
     private CheckWinningConditions checkWinningConditions;
 
-//    public ConversationController(List<ConsoleText> mainText){
-//        this.mainText = mainText;
-//    }
 
     public ConversationController(List<ConsoleText> mainText, CheckWinningConditions checkWinningConditions){
         this.mainText = mainText;
@@ -36,7 +33,7 @@ public class ConversationController {
     private void run(Player player, Character character, Conversation currentConversation){
         this.character = character;
         List<String> questions = currentConversation.getConversationQuestions();
-        //int result = Integer.parseInt(consoleView.show());
+
         int result = -1;
         while (result != questions.size() - 1 && (checkWinningConditions == null || checkWinningConditions.checkWinningConditions() == GameResult.UNDEFINED)) {
             if(checkWinningConditions != null && checkWinningConditions.checkWinningConditions() != GameResult.UNDEFINED)
@@ -64,29 +61,4 @@ public class ConversationController {
         this.checkWinningConditions = checkWinningConditions;
     }
 
-    // TODO DELETE
-    public static void main(String[] args) {
-        while (true) {
-            Player player = LoadController.getPlayer();
-
-
-            List<ConsoleText> mainText = new ArrayList<>();
-            mainText.add(new ConsoleText("This is a conversation between"));
-
-            ConversationController controller = new ConversationController(mainText, null);
-
-            controller.run(player, LoadController.getCharacters().get("Gardener"));
-        }
-
-
-//        Character character = new Character("Bob", "This is Bob", "Kitchen");
-//        Conversation conversation = new Conversation();
-//        conversation.addDialog(new Dialog("Hi how are you?", "I am fine."));
-//        conversation.addDialog(new Dialog("Bye!", "See ya!"));
-//
-//        player = new Player("Player Name", "This is you bud", "Kitchen");
-//
-//        character.setConversation(conversation);
-//        controller.run(player, character);
-    }
 }

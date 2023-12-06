@@ -17,7 +17,6 @@ public class LoadController {
     private static Character detective;
     private static Item murderWeapon;
     private static Character murderer;
-    // Making this class fully static
     private LoadController(){}
 
     public static void loadAllEntities(){

@@ -32,7 +32,6 @@ public class AudioController {
     private static final List<ConsoleText> audioOptions = new ArrayList<>();
 
     public static boolean volMenu(){
-        //TODO: pull option data for volume
         JsonMessageParser.loadAudioOptions();
         if(audioOptions.isEmpty()) {
             for (String option : JsonMessageParser.getAudioOptions()) {
@@ -114,6 +113,8 @@ public class AudioController {
     }
 
     //SFX volume controls -
+
+    //No argument version decreases by 10
     public static void sfxVolDown(){
         sfxVolDelta-=10.0f;
         FloatControl gainControl1 = (FloatControl) sound[2].getControl(FloatControl.Type.MASTER_GAIN);

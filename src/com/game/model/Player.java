@@ -26,6 +26,8 @@ public class Player extends Character {
         setCurrentLocation(newLocation);
     }
 
+    // GETTERS AND SETTERS
+
     public StringBuilder getInventoryString() {
         // builds a string with all items in the inventory separated by a comma and a space.
         StringBuilder sb = new StringBuilder();
