@@ -1,5 +1,9 @@
 package com.game.view;
 
+import com.game.model.Character;
+
+import java.util.List;
+
 /**
  * ConsoleText class that creates text objects with a text color, background color,
  * and the text string. There are three constructors that can be called (text only,
@@ -10,12 +14,12 @@ public class ConsoleText {
 
     // INSTANCE VARIABLES
     String text;
-    AnsiBackgroundColor backgroundColor;
-    AnsiTextColor textColor;
+    AnsiBackgroundColor backgroundColor = AnsiBackgroundColor.NONE;
+    AnsiTextColor textColor = AnsiTextColor.NONE;
 
     // CONSTRUCTOR
     // builds a new ConsoleText object with the given text, text color, and background color.
-    ConsoleText(String text, AnsiTextColor textColor, AnsiBackgroundColor backgroundColor) {
+    public ConsoleText(String text, AnsiTextColor textColor, AnsiBackgroundColor backgroundColor) {
         setText(text);
         setBackgroundColor(backgroundColor);
         setTextColor(textColor);
@@ -40,6 +44,29 @@ public class ConsoleText {
         setText(text);
         setTextColor(AnsiTextColor.NONE);
         setBackgroundColor(AnsiBackgroundColor.NONE);
+    }
+
+    public ConsoleText(String text, List<String> elements) {
+        setText(text + ListToString(elements));
+        setTextColor(AnsiTextColor.NONE);
+        setBackgroundColor(AnsiBackgroundColor.NONE);
+    }
+
+    public ConsoleText(List<String> elements){
+        text = ListToString(elements);
+        setTextColor(AnsiTextColor.NONE);
+        setBackgroundColor(AnsiBackgroundColor.NONE);
+    }
+
+    private String ListToString(List<String> elements){
+        String result = "";
+        for (int i = 0; i < elements.size() - 1; i++){
+            result += elements.get(i) + ", ";
+        }
+        if(elements.size() > 0){
+            result += elements.get(elements.size() - 1);
+        }
+        return result;
     }
 
     // GETTERS AND SETTERS

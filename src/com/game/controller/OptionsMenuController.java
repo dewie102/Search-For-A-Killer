@@ -1,59 +1,52 @@
 package com.game.controller;
 
+import com.game.controller.io.JsonMessageParser;
 import com.game.model.NotImplementedException;
-import com.game.view.ConsoleText;
-import com.game.view.ConsoleView;
-import com.game.view.MultipleChoiceConsoleView;
-import jdk.jshell.spi.ExecutionControl;
+import com.game.view.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 class OptionsMenuController {
+    List<ConsoleText> options = new ArrayList<>();
+    private List<ConsoleText> mainText = new ArrayList<>();
+    private List<ConsoleText> secondaryText = new ArrayList<>();
+
+    private final List<ConsoleText> gameResult = new ArrayList<>();
+
     public void run(){
-        MultipleChoiceConsoleView consoleView = new MultipleChoiceConsoleView(
-                List.of(List.of(new ConsoleText("Main Menu: "))),
-                List.of(
-                        new ConsoleText("Play new game."),
-//                        new ConsoleText("Load Saved game."),
-//                        new ConsoleText("How to play?"),
-//                        new ConsoleText("About this game."),
-                        new ConsoleText("Quit Game.")
-        ));
-        String userInput = consoleView.show();
-        switch (userInput){
-            case "0":
-                newGame();
-                break;
-//            case "1":
-//                loadSavedGame();
-//                break;
-//            case "2":
-//                howToPlay();
-//                break;
-//            case "3":
-//                aboutThisGame();
-//                break;
-            case "4":
-                quitGame();
-                break;
+        JsonMessageParser.loadPlayerOptions();
+        if(options.isEmpty()) {
+            for (String option : JsonMessageParser.getPlayerOptions()) {
+                options.add(new ConsoleText(option));
+            }
+        }
+        secondaryText = new ArrayList<>();
+        secondaryText.add(new ConsoleText("Main Menu:", AnsiTextColor.BLUE));
+        MultipleChoiceConsoleView consoleView = new MultipleChoiceConsoleView(List.of(mainText, secondaryText), options);
+        while (true) {
+            String userInput = consoleView.show();
+            switch (userInput) {
+                case "0":
+                    newGame();
+                    break;
+                case "1":
+                    quitGame();
+                    break;
+            }
         }
     }
 
     private void newGame(){
+        LoadController.loadAllEntities();
+        mainText.clear();
         GameController gameController = new GameController();
-        gameController.run();
-    }
-
-    private void loadSavedGame(){
-        throw new NotImplementedException("OptionsMenuController.loadSavedGame() is not implemented");
-    }
-
-    private void howToPlay(){
-        throw new NotImplementedException("OptionsMenuController.howToPlay() is not implemented");
-    }
-
-    private void aboutThisGame(){
-        throw new NotImplementedException("OptionsMenuController.aboutThisGame() is not implemented");
+        GameResult gameResult = gameController.run();
+        if (gameResult == GameResult.LOSS){
+            mainText.add(new ConsoleText(JsonMessageParser.getEndGameMessages().get("lose"), AnsiTextColor.RED));
+        }else {
+            mainText.add(new ConsoleText(JsonMessageParser.getEndGameMessages().get("win"), AnsiTextColor.GREEN));
+        }
     }
 
     private void quitGame(){

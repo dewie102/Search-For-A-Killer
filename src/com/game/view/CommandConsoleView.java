@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 public class CommandConsoleView extends ConsoleView{
-    //private Map<String, java.util.List<String>> commands = new TreeMap<>();
+
     List<Command> commands = new ArrayList<>();
     private List<String> entities = new ArrayList<>();
     private List<String> ignoreList = new ArrayList<>();

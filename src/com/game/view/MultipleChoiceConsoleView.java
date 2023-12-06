@@ -17,6 +17,14 @@ public class MultipleChoiceConsoleView extends ConsoleView{
         this.options = options;
     }
 
+    public MultipleChoiceConsoleView(List<List<ConsoleText>> textList, List<String> options, boolean flag){
+        super(textList);
+        this.options = new ArrayList<>();
+        for (var option : options){
+            addOptions(new ConsoleText(option));
+        }
+    }
+
     public void addOptions(ConsoleText ...options){
         this.options.addAll(Arrays.asList(options));
     }
@@ -32,6 +40,15 @@ public class MultipleChoiceConsoleView extends ConsoleView{
     @Override
     String collectInput() {
         return InputCollector.collectInput(options);
+    }
+
+    public List<ConsoleText> getOptions() {
+        return options;
+    }
+
+    public void setOptions(List<ConsoleText> options) {
+        this.options.clear();
+        this.options.addAll(options);
     }
 }
 
