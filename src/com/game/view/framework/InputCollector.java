@@ -40,11 +40,7 @@ public class InputCollector {
 
         // Trim the input then replace multiple spaces with a single space
         line = line.trim().toLowerCase().replaceAll(" +", " ");
-        // TODO DELETE THIS FOR LOOP, DEPRECATED
-//        for (var ignore : ignoreList){
-//            line = line.replace(" " + ignore + " ", " ");
-//        }
-        // Getting rid of any word that matches the ignoreList
+
         String[] lineArray = line.split(" ");
         line = "";
         for (String word : lineArray) {

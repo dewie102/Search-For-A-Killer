@@ -30,7 +30,7 @@
       "connectedRooms": "Connected Rooms: %s"
     },
   "endgame": {
-    "win": "Congratulations, you found the murderer and the murder weapon. You won the game!",
-    "lose": "Too bad, you failed in your quest to resolve the murder. Try again."
+    "win": "Congratulations! You have successfully identified the murderer and the murder weapon. You won the game!",
+    "lose": "Unfortunately, you were unable to solve the murder mystery this time. Feel free to give it another try!"
     }
   }

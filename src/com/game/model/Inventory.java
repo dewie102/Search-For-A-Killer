@@ -14,7 +14,6 @@ public class Inventory {
         inventory.addAll(Arrays.asList(items));
     }
 
-    //TODO: Implement
     public Item findByName(String itemName){
         throw new NotImplementedException("findByName");
     }
