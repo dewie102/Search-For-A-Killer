@@ -21,7 +21,6 @@ class OptionsMenuController {
                 options.add(new ConsoleText(option));
             }
         }
-//        MultipleChoiceConsoleView consoleView = new MultipleChoiceConsoleView(List.of(List.of(new ConsoleText("Main Menu: "))), options);
         secondaryText = new ArrayList<>();
         secondaryText.add(new ConsoleText("Main Menu:", AnsiTextColor.BLUE));
         MultipleChoiceConsoleView consoleView = new MultipleChoiceConsoleView(List.of(mainText, secondaryText), options);

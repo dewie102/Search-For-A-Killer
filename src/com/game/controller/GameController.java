@@ -57,7 +57,7 @@ public class GameController {
         // List of entities
         List<String> entities = new ArrayList<>(entityDictionary.keySet());
 
-        // List of entities
+        // List of words to ignore
         List<String> ignoreList = gameText.getIgnoreList();
 
         String escapeCommand = gameText.getGeneralMessages().get("quit");
@@ -209,8 +209,6 @@ public class GameController {
                 rooms.get(player.getCurrentLocation()).getInventory().add((Item)target);
                 //remove item from player inventory
                 player.getInventory().getItems().remove((Item)target);
-                //mainText.clear();
-                //mainText.addAll(getViewText());
                 //Tell the player what happened
                 secondaryText.add(new ConsoleText(String.format(gameText.getInfoMessages().get("dropItem"),target.getName())));
                 secondaryText.add(new ConsoleText(gameText.getGeneralMessages().get("divider"), AnsiTextColor.BLUE));
@@ -231,9 +229,6 @@ public class GameController {
             //If the target is in the same room as the player
             if (((Character) target).getCurrentLocation().equals(player.getCurrentLocation())){
                 conversationController.run(player, character);
-//                secondaryText.add(new ConsoleText(String.format("%s says:",target.getName())));
-//                secondaryText.add(new ConsoleText("Hello there Detective! I'm not interested in talking to you right now.", AnsiTextColor.PURPLE));
-//                secondaryText.add(new ConsoleText(gameText.getGeneralMessages().get("divider"), AnsiTextColor.BLUE));
                 return true;
             }
             consoleView.setErrorMessage(String.format(gameText.getErrorMessages().get("invalidCharacterPresence")));
@@ -277,7 +272,6 @@ public class GameController {
         return true;
     }
 
-    //TODO: Implement
     private boolean volCommand(Entity target){
         boolean success = AudioController.volMenu();
         if(success){
