@@ -25,7 +25,6 @@ class MapLoaderController {
     private List<StringBuilder> mapLayout3 = new ArrayList<>();
 
     // METHODS
-    //TODO: add the player.currentLocation as a String argument so that we can pull the player location
     public void loadMap(){
 
         // map json file path
