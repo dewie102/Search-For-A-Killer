@@ -55,7 +55,7 @@ class MainFrame extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == actionButton) {
-            System.out.println("Play Button Clicked!!");
+            System.out.println("Play Button Clicked!");
         }
     }
 }
