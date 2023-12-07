@@ -2,8 +2,11 @@ package com.game.view.gui;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-class MainFrame extends JFrame {
+class MainFrame extends JFrame implements ActionListener {
+    JButton actionButton;
     MainFrame() {
         this.setTitle("Search For A Killer");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -20,31 +23,39 @@ class MainFrame extends JFrame {
 
         JLabel label = new JLabel();
         label.setText("SEARCH FOR A KILLER");
-
         label.setVerticalTextPosition(JLabel.TOP);
-
-        label.setForeground(Color.GREEN);
-        label.setFont(new Font("MV Boli", Font.PLAIN, 30));
-
+        label.setForeground(Color.GREEN);label.setFont(new Font("MV Boli", Font.PLAIN, 30));
         label.setBackground(Color.BLACK);
         label.setOpaque(true);
-
         label.setVerticalAlignment(JLabel.CENTER);
         label.setHorizontalAlignment(JLabel.CENTER);
-
         label.setBounds(0, 0, 1000, 50);
 
-        JPanel panel = new JPanel();
-        panel.setBackground(Color.RED);
-        panel.setBounds(0, 0, 1000, 60);
+        JPanel bannerPanel = new JPanel();
+        bannerPanel.setBackground(Color.RED);
+        bannerPanel.setBounds(0, 0, 1000, 60);
+        bannerPanel.setLayout(new BorderLayout());
+        bannerPanel.add(label);
+        this.add(bannerPanel);
 
-        panel.setLayout(new BorderLayout());
+        actionButton = new JButton("Play");
+        actionButton.setBounds(400, 10, 200, 40);
+        actionButton.addActionListener(this);
 
-        panel.add(label);
-
-        this.add(panel);
+        JPanel actionPanel = new JPanel();
+        actionPanel.setBackground(Color.BLUE);
+        actionPanel.setBounds(0, 600, 1000, 60);
+        actionPanel.setLayout(null);
+        actionPanel.add(actionButton);
+        this.add(actionPanel);
 
         //        this.pack();
+    }
 
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == actionButton) {
+            System.out.println("Play Button Clicked!");
+        }
     }
 }
