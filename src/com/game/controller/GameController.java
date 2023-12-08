@@ -331,6 +331,7 @@ public class GameController {
             Dialog dialog = new Dialog(suspect.getName(), "Noted, you think the murderer was " + suspect.getName());
             dialog.setReport(suspect);
             dialog.setCallBack(this::reportCommand);
+            dialog.setEndsConversation(true);
             murdererConversation.addDialog(dialog);
         }
         murdererConversation.addDialog(new Dialog("On the other hand.", ""));
@@ -341,6 +342,7 @@ public class GameController {
             Dialog dialog = new Dialog(weapon.getName(), "Noted, you think the murder weapon was " + weapon.getName());
             dialog.setReport(weapon);
             dialog.setCallBack(this::reportCommand);
+            dialog.setEndsConversation(true);
             murdererWeaponConversation.addDialog(dialog);
         }
         murdererWeaponConversation.addDialog(new Dialog("On the other hand.", ""));

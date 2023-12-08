@@ -3,9 +3,7 @@ package com.game.controller.controllers;
 
 import com.game.controller.CheckWinningConditions;
 import com.game.controller.GameResult;
-import com.game.controller.LoadController;
 import com.game.model.Conversation;
-import com.game.model.Dialog;
 import com.game.model.Player;
 import com.game.view.ConsoleText;
 import com.game.view.MultipleChoiceConsoleView;
@@ -36,6 +34,8 @@ public class ConversationController {
         List<String> questions = currentConversation.getConversationQuestions();
 
         int result = -1;
+        // While the last option selected wasn't the last option and winning condition is undefined, keep asking.
+        // The last option added to question essentially goes back
         while (result != questions.size() - 1 && (checkWinningConditions == null || checkWinningConditions.checkWinningConditions() == GameResult.UNDEFINED)) {
             if(checkWinningConditions != null && checkWinningConditions.checkWinningConditions() != GameResult.UNDEFINED)
                 break;
@@ -54,6 +54,9 @@ public class ConversationController {
             if(currentConversation.getDialog(result).getFollowUpConversation() != null){
                 run(player, character, currentConversation.getDialog(result).getFollowUpConversation());
                 result = -1;
+            // This fixes the loop but we lost the secondary text
+            } else if(currentConversation.getDialog(result).endsConversation()) {
+                result = questions.size() - 1;
             }
         }
     }
