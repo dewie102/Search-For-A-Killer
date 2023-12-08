@@ -7,6 +7,8 @@ import java.awt.event.ActionListener;
 
 class MainFrame extends JFrame implements ActionListener {
     JButton actionButton;
+    JTextField inputField;
+    JPanel bannerPanel;
     MainFrame() {
         this.setTitle("Search For A Killer");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -31,7 +33,7 @@ class MainFrame extends JFrame implements ActionListener {
         label.setHorizontalAlignment(JLabel.CENTER);
         label.setBounds(0, 0, 1000, 50);
 
-        JPanel bannerPanel = new JPanel();
+        bannerPanel = new JPanel();
         bannerPanel.setBackground(Color.RED);
         bannerPanel.setBounds(0, 0, 1000, 60);
         bannerPanel.setLayout(new BorderLayout());
@@ -48,14 +50,26 @@ class MainFrame extends JFrame implements ActionListener {
         actionPanel.setLayout(null);
         actionPanel.add(actionButton);
         this.add(actionPanel);
-
         //        this.pack();
+
+        inputField = new JTextField();
+        inputField.setBounds(400, 70, 200, 30);
+
+        this.add(inputField);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == actionButton) {
-            System.out.println("Play Button Clicked!");
+
+            String userInput = inputField.getText();
+
+            if (!userInput.isEmpty()) {
+                System.out.println(userInput);
+            } else {
+                System.out.println("No Input");
+            }
         }
     }
+
 }
