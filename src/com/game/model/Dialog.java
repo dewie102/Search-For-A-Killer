@@ -7,6 +7,7 @@ public class Dialog {
     private String response;
     private Conversation followUpConversation;
     private int dept;
+    private boolean endsConversation;
     // This will be a functional interface instance that receives an Entity and returns true/false
     private CommandCallBack callBack;
     private Entity report;
@@ -76,5 +77,13 @@ public class Dialog {
 
     public void setReport(Entity report) {
         this.report = report;
+    }
+    
+    public boolean endsConversation() {
+        return endsConversation;
+    }
+    
+    public void setEndsConversation(boolean endsConversation) {
+        this.endsConversation = endsConversation;
     }
 }
