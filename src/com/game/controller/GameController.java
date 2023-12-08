@@ -49,7 +49,7 @@ public class GameController {
         commandMap.put("quit", new Command("quit", List.of("exit"), "Quits the game, no questions asked.", CommandType.STANDALONE, this::quitCommand));
         commandMap.put("help", new Command("help", List.of(), "It displays this menu.", CommandType.STANDALONE, this::helpCommand));
         commandMap.put("drop", new Command("drop", List.of("place", "put"), "Drop an object from your inventory into your current location", CommandType.TWO_PARTS, this::dropCommand));
-        commandMap.put("get", new Command("get", List.of("grab", "pickup", "take"), "Drop an object from your inventory into your current location", CommandType.TWO_PARTS, this::getCommand));
+        commandMap.put("get", new Command("get", List.of("grab", "pickup", "take"), "Get an object from your current location put into your inventory", CommandType.TWO_PARTS, this::getCommand));
         commandMap.put("talk", new Command("talk", List.of("chat", "speak"), "Talk to another character", CommandType.TWO_PARTS, this::talkCommand));
         commandMap.put("volume", new Command("volume", List.of("sound", "vol"), "Change the volume settings", CommandType.STANDALONE, this::volCommand));
 
