@@ -1,10 +1,7 @@
 package com.game.view.gui;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.io.IOException;
-import java.util.Objects;
 
 public class GameWindow extends JFrame {
     public GameWindow() {
