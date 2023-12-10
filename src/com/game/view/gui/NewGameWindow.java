@@ -2,8 +2,16 @@ package com.game.view.gui;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class NewGameWindow {
+    private static JTextArea gameTextArea;
+    private static JTextArea roomInformationArea;
+    private static JTextArea playerInformationArea;
+    private static JTextArea mapArea;
+    private static JTextField commandTextField;
+
     public static void main(String[] args) {
         SwingUtilities.invokeLater(NewGameWindow::createAndShowGUI);
     }
@@ -13,7 +21,7 @@ public class NewGameWindow {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1400, 800);
 
-        // Game Banner
+        // Game Banner Panel
         JPanel gameBannerPanel = createBannerPanel();
         frame.add(gameBannerPanel, BorderLayout.NORTH);
 
@@ -24,7 +32,8 @@ public class NewGameWindow {
         gbcMain.fill = GridBagConstraints.BOTH;
 
         // Making first column width 50%
-        JPanel gameTextPanel = createLabelPanel("Game Console Text", Color.GREEN);
+        gameTextArea = createTextArea();
+        JPanel gameTextPanel = createTextPanel(gameTextArea);
         gbcMain.gridx = 0;
         gbcMain.weightx = 0.5;
         gbcMain.weighty = 1.0;
@@ -32,17 +41,21 @@ public class NewGameWindow {
 
         JPanel informationPanel = new JPanel(new GridLayout(2, 1));
 
-        JPanel roomInformationPanel = createLabelPanel("Room Information", Color.YELLOW);
+        roomInformationArea = createTextArea();
+        JPanel roomInformationPanel = createTextPanel(roomInformationArea);
         informationPanel.add(roomInformationPanel);
 
-        JPanel playerInformationPanel = createLabelPanel("Player Information", Color.RED);
+
+        playerInformationArea = createTextArea();
+        JPanel playerInformationPanel = createTextPanel(playerInformationArea);
         informationPanel.add(playerInformationPanel);
 
         gbcMain.gridx = 1;
         gbcMain.weightx = 0.25;
         mainPanel.add(informationPanel, gbcMain);
 
-        JPanel mapPanel = createLabelPanel("Map", Color.ORANGE);
+        mapArea = createTextArea();
+        JPanel mapPanel = createTextPanel(mapArea);
         gbcMain.gridx = 2;
         gbcMain.weightx = 0.25;
         mainPanel.add(mapPanel, gbcMain);
@@ -55,19 +68,16 @@ public class NewGameWindow {
         GridBagConstraints gbcAction = new GridBagConstraints();
         gbcAction.fill = GridBagConstraints.BOTH;
 
-        // Input Command Panel (50%)
         JPanel inputCommandPanel = createTextInputPanel();
         gbcAction.gridx = 0;
         gbcAction.weightx = 0.475;
         actionPanel.add(inputCommandPanel, gbcAction);
 
-        // Sound Adjust Panel (25%)
-        JPanel soundAdjustPanel = createLabelPanel("Sound Adjust", Color.CYAN);
+        JPanel soundAdjustPanel = createLabelPanel();
         gbcAction.gridx = 1;
         gbcAction.weightx = 0.25;
         actionPanel.add(soundAdjustPanel, gbcAction);
 
-        // Help Panel (25%)
         JPanel helpPanel = new JPanel(new FlowLayout());
         JButton helpButton = new JButton("Help");
         JButton quitButton = new JButton("Quit");
@@ -80,6 +90,12 @@ public class NewGameWindow {
         frame.add(actionPanel, BorderLayout.SOUTH);
 
         frame.setVisible(true);
+
+        gameTextAreaPrintln("Welcome to the game!");
+        roomInformationAreaPrintln();
+        playerInformationAreaPrintln();
+        mapAreaPrintln();
+
     }
 
     private static JPanel createBannerPanel() {
@@ -91,11 +107,11 @@ public class NewGameWindow {
         return panel;
     }
 
-    private static JPanel createLabelPanel(String text, Color color) {
+    private static JPanel createLabelPanel() {
         JPanel panel = new JPanel(new BorderLayout());
-        JLabel label = new JLabel(text);
+        JLabel label = new JLabel("Sound Adjust");
         label.setHorizontalAlignment(JLabel.CENTER);
-        panel.setBackground(color);
+        panel.setBackground(Color.CYAN);
         panel.setOpaque(true);
         panel.add(label, BorderLayout.CENTER);
         return panel;
@@ -103,10 +119,54 @@ public class NewGameWindow {
 
     private static JPanel createTextInputPanel() {
         JPanel panel = new JPanel(new BorderLayout());
+
+        commandTextField = new JTextField();
+        commandTextField.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                executeCommand(commandTextField.getText());
+                commandTextField.setText("");
+            }
+        });
+
         JLabel label = new JLabel("Enter Command");
-        JTextField textField = new JTextField();
         panel.add(label, BorderLayout.NORTH);
-        panel.add(textField, BorderLayout.CENTER);
+        panel.add(commandTextField, BorderLayout.CENTER);
         return panel;
+    }
+
+    private static JTextArea createTextArea() {
+        JTextArea textArea = new JTextArea();
+        textArea.setEditable(false);
+        return textArea;
+    }
+
+    private static JPanel createTextPanel(JTextArea textArea) {
+        JPanel panel = new JPanel(new BorderLayout());
+        JScrollPane scrollPane = new JScrollPane(textArea);
+        panel.add(scrollPane, BorderLayout.CENTER);
+        panel.setBackground(Color.GREEN);
+        panel.setOpaque(true);
+        return panel;
+    }
+
+    private static void gameTextAreaPrintln(String message) {
+        gameTextArea.append(message + "\n");
+    }
+
+    private static void roomInformationAreaPrintln() {
+        roomInformationArea.append("Room Information" + "\n");
+    }
+
+    private static void playerInformationAreaPrintln() {
+        playerInformationArea.append("Player Information Area" + "\n");
+    }
+
+    private static void mapAreaPrintln() {
+        mapArea.append("Map Area" + "\n");
+    }
+
+    private static void executeCommand(String command) {
+        gameTextAreaPrintln("Player entered command: " + command);
     }
 }
