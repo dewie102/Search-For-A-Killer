@@ -17,17 +17,18 @@ public class NewGameWindow {
         JPanel gameBannerPanel = createBannerPanel();
         frame.add(gameBannerPanel, BorderLayout.NORTH);
 
+        // Main Panel
         JPanel mainPanel = new JPanel(new GridBagLayout());
 
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.fill = GridBagConstraints.BOTH;
+        GridBagConstraints gbcMain = new GridBagConstraints();
+        gbcMain.fill = GridBagConstraints.BOTH;
 
         // Making first column width 50%
         JPanel gameTextPanel = createLabelPanel("Game Console Text", Color.GREEN);
-        gbc.gridx = 0;
-        gbc.weightx = 0.5;
-        gbc.weighty = 1.0;
-        mainPanel.add(gameTextPanel, gbc);
+        gbcMain.gridx = 0;
+        gbcMain.weightx = 0.5;
+        gbcMain.weighty = 1.0;
+        mainPanel.add(gameTextPanel, gbcMain);
 
         JPanel informationPanel = new JPanel(new GridLayout(2, 1));
 
@@ -37,35 +38,44 @@ public class NewGameWindow {
         JPanel playerInformationPanel = createLabelPanel("Player Information", Color.RED);
         informationPanel.add(playerInformationPanel);
 
-        gbc.gridx = 1;
-        gbc.weightx = 0.25;
-        mainPanel.add(informationPanel, gbc);
+        gbcMain.gridx = 1;
+        gbcMain.weightx = 0.25;
+        mainPanel.add(informationPanel, gbcMain);
 
         JPanel mapPanel = createLabelPanel("Map", Color.ORANGE);
-        gbc.gridx = 2;
-        gbc.weightx = 0.25;
-        mainPanel.add(mapPanel, gbc);
+        gbcMain.gridx = 2;
+        gbcMain.weightx = 0.25;
+        mainPanel.add(mapPanel, gbcMain);
 
         frame.add(mainPanel, BorderLayout.CENTER);
 
-        JPanel actionPanel = new JPanel(new GridLayout(1, 3));
+        // Action Panel
+        JPanel actionPanel = new JPanel(new GridBagLayout());
 
-        // pending width adjustment
+        GridBagConstraints gbcAction = new GridBagConstraints();
+        gbcAction.fill = GridBagConstraints.BOTH;
+
+        // Input Command Panel (50%)
         JPanel inputCommandPanel = createTextInputPanel();
-        actionPanel.add(inputCommandPanel);
+        gbcAction.gridx = 0;
+        gbcAction.weightx = 0.475;
+        actionPanel.add(inputCommandPanel, gbcAction);
 
+        // Sound Adjust Panel (25%)
         JPanel soundAdjustPanel = createLabelPanel("Sound Adjust", Color.CYAN);
-        actionPanel.add(soundAdjustPanel);
+        gbcAction.gridx = 1;
+        gbcAction.weightx = 0.25;
+        actionPanel.add(soundAdjustPanel, gbcAction);
 
+        // Help Panel (25%)
         JPanel helpPanel = new JPanel(new FlowLayout());
-
         JButton helpButton = new JButton("Help");
         JButton quitButton = new JButton("Quit");
-
         helpPanel.add(helpButton);
         helpPanel.add(quitButton);
-
-        actionPanel.add(helpPanel);
+        gbcAction.gridx = 2;
+        gbcAction.weightx = 0.144;
+        actionPanel.add(helpPanel, gbcAction);
 
         frame.add(actionPanel, BorderLayout.SOUTH);
 
