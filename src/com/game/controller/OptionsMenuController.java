@@ -43,7 +43,7 @@ public class OptionsMenuController {
         mainText.clear();
         //GameController gameController = new GameController();
         //GameResult gameResult = gameController.run();
-        GameResult gameResult = GameController.getInstance().run();
+        GameResult gameResult = GameController.getInstance().runCommand("look");
         if (gameResult == GameResult.LOSS){
             mainText.add(new ConsoleText(JsonMessageParser.getEndGameMessages().get("lose"), AnsiTextColor.RED));
         }else {

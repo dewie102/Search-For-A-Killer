@@ -79,26 +79,26 @@ public class GameController {
         GameResult gameResult = GameResult.UNDEFINED;
         while (gameResult == GameResult.UNDEFINED){
             if(!MainController.PLAY_IN_GUI) {
-                /*String userInput = consoleView.show();
+                String userInput = consoleView.show();
                 String[] parts = userInput.split(" ", 2);
                 boolean result = false;
-    
+
                 Entity entity = parts.length > 1 ? entityDictionary.get(parts[1]) : null;
-    
+
                 if ((commandMap.get(parts[0]).getCommandType() == CommandType.TWO_PARTS)) {
                     if (entity == null) {
                         consoleView.setErrorMessage(gameText.getErrorMessages().get("invalidAction"));
                         continue;
                     }
                 }
-                
+
                 result = commandMap.get(parts[0]).executeCommand(entity);
                 mainText.clear();
                 mainText.addAll(getViewText());
-    
+
                 if(result){
                     consoleView.clearErrorMessage();
-                }*/
+                }
             }
             gameResult = checkForWinningConditions();
         }
@@ -108,9 +108,37 @@ public class GameController {
         return gameResult;
     }
     
-    private void runCommand() {
-        String userInput = consoleView.show();
-        String[] parts = userInput.split(" ", 2);
+    public GameResult runCommand(String command) {
+
+        // load the game map from json
+        mapLoaderController.loadMap();
+
+        //Map<String, Entity> entityDictionary = new HashMap<>();
+        entityDictionary.putAll(rooms);
+        entityDictionary.putAll(items);
+        entityDictionary.putAll(characters);
+        mainText = getViewText();
+        commandMap.put("go", new Command("go", List.of("run", "move", "walk", "travel"), "Go to a room. e.g. go kitchen", CommandType.TWO_PARTS, this::goCommand));
+        commandMap.put("look", new Command("look", List.of("see", "inspect", "read"), "Look at an object or room. e.g. look knife", CommandType.HYBRID, this::lookCommand));
+        commandMap.put("quit", new Command("quit", List.of("exit"), "Quits the game, no questions asked.", CommandType.STANDALONE, this::quitCommand));
+        commandMap.put("drop", new Command("drop", List.of("place", "put"), "Drop an object from your inventory into your current location", CommandType.TWO_PARTS, this::dropCommand));
+        commandMap.put("get", new Command("get", List.of("grab", "pickup", "take"), "Get an object from your current location put into your inventory", CommandType.TWO_PARTS, this::getCommand));
+        commandMap.put("talk", new Command("talk", List.of("chat", "speak"), "Talk to another character", CommandType.TWO_PARTS, this::talkCommand));
+        commandMap.put("volume", new Command("volume", List.of("sound", "vol"), "Change the volume settings", CommandType.STANDALONE, this::volCommand));
+
+        // List of entities
+        List<String> entities = new ArrayList<>(entityDictionary.keySet());
+
+        // List of words to ignore
+        List<String> ignoreList = gameText.getIgnoreList();
+
+        String escapeCommand = gameText.getGeneralMessages().get("quit");
+
+        consoleView = new CommandConsoleView(List.of(mainText, secondaryText), new ArrayList<>(commandMap.values()), entities, ignoreList);
+        GameResult gameResult = GameResult.UNDEFINED;
+
+//        String userInput = consoleView.show();
+        String[] parts = command.split(" ", 2);
         boolean result = false;
 
         Entity entity = parts.length > 1 ? entityDictionary.get(parts[1]) : null;
@@ -120,16 +148,23 @@ public class GameController {
                 consoleView.setErrorMessage(gameText.getErrorMessages().get("invalidAction"));
             }
         }
-        
+
         result = commandMap.get(parts[0]).executeCommand(entity);
         mainText.clear();
         mainText.addAll(getViewText());
 
+        System.out.println(Arrays.toString(parts));
+
         if(result){
             consoleView.clearErrorMessage();
         }
-        
-        
+
+        gameResult = checkForWinningConditions();
+        player.getPlayerHistory().clear();
+        mapLoaderController.buildMap(player.getCurrentLocation(), player.getPlayerHistory());
+        mapLoaderController.displayMap();
+        return gameResult;
+
     }
 
     private boolean goCommand(Entity target){

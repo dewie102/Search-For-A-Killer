@@ -225,8 +225,10 @@ public class GameWindow {
             @Override
             // Called when press enter in command input
             public void actionPerformed(ActionEvent e) {
-                executeCommand(commandTextField.getText());
-                commandTextField.setText("");
+//                executeCommand(commandTextField.getText());
+//                commandTextField.setText("");
+                GameController.getInstance().runCommand(commandTextField.getText());
+
             }
         });
 
