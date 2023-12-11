@@ -5,6 +5,7 @@ import com.game.controller.controllers.ConversationController;
 import com.game.controller.controllers.QuitGameController;
 import com.game.controller.io.JsonMessageParser;
 import com.game.model.*;
+import com.game.view.gui.GameWindow;
 import com.game.view.terminal.AnsiTextColor;
 import com.game.view.terminal.CommandConsoleView;
 import com.game.view.terminal.ConsoleText;
@@ -28,9 +29,20 @@ public class GameController {
     private final ConversationController conversationController = new ConversationController(mainText, this::checkForWinningConditions);
     private Character reportedMurder = null;
     private Item reportedMurderWeapon = null;
+    private Map<String, Entity> entityDictionary = new HashMap<>();
 
 
-    public GameController(){
+    private static GameController instance;
+    
+    public static GameController getInstance() {
+        if(instance == null) {
+            instance = new GameController();
+        }
+        
+        return instance;
+    }
+    
+    private GameController(){
         setDetectiveEndGameConversation();
     }
 
@@ -39,7 +51,7 @@ public class GameController {
         // load the game map from json
         mapLoaderController.loadMap();
 
-        Map<String, Entity> entityDictionary = new HashMap<>();
+        //Map<String, Entity> entityDictionary = new HashMap<>();
         entityDictionary.putAll(rooms);
         entityDictionary.putAll(items);
         entityDictionary.putAll(characters);
@@ -47,7 +59,9 @@ public class GameController {
         commandMap.put("go", new Command("go", List.of("run", "move", "walk", "travel"), "Go to a room. e.g. go kitchen", CommandType.TWO_PARTS, this::goCommand));
         commandMap.put("look", new Command("look", List.of("see", "inspect", "read"), "Look at an object or room. e.g. look knife", CommandType.HYBRID, this::lookCommand));
         commandMap.put("quit", new Command("quit", List.of("exit"), "Quits the game, no questions asked.", CommandType.STANDALONE, this::quitCommand));
-        commandMap.put("help", new Command("help", List.of(), "It displays this menu.", CommandType.STANDALONE, this::helpCommand));
+        if(!MainController.PLAY_IN_GUI) {
+            commandMap.put("help", new Command("help", List.of(), "It displays this menu.", CommandType.STANDALONE, this::helpCommand));
+        }
         commandMap.put("drop", new Command("drop", List.of("place", "put"), "Drop an object from your inventory into your current location", CommandType.TWO_PARTS, this::dropCommand));
         commandMap.put("get", new Command("get", List.of("grab", "pickup", "take"), "Get an object from your current location put into your inventory", CommandType.TWO_PARTS, this::getCommand));
         commandMap.put("talk", new Command("talk", List.of("chat", "speak"), "Talk to another character", CommandType.TWO_PARTS, this::talkCommand));
@@ -64,32 +78,58 @@ public class GameController {
         consoleView = new CommandConsoleView(List.of(mainText, secondaryText), new ArrayList<>(commandMap.values()), entities, ignoreList);
         GameResult gameResult = GameResult.UNDEFINED;
         while (gameResult == GameResult.UNDEFINED){
-            String userInput = consoleView.show();
-            String[] parts = userInput.split(" ", 2);
-            boolean result = false;
-
-            Entity entity = parts.length > 1 ? entityDictionary.get(parts[1]) : null;
-
-            if((commandMap.get(parts[0]).getCommandType() == CommandType.TWO_PARTS)) {
-                if (entity == null) {
-                    consoleView.setErrorMessage(gameText.getErrorMessages().get("invalidAction"));
-                    continue;
+            if(!MainController.PLAY_IN_GUI) {
+                /*String userInput = consoleView.show();
+                String[] parts = userInput.split(" ", 2);
+                boolean result = false;
+    
+                Entity entity = parts.length > 1 ? entityDictionary.get(parts[1]) : null;
+    
+                if ((commandMap.get(parts[0]).getCommandType() == CommandType.TWO_PARTS)) {
+                    if (entity == null) {
+                        consoleView.setErrorMessage(gameText.getErrorMessages().get("invalidAction"));
+                        continue;
+                    }
                 }
+                
+                result = commandMap.get(parts[0]).executeCommand(entity);
+                mainText.clear();
+                mainText.addAll(getViewText());
+    
+                if(result){
+                    consoleView.clearErrorMessage();
+                }*/
             }
-            result = commandMap.get(parts[0]).executeCommand(entity);
-            mainText.clear();
-            mainText.addAll(getViewText());
-
-            if(result){
-                consoleView.clearErrorMessage();
-            }
-
             gameResult = checkForWinningConditions();
         }
         player.getPlayerHistory().clear();
         mapLoaderController.buildMap(player.getCurrentLocation(), player.getPlayerHistory());
         mapLoaderController.displayMap();
         return gameResult;
+    }
+    
+    private void runCommand() {
+        String userInput = consoleView.show();
+        String[] parts = userInput.split(" ", 2);
+        boolean result = false;
+
+        Entity entity = parts.length > 1 ? entityDictionary.get(parts[1]) : null;
+
+        if ((commandMap.get(parts[0]).getCommandType() == CommandType.TWO_PARTS)) {
+            if (entity == null) {
+                consoleView.setErrorMessage(gameText.getErrorMessages().get("invalidAction"));
+            }
+        }
+        
+        result = commandMap.get(parts[0]).executeCommand(entity);
+        mainText.clear();
+        mainText.addAll(getViewText());
+
+        if(result){
+            consoleView.clearErrorMessage();
+        }
+        
+        
     }
 
     private boolean goCommand(Entity target){
@@ -186,6 +226,17 @@ public class GameController {
         }
         secondaryText.add(new ConsoleText(gameText.getGeneralMessages().get("divider"), AnsiTextColor.BLUE));
         return true;
+    }
+    
+    public void displayHelpMessage() {
+        GameWindow.helpTextArea.setText("");
+        //secondaryText.add(new ConsoleText(gameText.getInfoMessages().get("availableCommands")));
+        GameWindow.helpTextArea.append(gameText.getInfoMessages().get("availableCommands"));
+        for (var command : commandMap.values()) {
+            //secondaryText.add(new ConsoleText(String.format("%s: \t%s", command.getKeyWord(), command.getDescription())));
+            GameWindow.helpTextArea.append(String.format("%s: \t%s", command.getKeyWord(), command.getDescription()));
+        }
+        //secondaryText.add(new ConsoleText(gameText.getGeneralMessages().get("divider"), AnsiTextColor.BLUE));
     }
 
     private boolean lookCharacter(Character character){

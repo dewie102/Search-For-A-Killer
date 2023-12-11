@@ -9,6 +9,6 @@ public class GameClient {
     public static void main(String[] args) {
         // Execute Main Game Window
         MainController.PLAY_IN_GUI = true;
-        SwingUtilities.invokeLater(GameWindow::new);
+        //SwingUtilities.invokeLater(TitleWindow::new);
     }
 }
