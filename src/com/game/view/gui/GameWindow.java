@@ -157,7 +157,8 @@ public class GameWindow {
         textArea.setEditable(false);
         textArea.setBackground(new Color(50, 50, 50));
         textArea.setForeground(Color.YELLOW);
-        textArea.setFont(new Font("Courier New", Font.PLAIN, 10));
+        textArea.setFont(new Font("Courier New", Font.PLAIN, 14));
+        textArea.setWrapStyleWord(true);
         return textArea;
     }
 
@@ -228,7 +229,7 @@ public class GameWindow {
 //                executeCommand(commandTextField.getText());
 //                commandTextField.setText("");
                 GameController.getInstance().runCommand(commandTextField.getText());
-
+                commandTextField.setText("");
             }
         });
 

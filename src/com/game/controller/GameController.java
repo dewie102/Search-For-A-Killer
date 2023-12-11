@@ -5,6 +5,7 @@ import com.game.controller.controllers.ConversationController;
 import com.game.controller.controllers.QuitGameController;
 import com.game.controller.io.JsonMessageParser;
 import com.game.model.*;
+import com.game.view.gui.DisplayView;
 import com.game.view.gui.GameWindow;
 import com.game.view.terminal.AnsiTextColor;
 import com.game.view.terminal.CommandConsoleView;
@@ -77,31 +78,30 @@ public class GameController {
         ignoreList = gameText.getIgnoreList();
     }
 
+    // This is only called for terminal run
     public GameResult run() {
         consoleView = new CommandConsoleView(List.of(mainText, secondaryText), new ArrayList<>(commandMap.values()), entities, ignoreList);
         GameResult gameResult = GameResult.UNDEFINED;
         while (gameResult == GameResult.UNDEFINED){
-            if(!MainController.PLAY_IN_GUI) {
-                String userInput = consoleView.show();
-                String[] parts = userInput.split(" ", 2);
-                boolean result = false;
+            String userInput = consoleView.show();
+            String[] parts = userInput.split(" ", 2);
+            boolean result = false;
 
-                Entity entity = parts.length > 1 ? entityDictionary.get(parts[1]) : null;
+            Entity entity = parts.length > 1 ? entityDictionary.get(parts[1]) : null;
 
-                if ((commandMap.get(parts[0]).getCommandType() == CommandType.TWO_PARTS)) {
-                    if (entity == null) {
-                        consoleView.setErrorMessage(gameText.getErrorMessages().get("invalidAction"));
-                        continue;
-                    }
+            if ((commandMap.get(parts[0]).getCommandType() == CommandType.TWO_PARTS)) {
+                if (entity == null) {
+                    consoleView.setErrorMessage(gameText.getErrorMessages().get("invalidAction"));
+                    continue;
                 }
+            }
 
-                result = commandMap.get(parts[0]).executeCommand(entity);
-                mainText.clear();
-                mainText.addAll(getViewText());
+            result = commandMap.get(parts[0]).executeCommand(entity);
+            mainText.clear();
+            mainText.addAll(getViewText());
 
-                if(result){
-                    consoleView.clearErrorMessage();
-                }
+            if(result){
+                consoleView.clearErrorMessage();
             }
             gameResult = checkForWinningConditions();
         }
@@ -114,9 +114,11 @@ public class GameController {
     
     // The idea here is whenever a command is entered in the GUI it runs this function
     public GameResult runCommand(String command) {
+        DisplayView displayView = new DisplayView(List.of(mainText, secondaryText), GameWindow.gameTextArea);
         GameResult gameResult = GameResult.UNDEFINED;
 
 //        String userInput = consoleView.show();
+        
         String[] parts = command.split(" ", 2);
         boolean result = false;
 
@@ -132,16 +134,18 @@ public class GameController {
         mainText.clear();
         mainText.addAll(getViewText());
 
-        System.out.println(Arrays.toString(parts));
-
         if(result){
-            consoleView.clearErrorMessage();
+            displayView.clearErrorMessage();
         }
 
         gameResult = checkForWinningConditions();
         player.getPlayerHistory().clear();
-        mapLoaderController.buildMap(player.getCurrentLocation(), player.getPlayerHistory());
-        mapLoaderController.displayMap();
+        // Clear the component and display the text
+        displayView.clearText();
+        displayView.show();
+        // This handles the map displaying and building
+        //mapLoaderController.buildMap(player.getCurrentLocation(), player.getPlayerHistory());
+        //mapLoaderController.displayMap();
         return gameResult;
 
     }
