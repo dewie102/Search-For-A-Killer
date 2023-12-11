@@ -144,7 +144,7 @@ public class NewGameWindow {
         JTextArea textArea = new JTextArea();
         textArea.setEditable(false);
         textArea.setBackground(new Color(50, 50, 50));
-        textArea.setForeground(Color.WHITE);
+        textArea.setForeground(Color.YELLOW);
         return textArea;
     }
 
