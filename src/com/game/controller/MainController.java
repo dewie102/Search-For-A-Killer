@@ -2,7 +2,9 @@ package com.game.controller;
 
 import java.io.IOException;
 
-class MainController {
+public class MainController {
+    public static boolean PLAY_IN_GUI = false;
+    
     public static void main(String[] args) throws  IOException {
 
         AudioController.loadMusic();

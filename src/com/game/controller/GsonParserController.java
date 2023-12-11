@@ -39,8 +39,13 @@ public class GsonParserController {
             if (jsonElement.isJsonObject()) {
                 JsonObject jsonObject = jsonElement.getAsJsonObject();
                 List<ConsoleText> mainText = new ArrayList<>();
-                ConsoleView consoleView = new ConsoleView(List.of(mainText));
-                //DisplayView displayView = new DisplayView(List.of(mainText), NewGameWindow.gameTextArea);
+                ConsoleView consoleView = null;
+                DisplayView displayView = null;
+                if(!MainController.PLAY_IN_GUI) {
+                    consoleView = new ConsoleView(List.of(mainText));
+                } else {
+                    displayView = new DisplayView(List.of(mainText), NewGameWindow.gameTextArea);
+                }
 
                 // Iterate through the JSON object
                 Set<Map.Entry<String, JsonElement>> entries = jsonObject.entrySet();
@@ -58,8 +63,11 @@ public class GsonParserController {
                         mainText.add(new ConsoleText(value.toString()));
                     }
                 }
-                consoleView.show();
-                //displayView.show();
+                if(!MainController.PLAY_IN_GUI) {
+                    consoleView.show();
+                } else {
+                    displayView.show();
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
