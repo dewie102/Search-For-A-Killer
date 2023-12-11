@@ -8,7 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class TitleWindow extends JFrame {
-    public TitleWindow(OptionsMenuController menuController) {
+    public TitleWindow() {
         setTitle("Search For A Killer");
         setSize(800, 400);
         setResizable(false);
@@ -78,7 +78,6 @@ public class TitleWindow extends JFrame {
 
                 // Open New Game Window
                 SwingUtilities.invokeLater(GameWindow::createAndShowGUI);
-                menuController.newGame();
             }
         });
 

@@ -30,6 +30,8 @@ public class GameController {
     private Character reportedMurder = null;
     private Item reportedMurderWeapon = null;
     private Map<String, Entity> entityDictionary = new HashMap<>();
+    private List<String> entities;
+    private List<String> ignoreList;
 
 
     private static GameController instance;
@@ -45,12 +47,13 @@ public class GameController {
     private GameController(){
         setDetectiveEndGameConversation();
     }
-
-    public GameResult run(){
-
+    
+    public void initialize() {
+        LoadController.loadAllEntities();
+        
         // load the game map from json
         mapLoaderController.loadMap();
-
+    
         //Map<String, Entity> entityDictionary = new HashMap<>();
         entityDictionary.putAll(rooms);
         entityDictionary.putAll(items);
@@ -66,15 +69,15 @@ public class GameController {
         commandMap.put("get", new Command("get", List.of("grab", "pickup", "take"), "Get an object from your current location put into your inventory", CommandType.TWO_PARTS, this::getCommand));
         commandMap.put("talk", new Command("talk", List.of("chat", "speak"), "Talk to another character", CommandType.TWO_PARTS, this::talkCommand));
         commandMap.put("volume", new Command("volume", List.of("sound", "vol"), "Change the volume settings", CommandType.STANDALONE, this::volCommand));
-
+    
         // List of entities
-        List<String> entities = new ArrayList<>(entityDictionary.keySet());
-
+        entities = new ArrayList<>(entityDictionary.keySet());
+    
         // List of words to ignore
-        List<String> ignoreList = gameText.getIgnoreList();
+        ignoreList = gameText.getIgnoreList();
+    }
 
-        String escapeCommand = gameText.getGeneralMessages().get("quit");
-
+    public GameResult run() {
         consoleView = new CommandConsoleView(List.of(mainText, secondaryText), new ArrayList<>(commandMap.values()), entities, ignoreList);
         GameResult gameResult = GameResult.UNDEFINED;
         while (gameResult == GameResult.UNDEFINED){
@@ -108,33 +111,9 @@ public class GameController {
         return gameResult;
     }
     
+    
+    // The idea here is whenever a command is entered in the GUI it runs this function
     public GameResult runCommand(String command) {
-
-        // load the game map from json
-        mapLoaderController.loadMap();
-
-        //Map<String, Entity> entityDictionary = new HashMap<>();
-        entityDictionary.putAll(rooms);
-        entityDictionary.putAll(items);
-        entityDictionary.putAll(characters);
-        mainText = getViewText();
-        commandMap.put("go", new Command("go", List.of("run", "move", "walk", "travel"), "Go to a room. e.g. go kitchen", CommandType.TWO_PARTS, this::goCommand));
-        commandMap.put("look", new Command("look", List.of("see", "inspect", "read"), "Look at an object or room. e.g. look knife", CommandType.HYBRID, this::lookCommand));
-        commandMap.put("quit", new Command("quit", List.of("exit"), "Quits the game, no questions asked.", CommandType.STANDALONE, this::quitCommand));
-        commandMap.put("drop", new Command("drop", List.of("place", "put"), "Drop an object from your inventory into your current location", CommandType.TWO_PARTS, this::dropCommand));
-        commandMap.put("get", new Command("get", List.of("grab", "pickup", "take"), "Get an object from your current location put into your inventory", CommandType.TWO_PARTS, this::getCommand));
-        commandMap.put("talk", new Command("talk", List.of("chat", "speak"), "Talk to another character", CommandType.TWO_PARTS, this::talkCommand));
-        commandMap.put("volume", new Command("volume", List.of("sound", "vol"), "Change the volume settings", CommandType.STANDALONE, this::volCommand));
-
-        // List of entities
-        List<String> entities = new ArrayList<>(entityDictionary.keySet());
-
-        // List of words to ignore
-        List<String> ignoreList = gameText.getIgnoreList();
-
-        String escapeCommand = gameText.getGeneralMessages().get("quit");
-
-        consoleView = new CommandConsoleView(List.of(mainText, secondaryText), new ArrayList<>(commandMap.values()), entities, ignoreList);
         GameResult gameResult = GameResult.UNDEFINED;
 
 //        String userInput = consoleView.show();
@@ -265,13 +244,10 @@ public class GameController {
     
     public void displayHelpMessage() {
         GameWindow.helpTextArea.setText("");
-        //secondaryText.add(new ConsoleText(gameText.getInfoMessages().get("availableCommands")));
-        GameWindow.helpTextArea.append(gameText.getInfoMessages().get("availableCommands"));
+        GameWindow.helpTextArea.append(gameText.getInfoMessages().get("availableCommands") + "\n");
         for (var command : commandMap.values()) {
-            //secondaryText.add(new ConsoleText(String.format("%s: \t%s", command.getKeyWord(), command.getDescription())));
-            GameWindow.helpTextArea.append(String.format("%s: \t%s", command.getKeyWord(), command.getDescription()));
+            GameWindow.helpTextArea.append(String.format("%s: \t%s\n", command.getKeyWord(), command.getDescription()));
         }
-        //secondaryText.add(new ConsoleText(gameText.getGeneralMessages().get("divider"), AnsiTextColor.BLUE));
     }
 
     private boolean lookCharacter(Character character){

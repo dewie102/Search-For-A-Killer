@@ -38,12 +38,12 @@ public class OptionsMenuController {
         }
     }
 
+    // Method for the terminal new game
     public void newGame(){
-        LoadController.loadAllEntities();
         mainText.clear();
         //GameController gameController = new GameController();
         //GameResult gameResult = gameController.run();
-        GameResult gameResult = GameController.getInstance().runCommand("look");
+        GameResult gameResult = GameController.getInstance().run();
         if (gameResult == GameResult.LOSS){
             mainText.add(new ConsoleText(JsonMessageParser.getEndGameMessages().get("lose"), AnsiTextColor.RED));
         }else {

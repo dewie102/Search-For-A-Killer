@@ -13,10 +13,13 @@ public class MainController {
         AudioController.loadMusic();
         AudioController.musicVolDown(30f);
         //AudioController.loopMusic(); //<<<<Uncomment to have music play by default
-
-        // Create the titlePage and devTitlePage objects that will take in the json data and pass it
-        // to the ConsoleText class and the Console class, so it's outputted.
+        
+        // Initialize all game components before doing specific terminal and GUI stuff
+        GameController.getInstance().initialize();
+        
         if(!PLAY_IN_GUI) {
+            // Create the titlePage and devTitlePage objects that will take in the json data and pass it
+            // to the ConsoleText class and the Console class, so it's outputted.
             GsonParserController titlePage = new GsonParserController("data/Title.json");
             GsonParserController developmentPage = new GsonParserController("data/DevelopmentTitle.json");
             GsonParserController introText = new GsonParserController("data/IntroText.json");
@@ -27,8 +30,9 @@ public class MainController {
             OptionsMenuController optionsMenuController = new OptionsMenuController();
             optionsMenuController.run();
         } else {
-            OptionsMenuController optionsMenuController = new OptionsMenuController();
-            SwingUtilities.invokeLater(() -> new TitleWindow(optionsMenuController));
+            // Use this if you want/ need to add parameters
+            //SwingUtilities.invokeLater(() -> new TitleWindow());
+            SwingUtilities.invokeLater(TitleWindow::new);
         }
     }
 }
