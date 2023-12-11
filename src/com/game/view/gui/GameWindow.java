@@ -1,14 +1,18 @@
 package com.game.view.gui;
 
+import com.game.controller.GsonParserController;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class GameWindow extends JFrame {
+    private static JTextArea developmentTitleTextArea;
+
     public GameWindow() {
         setTitle("Search For A Killer");
-        setSize(800, 400);
+        setSize(1000, 500);
         setResizable(false);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -34,6 +38,22 @@ public class GameWindow extends JFrame {
         JLabel logoLabel = new JLabel(logoIcon);
         logoLabel.setHorizontalAlignment(JLabel.CENTER);
 
+        JPanel logoTextPanel = new JPanel(new BorderLayout());
+        logoTextPanel.setBackground(new Color(34, 34, 34));
+
+        logoTextPanel.add(logoLabel, BorderLayout.CENTER);
+
+        developmentTitleTextArea = new JTextArea();
+        developmentTitleTextArea.setEditable(false);
+        developmentTitleTextArea.setLineWrap(true);
+        developmentTitleTextArea.setWrapStyleWord(true);
+        developmentTitleTextArea.setFont(new Font("Arial", Font.PLAIN, 14));
+        developmentTitleTextArea.setForeground(Color.WHITE);
+        developmentTitleTextArea.setBackground(new Color(34, 34, 34));
+        developmentTitleTextArea.setBorder(BorderFactory.createEmptyBorder(10, 600, 10, 10));
+
+        logoTextPanel.add(developmentTitleTextArea, BorderLayout.SOUTH);
+
         // Create a separate panel for buttons
         JPanel buttonPanel = new JPanel(new FlowLayout());
         buttonPanel.setBackground(new Color(34, 34, 34));
@@ -56,9 +76,9 @@ public class GameWindow extends JFrame {
         buttonPanel.add(playGameButton);
         buttonPanel.add(quitButton);
 
-        // Add components to the main panel
+        // Add the main panel to the frame
         panel.add(gameBanner, BorderLayout.NORTH);
-        panel.add(logoLabel, BorderLayout.CENTER);
+        panel.add(logoTextPanel, BorderLayout.CENTER);
         panel.add(buttonPanel, BorderLayout.SOUTH);
 
         // Add the main panel to the frame
@@ -87,5 +107,12 @@ public class GameWindow extends JFrame {
                 System.exit(0);
             }
         });
+
+        loadJsonData();
+    }
+
+    private void loadJsonData() {
+        GsonParserController developmentPage = new GsonParserController("data/DevelopmentTitle.json");
+        developmentPage.printJson(developmentTitleTextArea);
     }
 }
