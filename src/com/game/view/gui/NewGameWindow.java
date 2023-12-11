@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.AdjustmentEvent;
+import java.awt.event.AdjustmentListener;
 
 public class NewGameWindow {
     private static JTextArea gameTextArea;
@@ -12,46 +14,50 @@ public class NewGameWindow {
     private static JTextArea mapArea;
     private static JTextField commandTextField;
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(NewGameWindow::createAndShowGUI);
-    }
-
-    private static void createAndShowGUI() {
+    static void createAndShowGUI() {
         JFrame frame = new JFrame("Search For A Killer");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1400, 800);
+
+        // window icon
+        ImageIcon image = new ImageIcon("data/logo.png");
+        frame.setIconImage(image.getImage());
+
+        // Window open in center
+        frame.setLocationRelativeTo(null);
 
         // Game Banner Panel
         JPanel gameBannerPanel = createBannerPanel();
         frame.add(gameBannerPanel, BorderLayout.NORTH);
 
-        // Main Panel
+        // Main Panel, consist of game text, player/room info and map
         JPanel mainPanel = new JPanel(new GridBagLayout());
+        mainPanel.setBackground(new Color(50, 50, 50));
 
         GridBagConstraints gbcMain = new GridBagConstraints();
         gbcMain.fill = GridBagConstraints.BOTH;
 
-        // Making first column width 50%
+        // Making first column width 40%
         gameTextArea = createTextArea();
         JPanel gameTextPanel = createTextPanel(gameTextArea);
         gbcMain.gridx = 0;
-        gbcMain.weightx = 0.5;
+        gbcMain.weightx = 0.4;
         gbcMain.weighty = 1.0;
         mainPanel.add(gameTextPanel, gbcMain);
 
         JPanel informationPanel = new JPanel(new GridLayout(2, 1));
+        informationPanel.setBackground(new Color(50, 50, 50));
 
         roomInformationArea = createTextArea();
         JPanel roomInformationPanel = createTextPanel(roomInformationArea);
         informationPanel.add(roomInformationPanel);
-
 
         playerInformationArea = createTextArea();
         JPanel playerInformationPanel = createTextPanel(playerInformationArea);
         informationPanel.add(playerInformationPanel);
 
         gbcMain.gridx = 1;
-        gbcMain.weightx = 0.25;
+        gbcMain.weightx = 0.15;
         mainPanel.add(informationPanel, gbcMain);
 
         mapArea = createTextArea();
@@ -60,32 +66,49 @@ public class NewGameWindow {
         gbcMain.weightx = 0.25;
         mainPanel.add(mapPanel, gbcMain);
 
+        // Add space around the panels
+        int panelSpace = 10;
+        gameTextPanel.setBorder(BorderFactory.createEmptyBorder(panelSpace, panelSpace, panelSpace, panelSpace));
+        informationPanel.setBorder(BorderFactory.createEmptyBorder(panelSpace, panelSpace, panelSpace, panelSpace));
+        mapPanel.setBorder(BorderFactory.createEmptyBorder(panelSpace, panelSpace, panelSpace, panelSpace));
+
         frame.add(mainPanel, BorderLayout.CENTER);
 
-        // Action Panel
+        // Action Panel, consist of command input, volume control and help/quit buttons
         JPanel actionPanel = new JPanel(new GridBagLayout());
+        actionPanel.setBackground(new Color(50, 50, 50));
 
         GridBagConstraints gbcAction = new GridBagConstraints();
         gbcAction.fill = GridBagConstraints.BOTH;
 
-        JPanel inputCommandPanel = createTextInputPanel();
+        JPanel inputCommandPanel = createInputCommandPanel();
         gbcAction.gridx = 0;
-        gbcAction.weightx = 0.475;
+        gbcAction.weightx = 0.31;
         actionPanel.add(inputCommandPanel, gbcAction);
 
-        JPanel soundAdjustPanel = createLabelPanel();
+        JPanel soundAdjustPanel = adjustSoundPanel();
         gbcAction.gridx = 1;
-        gbcAction.weightx = 0.25;
+        gbcAction.weightx = 0.139;
         actionPanel.add(soundAdjustPanel, gbcAction);
 
         JPanel helpPanel = new JPanel(new FlowLayout());
         JButton helpButton = new JButton("Help");
         JButton quitButton = new JButton("Quit");
+        helpPanel.setBackground(new Color(50, 50, 50));
+        helpButton.setBackground(Color.GREEN);
+        helpButton.setForeground(Color.BLACK);
+        quitButton.setBackground(Color.RED);
+        quitButton.setForeground(Color.BLACK);
         helpPanel.add(helpButton);
         helpPanel.add(quitButton);
         gbcAction.gridx = 2;
         gbcAction.weightx = 0.144;
         actionPanel.add(helpPanel, gbcAction);
+
+        // Add space around the action panel
+        inputCommandPanel.setBorder(BorderFactory.createEmptyBorder(panelSpace, panelSpace, panelSpace, panelSpace));
+        soundAdjustPanel.setBorder(BorderFactory.createEmptyBorder(panelSpace, panelSpace, panelSpace, panelSpace));
+        helpPanel.setBorder(BorderFactory.createEmptyBorder(panelSpace, panelSpace, panelSpace, panelSpace));
 
         frame.add(actionPanel, BorderLayout.SOUTH);
 
@@ -96,48 +119,24 @@ public class NewGameWindow {
         playerInformationAreaPrintln();
         mapAreaPrintln();
 
-    }
+        // Action Listeners
 
-    private static JPanel createBannerPanel() {
-        JPanel panel = new JPanel();
-        JLabel label = new JLabel("Search For A Killer");
-        label.setFont(new Font("Arial", Font.BOLD, 20));
-        panel.setBackground(Color.BLUE);
-        panel.add(label);
-        return panel;
-    }
-
-    private static JPanel createLabelPanel() {
-        JPanel panel = new JPanel(new BorderLayout());
-        JLabel label = new JLabel("Sound Adjust");
-        label.setHorizontalAlignment(JLabel.CENTER);
-        panel.setBackground(Color.CYAN);
-        panel.setOpaque(true);
-        panel.add(label, BorderLayout.CENTER);
-        return panel;
-    }
-
-    private static JPanel createTextInputPanel() {
-        JPanel panel = new JPanel(new BorderLayout());
-
-        commandTextField = new JTextField();
-        commandTextField.addActionListener(new ActionListener() {
+        quitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                executeCommand(commandTextField.getText());
-                commandTextField.setText("");
+                // Close the current window and terminate the process
+                frame.dispose();
+                System.exit(0);
             }
         });
 
-        JLabel label = new JLabel("Enter Command");
-        panel.add(label, BorderLayout.NORTH);
-        panel.add(commandTextField, BorderLayout.CENTER);
-        return panel;
     }
 
     private static JTextArea createTextArea() {
         JTextArea textArea = new JTextArea();
         textArea.setEditable(false);
+        textArea.setBackground(new Color(50, 50, 50));
+        textArea.setForeground(Color.WHITE);
         return textArea;
     }
 
@@ -145,10 +144,78 @@ public class NewGameWindow {
         JPanel panel = new JPanel(new BorderLayout());
         JScrollPane scrollPane = new JScrollPane(textArea);
         panel.add(scrollPane, BorderLayout.CENTER);
-        panel.setBackground(Color.GREEN);
+        panel.setBackground(new Color(50, 50, 50));
         panel.setOpaque(true);
         return panel;
     }
+
+    private static JPanel createBannerPanel() {
+        JPanel panel = new JPanel();
+        JLabel label = new JLabel("Search For A Killer");
+        Font customFont = new Font("Chiller", Font.BOLD, 36);
+        label.setFont(customFont);
+        label.setForeground(Color.WHITE);
+        panel.setBackground(new Color(30, 30, 30));
+        panel.add(label);
+        return panel;
+    }
+
+    private static JPanel adjustSoundPanel() {
+        JPanel panel = new JPanel(new BorderLayout());
+
+        JLabel label = new JLabel("Volume");
+        label.setHorizontalAlignment(JLabel.CENTER);
+        label.setForeground(Color.WHITE);
+        panel.setBackground(new Color(50, 50, 50));
+        panel.setOpaque(true);
+        panel.add(label, BorderLayout.NORTH);
+
+        // Volume Control scroll bar
+        JScrollBar volumeScrollBar = new JScrollBar(JScrollBar.HORIZONTAL, 50, 10, 0, 100);
+        volumeScrollBar.setBackground(new Color(50, 50, 50));
+        volumeScrollBar.setForeground(Color.WHITE);
+
+        volumeScrollBar.addAdjustmentListener(new AdjustmentListener() {
+            @Override
+            // Called when adjust volume
+            public void adjustmentValueChanged(AdjustmentEvent e) {
+                int volume = e.getValue();
+
+                // Volume control logic here
+
+                gameTextAreaPrintln("Volume Adjusted: " + volume);
+            }
+        });
+
+        panel.add(volumeScrollBar, BorderLayout.SOUTH);
+
+        return panel;
+    }
+
+    private static JPanel createInputCommandPanel() {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBackground(new Color(50, 50, 50));
+
+        commandTextField = new JTextField();
+        commandTextField.setBackground(new Color(50, 50, 50));
+        commandTextField.setForeground(Color.WHITE);
+
+        commandTextField.addActionListener(new ActionListener() {
+            @Override
+            // Called when press enter in command input
+            public void actionPerformed(ActionEvent e) {
+                executeCommand(commandTextField.getText());
+                commandTextField.setText("");
+            }
+        });
+
+        JLabel label = new JLabel("Enter Command");
+        label.setForeground(Color.WHITE);
+        panel.add(label, BorderLayout.NORTH);
+        panel.add(commandTextField, BorderLayout.CENTER);
+        return panel;
+    }
+
 
     private static void gameTextAreaPrintln(String message) {
         gameTextArea.append(message + "\n");
