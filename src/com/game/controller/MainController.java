@@ -1,12 +1,10 @@
 package com.game.controller;
 
-import com.game.model.Player;
-
-import com.game.controller.AudioController;
-import javax.swing.text.html.Option;
 import java.io.IOException;
 
-class MainController {
+public class MainController {
+    public static boolean PLAY_IN_GUI = false;
+    
     public static void main(String[] args) throws  IOException {
 
         AudioController.loadMusic();

@@ -1,7 +1,9 @@
 package com.game.controller;
 
-import com.game.view.ConsoleText;
-import com.game.view.ConsoleView;
+import com.game.view.gui.DisplayView;
+import com.game.view.gui.NewGameWindow;
+import com.game.view.terminal.ConsoleText;
+import com.game.view.terminal.ConsoleView;
 import com.google.gson.*;
 import java.io.FileReader;
 import java.util.ArrayList;
@@ -37,7 +39,13 @@ public class GsonParserController {
             if (jsonElement.isJsonObject()) {
                 JsonObject jsonObject = jsonElement.getAsJsonObject();
                 List<ConsoleText> mainText = new ArrayList<>();
-                ConsoleView consoleView = new ConsoleView(List.of(mainText));
+                ConsoleView consoleView = null;
+                DisplayView displayView = null;
+                if(!MainController.PLAY_IN_GUI) {
+                    consoleView = new ConsoleView(List.of(mainText));
+                } else {
+                    displayView = new DisplayView(List.of(mainText), NewGameWindow.gameTextArea);
+                }
 
                 // Iterate through the JSON object
                 Set<Map.Entry<String, JsonElement>> entries = jsonObject.entrySet();
@@ -55,7 +63,11 @@ public class GsonParserController {
                         mainText.add(new ConsoleText(value.toString()));
                     }
                 }
-                consoleView.show();
+                if(!MainController.PLAY_IN_GUI) {
+                    consoleView.show();
+                } else {
+                    displayView.show();
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();

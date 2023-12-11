@@ -1,13 +1,12 @@
 package com.game.view.framework;
 
 import com.game.controller.Command;
+import com.game.controller.MainController;
 import com.game.controller.commands.CommandType;
-import com.game.view.ConsoleText;
-import com.game.view.Console;
+import com.game.view.terminal.ConsoleText;
+import com.game.view.terminal.Console;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
 
 /*
@@ -25,7 +24,11 @@ public class InputCollector {
     // This method will collect input from the console and return it back, no validations performed
     public static String collectInput(){
         Console.print(PROMPT);
-        return SCANNER.nextLine();
+        if(!MainController.PLAY_IN_GUI) {
+            return SCANNER.nextLine();
+        } else {
+            return "";
+        }
     }
 
     /*

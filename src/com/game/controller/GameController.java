@@ -5,13 +5,12 @@ import com.game.controller.controllers.ConversationController;
 import com.game.controller.controllers.QuitGameController;
 import com.game.controller.io.JsonMessageParser;
 import com.game.model.*;
-import com.game.view.AnsiTextColor;
-import com.game.view.CommandConsoleView;
-import com.game.view.ConsoleText;
+import com.game.view.terminal.AnsiTextColor;
+import com.game.view.terminal.CommandConsoleView;
+import com.game.view.terminal.ConsoleText;
 import com.game.model.Character;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class GameController {
     private CommandConsoleView consoleView;
@@ -50,7 +49,7 @@ public class GameController {
         commandMap.put("quit", new Command("quit", List.of("exit"), "Quits the game, no questions asked.", CommandType.STANDALONE, this::quitCommand));
         commandMap.put("help", new Command("help", List.of(), "It displays this menu.", CommandType.STANDALONE, this::helpCommand));
         commandMap.put("drop", new Command("drop", List.of("place", "put"), "Drop an object from your inventory into your current location", CommandType.TWO_PARTS, this::dropCommand));
-        commandMap.put("get", new Command("get", List.of("grab", "pickup", "take"), "Drop an object from your inventory into your current location", CommandType.TWO_PARTS, this::getCommand));
+        commandMap.put("get", new Command("get", List.of("grab", "pickup", "take"), "Get an object from your current location put into your inventory", CommandType.TWO_PARTS, this::getCommand));
         commandMap.put("talk", new Command("talk", List.of("chat", "speak"), "Talk to another character", CommandType.TWO_PARTS, this::talkCommand));
         commandMap.put("volume", new Command("volume", List.of("sound", "vol"), "Change the volume settings", CommandType.STANDALONE, this::volCommand));
 
@@ -332,6 +331,7 @@ public class GameController {
             Dialog dialog = new Dialog(suspect.getName(), "Noted, you think the murderer was " + suspect.getName());
             dialog.setReport(suspect);
             dialog.setCallBack(this::reportCommand);
+            dialog.setEndsConversation(true);
             murdererConversation.addDialog(dialog);
         }
         murdererConversation.addDialog(new Dialog("On the other hand.", ""));
@@ -342,6 +342,7 @@ public class GameController {
             Dialog dialog = new Dialog(weapon.getName(), "Noted, you think the murder weapon was " + weapon.getName());
             dialog.setReport(weapon);
             dialog.setCallBack(this::reportCommand);
+            dialog.setEndsConversation(true);
             murdererWeaponConversation.addDialog(dialog);
         }
         murdererWeaponConversation.addDialog(new Dialog("On the other hand.", ""));
