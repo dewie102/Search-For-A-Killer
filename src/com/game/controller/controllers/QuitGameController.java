@@ -2,10 +2,9 @@ package com.game.controller.controllers;
 
 import com.game.controller.Command;
 import com.game.controller.commands.CommandType;
-import com.game.view.AnsiTextColor;
-import com.game.view.CommandConsoleView;
-import com.game.view.ConsoleText;
-import com.game.view.MultipleChoiceConsoleView;
+import com.game.view.terminal.AnsiTextColor;
+import com.game.view.terminal.CommandConsoleView;
+import com.game.view.terminal.ConsoleText;
 
 import java.util.ArrayList;
 import java.util.List;

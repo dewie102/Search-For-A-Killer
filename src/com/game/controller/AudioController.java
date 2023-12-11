@@ -1,14 +1,13 @@
 package com.game.controller;
 
 import com.game.controller.io.JsonMessageParser;
-import com.game.view.ConsoleText;
-import com.game.view.MultipleChoiceConsoleView;
+import com.game.view.terminal.ConsoleText;
+import com.game.view.terminal.MultipleChoiceConsoleView;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.FloatControl;
-import javax.swing.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;

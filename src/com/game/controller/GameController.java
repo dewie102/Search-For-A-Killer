@@ -5,9 +5,9 @@ import com.game.controller.controllers.ConversationController;
 import com.game.controller.controllers.QuitGameController;
 import com.game.controller.io.JsonMessageParser;
 import com.game.model.*;
-import com.game.view.AnsiTextColor;
-import com.game.view.CommandConsoleView;
-import com.game.view.ConsoleText;
+import com.game.view.terminal.AnsiTextColor;
+import com.game.view.terminal.CommandConsoleView;
+import com.game.view.terminal.ConsoleText;
 import com.game.model.Character;
 
 import java.util.*;

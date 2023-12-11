@@ -1,5 +1,7 @@
 package com.game.view.gui;
 
+import com.game.controller.GsonParserController;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -8,7 +10,7 @@ import java.awt.event.AdjustmentEvent;
 import java.awt.event.AdjustmentListener;
 
 public class NewGameWindow {
-    private static JTextArea gameTextArea;
+    public static JTextArea gameTextArea;
     private static JTextArea roomInformationArea;
     private static JTextArea playerInformationArea;
     private static JTextArea mapArea;
@@ -138,6 +140,14 @@ public class NewGameWindow {
                 System.exit(0);
             }
         });
+        
+        
+        // TODO: POC
+        GsonParserController developmentPage = new GsonParserController("data/DevelopmentTitle.json");
+        GsonParserController introText = new GsonParserController("data/IntroText.json");
+    
+        //developmentPage.printJson();
+        introText.printJson();
     }
 
     private static JTextArea createTextArea() {
@@ -145,6 +155,7 @@ public class NewGameWindow {
         textArea.setEditable(false);
         textArea.setBackground(new Color(50, 50, 50));
         textArea.setForeground(Color.YELLOW);
+        textArea.setFont(new Font("Courier New", Font.PLAIN, 10));
         return textArea;
     }
 
