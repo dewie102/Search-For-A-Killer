@@ -121,6 +121,15 @@ public class NewGameWindow {
 
         // Action Listeners
 
+        // Add ActionListener for the Help button
+        helpButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Display the help pop-up
+                showHelpPopup();
+            }
+        });
+
         quitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -129,14 +138,13 @@ public class NewGameWindow {
                 System.exit(0);
             }
         });
-
     }
 
     private static JTextArea createTextArea() {
         JTextArea textArea = new JTextArea();
         textArea.setEditable(false);
         textArea.setBackground(new Color(50, 50, 50));
-        textArea.setForeground(Color.WHITE);
+        textArea.setForeground(Color.YELLOW);
         return textArea;
     }
 
@@ -214,6 +222,33 @@ public class NewGameWindow {
         panel.add(label, BorderLayout.NORTH);
         panel.add(commandTextField, BorderLayout.CENTER);
         return panel;
+    }
+
+    private static void showHelpPopup() {
+        JFrame helpFrame = new JFrame("Help");
+        helpFrame.setSize(700, 500);
+        helpFrame.setLocationRelativeTo(null);
+
+        ImageIcon image = new ImageIcon("data/logo.png");
+        helpFrame.setIconImage(image.getImage());
+
+        JTextArea helpTextArea = new JTextArea();
+        helpTextArea.setEditable(false);
+        helpTextArea.setBackground(new Color(50, 50, 50));
+        helpTextArea.setForeground(Color.WHITE);
+
+        // Set text content in help window
+        helpTextArea.setText("Help Window");
+
+        JScrollPane scrollPane = new JScrollPane(helpTextArea);
+
+        JPanel helpPanel = new JPanel(new BorderLayout());
+        helpPanel.setBackground(new Color(50, 50, 50));
+        helpPanel.add(scrollPane, BorderLayout.CENTER);
+
+        helpFrame.add(helpPanel);
+
+        helpFrame.setVisible(true);
     }
 
 
