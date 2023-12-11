@@ -1,7 +1,6 @@
-package com.game.view;
+package com.game.view.terminal;
 
 import com.game.view.framework.InputCollector;
-import com.game.view.framework.InvalidInputException;
 
 import java.util.ArrayList;
 import java.util.Arrays;

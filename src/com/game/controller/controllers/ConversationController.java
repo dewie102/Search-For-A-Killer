@@ -5,8 +5,8 @@ import com.game.controller.CheckWinningConditions;
 import com.game.controller.GameResult;
 import com.game.model.Conversation;
 import com.game.model.Player;
-import com.game.view.ConsoleText;
-import com.game.view.MultipleChoiceConsoleView;
+import com.game.view.terminal.ConsoleText;
+import com.game.view.terminal.MultipleChoiceConsoleView;
 
 import java.util.ArrayList;
 import java.util.List;

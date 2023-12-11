@@ -1,4 +1,4 @@
-package com.game.view;
+package com.game.view.terminal;
 
 /**
  * Console class that actually outputs to the terminal by calling System.out.println

@@ -1,12 +1,10 @@
-package com.game.view;
+package com.game.view.terminal;
 
 import com.game.controller.Command;
 import com.game.view.framework.InputCollector;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 
 public class CommandConsoleView extends ConsoleView{
 

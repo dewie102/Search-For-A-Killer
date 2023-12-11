@@ -1,8 +1,9 @@
 package com.game.controller;
 
 import com.game.controller.io.JsonMessageParser;
-import com.game.model.NotImplementedException;
-import com.game.view.*;
+import com.game.view.terminal.AnsiTextColor;
+import com.game.view.terminal.ConsoleText;
+import com.game.view.terminal.MultipleChoiceConsoleView;
 
 import java.util.ArrayList;
 import java.util.List;

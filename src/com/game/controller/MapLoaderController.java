@@ -1,8 +1,8 @@
 package com.game.controller;
 
-import com.game.view.AnsiTextColor;
-import com.game.view.ConsoleText;
-import com.game.view.ConsoleView;
+import com.game.view.terminal.AnsiTextColor;
+import com.game.view.terminal.ConsoleText;
+import com.game.view.terminal.ConsoleView;
 import com.google.gson.Gson;
 import java.io.FileReader;
 import java.util.*;

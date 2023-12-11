@@ -1,4 +1,4 @@
-package com.game.view;
+package com.game.view.terminal;
 
 public enum AnsiBackgroundColor {
 

@@ -1,6 +1,4 @@
-package com.game.view;
-
-import com.game.model.Character;
+package com.game.view.terminal;
 
 import java.util.List;
 
