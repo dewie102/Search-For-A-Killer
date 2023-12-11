@@ -2,6 +2,8 @@ package com.game.view.gui;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class GameWindow extends JFrame {
     public GameWindow() {
@@ -35,14 +37,20 @@ public class GameWindow extends JFrame {
         // Create a separate panel for buttons
         JPanel buttonPanel = new JPanel(new FlowLayout());
         buttonPanel.setBackground(new Color(34, 34, 34));
-        JButton playGameButton = new JButton("Play Game");
-        JButton quitButton = new JButton("Quit");
 
+        // Use a custom font for the buttons
+        Font buttonFont = new Font("Impact", Font.PLAIN, 15);
+
+        JButton playGameButton = new JButton("Play Game");
+        playGameButton.setFont(buttonFont);
         playGameButton.setBackground(Color.GREEN);
-        playGameButton.setForeground(Color.WHITE);
+        playGameButton.setForeground(Color.BLACK);
         playGameButton.setFocusPainted(false);
+
+        JButton quitButton = new JButton("Quit");
+        quitButton.setFont(buttonFont);
         quitButton.setBackground(Color.RED);
-        quitButton.setForeground(Color.WHITE);
+        quitButton.setForeground(Color.BLACK);
 
         // Add buttons to the button panel
         buttonPanel.add(playGameButton);
@@ -57,5 +65,27 @@ public class GameWindow extends JFrame {
         add(panel);
 
         setVisible(true);
+
+        // Action Listeners
+
+        playGameButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Close the current window
+                dispose();
+
+                // Open New Game Window
+                SwingUtilities.invokeLater(NewGameWindow::createAndShowGUI);
+            }
+        });
+
+        quitButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Close the current window and terminate the process
+                dispose();
+                System.exit(0);
+            }
+        });
     }
 }

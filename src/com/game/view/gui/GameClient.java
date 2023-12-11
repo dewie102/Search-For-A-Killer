@@ -5,7 +5,7 @@ import javax.swing.*;
 
 public class GameClient {
     public static void main(String[] args) {
-        // This is the client code
+        // Execute Main Game Window
         SwingUtilities.invokeLater(GameWindow::new);
     }
 }
