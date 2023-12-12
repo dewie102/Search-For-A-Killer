@@ -1,7 +1,7 @@
 package com.game.controller;
 
 import com.game.view.gui.DisplayView;
-import com.game.view.gui.NewGameWindow;
+import com.game.view.gui.GameWindow;
 import com.game.view.terminal.ConsoleText;
 import com.game.view.terminal.ConsoleView;
 import com.google.gson.*;
@@ -50,7 +50,7 @@ public class GsonParserController {
                 if(!MainController.PLAY_IN_GUI) {
                     consoleView = new ConsoleView(List.of(mainText));
                 } else {
-                    displayView = new DisplayView(List.of(mainText), (textArea != null) ? textArea : NewGameWindow.gameTextArea);
+                    displayView = new DisplayView(List.of(mainText), (textArea != null) ? textArea : GameWindow.gameTextArea);
                 }
 
                 // Iterate through the JSON object
@@ -58,7 +58,12 @@ public class GsonParserController {
 
                 for (Map.Entry<String, JsonElement> entry : entries) {
                     JsonElement value = entry.getValue();
-
+                    
+                    // This stops the press enter to continue
+                    if(MainController.PLAY_IN_GUI && "enter".equals(entry.getKey())) {
+                        continue;
+                    }
+                    
                     // Check the value type and print accordingly
                     if (value.isJsonPrimitive()) {
                         mainText.add(new ConsoleText(value.getAsString()));

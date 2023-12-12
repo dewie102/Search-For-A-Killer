@@ -65,6 +65,10 @@ public class DisplayView {
             Display.printNewLine(errorMessage, getDisplayComponent());
     }
     
+    public void clearText() {
+        getDisplayComponent().setText("");
+    }
+    
     String collectInput(){
         return InputCollector.collectInput();
     }
