@@ -145,7 +145,6 @@ public class NewGameWindow {
         
         
         // TODO: POC
-        GsonParserController developmentPage = new GsonParserController("data/DevelopmentTitle.json");
         GsonParserController introText = new GsonParserController("data/IntroText.json");
     
         //developmentPage.printJson();
