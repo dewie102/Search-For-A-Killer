@@ -1,7 +1,7 @@
 package com.game.controller;
 
 import com.game.view.gui.DisplayView;
-import com.game.view.gui.GameWindow;
+import com.game.view.gui.NewGameWindow;
 import com.game.view.terminal.ConsoleText;
 import com.game.view.terminal.ConsoleView;
 import com.google.gson.*;
@@ -44,7 +44,7 @@ public class GsonParserController {
                 if(!MainController.PLAY_IN_GUI) {
                     consoleView = new ConsoleView(List.of(mainText));
                 } else {
-                    displayView = new DisplayView(List.of(mainText), GameWindow.gameTextArea);
+                    displayView = new DisplayView(List.of(mainText), NewGameWindow.gameTextArea);
                 }
 
                 // Iterate through the JSON object
