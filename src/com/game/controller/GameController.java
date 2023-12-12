@@ -16,6 +16,14 @@ import java.util.*;
 
 public class GameController {
     private CommandConsoleView consoleView;
+    
+    // DisplayViews available to the command and other functions
+    private DisplayView mainView;
+    private DisplayView roomView;
+    private DisplayView playerView;
+    private List<ConsoleText> roomText = new ArrayList<>();
+    private List<ConsoleText> playerText = new ArrayList<>();
+    
     private final Player player = LoadController.getPlayer();
     private final Map<String, Room> rooms = LoadController.getRooms();
     private final Map<String, Item> items = LoadController.getItems();
@@ -114,16 +122,12 @@ public class GameController {
     
     // The idea here is whenever a command is entered in the GUI it runs this function
     public GameResult runCommand(String command) {
-        // Array Lists and display views for each thing, maybe refactor this into a controller
-        List<ConsoleText> roomText = new ArrayList<>();
-        List<ConsoleText> playerText = new ArrayList<>();
-        DisplayView displayView = new DisplayView(List.of(mainText), GameWindow.gameTextArea);
-        DisplayView roomView = new DisplayView(List.of(roomText), GameWindow.roomInformationArea);
-        DisplayView playerView = new DisplayView(List.of(playerText), GameWindow.playerInformationArea);
+        // display views for each thing, maybe refactor this into a controller
+        mainView = new DisplayView(List.of(mainText, secondaryText), GameWindow.gameTextArea);
+        roomView = new DisplayView(List.of(roomText), GameWindow.roomInformationArea);
+        playerView = new DisplayView(List.of(playerText), GameWindow.playerInformationArea);
         
         GameResult gameResult = GameResult.UNDEFINED;
-
-//        String userInput = consoleView.show();
         
         String[] parts = command.split(" ", 2);
         boolean result = false;
@@ -137,21 +141,26 @@ public class GameController {
         }
 
         result = commandMap.get(parts[0]).executeCommand(entity);
+        // Clear each text array and fill it with the right information
         mainText.clear();
         mainText.add(new ConsoleText(rooms.get(player.getCurrentLocation()).getDescription()));
+    
+        roomText.clear();
         roomText.addAll(getCurrentRoomInformation());
+    
+        playerText.clear();
         playerText.addAll(getPlayerInformation());
 
         if(result){
-            displayView.clearErrorMessage();
+            mainView.clearErrorMessage();
         }
 
         gameResult = checkForWinningConditions();
         player.getPlayerHistory().clear();
         
         // Clear the component and display the text
-        displayView.clearText();
-        displayView.show();
+        mainView.clearText();
+        mainView.show();
         
         roomView.clearText();
         roomView.show();
@@ -191,27 +200,23 @@ public class GameController {
     }
 
     private boolean lookCommand(Entity target){
-        if(target == null){
+        if(target == null && !MainController.PLAY_IN_GUI){
             if(lookRoom(rooms.get(player.getCurrentLocation())))
                 return true;
         }
-        if(target instanceof Room) {
+        if(target instanceof Room && !MainController.PLAY_IN_GUI) {
             //This clause is necessary to allow correct error message to print
-            if (lookRoom((Room)target)){
-                return true;
-            }
+            return lookRoom((Room) target);
         }
         else if (target instanceof Item){
-            if (lookItem((Item)target)){
-                return true;
-            }
+            return lookItem((Item) target);
         }
         else if (target instanceof Character){
-            if(lookCharacter((Character)target)){
-                return true;
-            }
+            return lookCharacter((Character) target);
+        } else if(MainController.PLAY_IN_GUI) {
+            return true;
         }
-        consoleView.setErrorMessage(String.format(gameText.getErrorMessages().get("invalidLook"), target != null ? target.getName() : gameText.getErrorMessages().get("invalidDefaultThat")));
+        //consoleView.setErrorMessage(String.format(gameText.getErrorMessages().get("invalidLook"), target != null ? target.getName() : gameText.getErrorMessages().get("invalidDefaultThat")));
         return false;
     }
 
