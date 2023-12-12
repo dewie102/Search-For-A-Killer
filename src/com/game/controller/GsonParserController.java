@@ -45,6 +45,8 @@ public class GsonParserController {
             if (jsonElement.isJsonObject()) {
                 JsonObject jsonObject = jsonElement.getAsJsonObject();
                 List<ConsoleText> mainText = new ArrayList<>();
+                
+                // Initialize these to null so one is actually initialized whether playing in GUI or terminal
                 ConsoleView consoleView = null;
                 DisplayView displayView = null;
                 if(!MainController.PLAY_IN_GUI) {
@@ -74,6 +76,8 @@ public class GsonParserController {
                         mainText.add(new ConsoleText(value.toString()));
                     }
                 }
+                
+                // Call the appropriate show command
                 if(!MainController.PLAY_IN_GUI) {
                     consoleView.show();
                 } else {

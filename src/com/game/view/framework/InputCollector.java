@@ -24,6 +24,7 @@ public class InputCollector {
     // This method will collect input from the console and return it back, no validations performed
     public static String collectInput(){
         Console.print(PROMPT);
+        // If playing in terminal actually wait for input using scanner
         if(!MainController.PLAY_IN_GUI) {
             return SCANNER.nextLine();
         } else {
