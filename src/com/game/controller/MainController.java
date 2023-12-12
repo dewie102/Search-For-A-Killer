@@ -1,6 +1,6 @@
 package com.game.controller;
 
-import com.game.view.gui.GameWindow;
+import com.game.view.gui.TitleWindow;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -32,7 +32,7 @@ public class MainController {
         } else {
             // Use this if you want/ need to add parameters
             //SwingUtilities.invokeLater(() -> new TitleWindow());
-            SwingUtilities.invokeLater(GameWindow::new);
+            SwingUtilities.invokeLater(TitleWindow::new);
         }
     }
 }

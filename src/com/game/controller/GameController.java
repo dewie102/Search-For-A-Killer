@@ -6,7 +6,7 @@ import com.game.controller.controllers.QuitGameController;
 import com.game.controller.io.JsonMessageParser;
 import com.game.model.*;
 import com.game.view.gui.DisplayView;
-import com.game.view.gui.NewGameWindow;
+import com.game.view.gui.GameWindow;
 import com.game.view.terminal.AnsiTextColor;
 import com.game.view.terminal.CommandConsoleView;
 import com.game.view.terminal.ConsoleText;
@@ -114,7 +114,7 @@ public class GameController {
     
     // The idea here is whenever a command is entered in the GUI it runs this function
     public GameResult runCommand(String command) {
-        DisplayView displayView = new DisplayView(List.of(mainText, secondaryText), NewGameWindow.gameTextArea);
+        DisplayView displayView = new DisplayView(List.of(mainText, secondaryText), GameWindow.gameTextArea);
         GameResult gameResult = GameResult.UNDEFINED;
 
 //        String userInput = consoleView.show();
@@ -247,10 +247,10 @@ public class GameController {
     }
     
     public void displayHelpMessage() {
-        NewGameWindow.helpTextArea.setText("");
-        NewGameWindow.helpTextArea.append(gameText.getInfoMessages().get("availableCommands") + "\n");
+        GameWindow.helpTextArea.setText("");
+        GameWindow.helpTextArea.append(gameText.getInfoMessages().get("availableCommands") + "\n");
         for (var command : commandMap.values()) {
-            NewGameWindow.helpTextArea.append(String.format("%s: \t%s\n", command.getKeyWord(), command.getDescription()));
+            GameWindow.helpTextArea.append(String.format("%s: \t%s\n", command.getKeyWord(), command.getDescription()));
         }
     }
 
