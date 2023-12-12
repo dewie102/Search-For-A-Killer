@@ -11,6 +11,9 @@ import java.awt.event.AdjustmentEvent;
 import java.awt.event.AdjustmentListener;
 
 public class GameWindow {
+    public static final int FRAME_WIDTH = 1400;
+    public static final int FRAME_HEIGHT = 800;
+
     public static JTextArea gameTextArea;
     public static JTextArea roomInformationArea;
     public static JTextArea playerInformationArea;
@@ -21,7 +24,7 @@ public class GameWindow {
     static void createAndShowGUI() {
         JFrame frame = new JFrame("Search For A Killer");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(1400, 800);
+        frame.setSize(FRAME_WIDTH, FRAME_HEIGHT);
 
         // window icon
         ImageIcon image = new ImageIcon("data/logo.png");
@@ -41,15 +44,20 @@ public class GameWindow {
         GridBagConstraints gbcMain = new GridBagConstraints();
         gbcMain.fill = GridBagConstraints.BOTH;
 
-        // Making first column width 40%
+        int gameTextAreaWidth = (int) (FRAME_WIDTH * 0.6);
+
+        JPanel containerPanel = new JPanel(new BorderLayout());
+        containerPanel.setBackground(new Color(50, 50, 50));
+        containerPanel.setPreferredSize(new Dimension(gameTextAreaWidth, 0));
+
         gameTextArea = createTextArea();
         JPanel gameTextPanel = createTextPanel(gameTextArea);
-        gbcMain.gridx = 0;
-        gbcMain.weightx = 0.4;
-        gbcMain.weighty = 1.0;
+
+        containerPanel.add(gameTextPanel);
+
         mainPanel.add(gameTextPanel, gbcMain);
 
-        JPanel informationPanel = new JPanel(new GridLayout(2, 1));
+        JPanel informationPanel = new JPanel(new GridLayout(1, 2));
         informationPanel.setBackground(new Color(50, 50, 50));
 
         roomInformationArea = createTextArea();
@@ -60,14 +68,18 @@ public class GameWindow {
         JPanel playerInformationPanel = createTextPanel(playerInformationArea);
         informationPanel.add(playerInformationPanel);
 
-        gbcMain.gridx = 1;
-        gbcMain.weightx = 0.15;
-        mainPanel.add(informationPanel, gbcMain);
+        containerPanel.add(informationPanel);
+        gbcMain.gridx = 0;
+        gbcMain.weightx = 0.0; // use gameTextAreaWidth as it is
+        gbcMain.weighty = 1.0;
+        mainPanel.add(containerPanel, gbcMain);
 
         mapArea = createTextArea();
         JPanel mapPanel = createTextPanel(mapArea);
-        gbcMain.gridx = 2;
-        gbcMain.weightx = 0.25;
+        gbcMain.gridx = 1;
+        gbcMain.weightx = 0.5;
+        gbcMain.weighty = 1.0;
+        gbcMain.gridheight = 2;
         mainPanel.add(mapPanel, gbcMain);
 
         // Add space around the panels
@@ -155,11 +167,20 @@ public class GameWindow {
         JTextArea textArea = new JTextArea();
         textArea.setEditable(false);
         textArea.setBackground(new Color(50, 50, 50));
-        textArea.setForeground(Color.YELLOW);
-        textArea.setFont(new Font("Courier New", Font.PLAIN, 14));
+        textArea.setForeground(Color.WHITE);
+        textArea.setFont(new Font("Courier", Font.PLAIN, 14));
+
+        // Wrapping text for both line and word if it cannot fit in the text area width
+        textArea.setLineWrap(true);
         textArea.setWrapStyleWord(true);
+
+        // Add padding around the text area
+        int padding = 10;
+        textArea.setBorder(BorderFactory.createEmptyBorder(padding, padding, padding, padding));
+
         return textArea;
     }
+
 
     private static JPanel createTextPanel(JTextArea textArea) {
         JPanel panel = new JPanel(new BorderLayout());
