@@ -114,7 +114,13 @@ public class GameController {
     
     // The idea here is whenever a command is entered in the GUI it runs this function
     public GameResult runCommand(String command) {
-        DisplayView displayView = new DisplayView(List.of(mainText, secondaryText), GameWindow.gameTextArea);
+        // Array Lists and display views for each thing, maybe refactor this into a controller
+        List<ConsoleText> roomText = new ArrayList<>();
+        List<ConsoleText> playerText = new ArrayList<>();
+        DisplayView displayView = new DisplayView(List.of(mainText), GameWindow.gameTextArea);
+        DisplayView roomView = new DisplayView(List.of(roomText), GameWindow.roomInformationArea);
+        DisplayView playerView = new DisplayView(List.of(playerText), GameWindow.playerInformationArea);
+        
         GameResult gameResult = GameResult.UNDEFINED;
 
 //        String userInput = consoleView.show();
@@ -132,7 +138,9 @@ public class GameController {
 
         result = commandMap.get(parts[0]).executeCommand(entity);
         mainText.clear();
-        mainText.addAll(getViewText());
+        mainText.add(new ConsoleText(rooms.get(player.getCurrentLocation()).getDescription()));
+        roomText.addAll(getCurrentRoomInformation());
+        playerText.addAll(getPlayerInformation());
 
         if(result){
             displayView.clearErrorMessage();
@@ -140,9 +148,16 @@ public class GameController {
 
         gameResult = checkForWinningConditions();
         player.getPlayerHistory().clear();
+        
         // Clear the component and display the text
         displayView.clearText();
         displayView.show();
+        
+        roomView.clearText();
+        roomView.show();
+        
+        playerView.clearText();
+        playerView.show();
         // This handles the map displaying and building
         //mapLoaderController.buildMap(player.getCurrentLocation(), player.getPlayerHistory());
         //mapLoaderController.displayMap();
@@ -235,6 +250,15 @@ public class GameController {
         }
         return false;
     }
+    
+    private boolean lookCharacter(Character character){
+        if(player.getCurrentLocation().equals(character.getCurrentLocation())){
+            secondaryText.add(new ConsoleText(character.getDescription()));
+            secondaryText.add(new ConsoleText(gameText.getGeneralMessages().get("divider"), AnsiTextColor.BLUE));
+            return true;
+        }
+        return false;
+    }
 
     private boolean helpCommand(Entity target) {
         secondaryText.clear();
@@ -252,15 +276,6 @@ public class GameController {
         for (var command : commandMap.values()) {
             GameWindow.helpTextArea.append(String.format("%s: \t%s\n", command.getKeyWord(), command.getDescription()));
         }
-    }
-
-    private boolean lookCharacter(Character character){
-        if(player.getCurrentLocation().equals(character.getCurrentLocation())){
-            secondaryText.add(new ConsoleText(character.getDescription()));
-            secondaryText.add(new ConsoleText(gameText.getGeneralMessages().get("divider"), AnsiTextColor.BLUE));
-            return true;
-        }
-        return false;
     }
 
     private boolean dropCommand(Entity target){
@@ -347,6 +362,8 @@ public class GameController {
 
     }
 
+    // Extracted the player and room information out, allowing the terminal to work as expected but GUI can call
+    // the separate methods
     private List<ConsoleText> getViewText(){
 
         // View text to be passed to our view
@@ -358,11 +375,43 @@ public class GameController {
         mapLoaderController.displayMap();
 
         result.add(new ConsoleText(gameText.getGeneralMessages().get("divider"), AnsiTextColor.BLUE));
+        result.addAll(getPlayerInformation());
+        result.add(new ConsoleText(gameText.getGeneralMessages().get("divider"), AnsiTextColor.BLUE));
+        result.addAll(getConnectedRoomInformation());
+        result.add(new ConsoleText(gameText.getGeneralMessages().get("divider"), AnsiTextColor.BLUE));
+        return result;
+    }
+    
+    private List<ConsoleText> getPlayerInformation() {
+        List<ConsoleText> result = new ArrayList<>();
         result.add(new ConsoleText(String.format(gameText.getInfoMessages().get("playerLocation"), player.getCurrentLocation())));
         result.add(new ConsoleText(String.format(gameText.getInfoMessages().get("playerInventory"), player.getInventory())));
-        result.add(new ConsoleText(gameText.getGeneralMessages().get("divider"), AnsiTextColor.BLUE));
+        
+        return result;
+    }
+    
+    private List<ConsoleText> getConnectedRoomInformation() {
+        List<ConsoleText> result = new ArrayList<>();
         result.add(new ConsoleText(String.format(gameText.getInfoMessages().get("connectedRooms"), rooms.get(player.getCurrentLocation()).adjacentRoomToString())));
-        result.add(new ConsoleText(gameText.getGeneralMessages().get("divider"), AnsiTextColor.BLUE));
+    
+        return result;
+    }
+    
+    private List<ConsoleText> getCurrentRoomInformation() {
+        List<ConsoleText> result = new ArrayList<>();
+        
+        Room room = rooms.get(player.getCurrentLocation());
+        
+        if (!room.getInventory().getItems().isEmpty()) {
+            //print items in room if there are any
+            result.add(new ConsoleText(gameText.getInfoMessages().get("visibleItems") + room.getInventory()));
+        }
+        if (!(room.getCharactersInRoom() == null) && !room.getCharactersInRoom().isEmpty()) {
+            result.add(new ConsoleText(gameText.getInfoMessages().get("personVisible"), room.getCharactersInRoomToString()));
+        }
+        //print adjacent rooms
+        result.add(new ConsoleText(gameText.getInfoMessages().get("traversableRooms"), room.getJsonAdjacentRooms()));
+        
         return result;
     }
 

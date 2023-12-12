@@ -6,6 +6,7 @@ import javax.swing.*;
 import java.io.IOException;
 
 public class MainController {
+    // "Feature toggle" for whether to play in the GUI or terminal
     public static boolean PLAY_IN_GUI = true;
     
     public static void main(String[] args) throws  IOException {
