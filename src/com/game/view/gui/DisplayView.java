@@ -28,16 +28,9 @@ public class DisplayView {
     }
     
     // For each ConsoleText in text call Console.print and pass the color and text
-    public String show(){
-        while (true){
-            displayText();
-            executeViewLogic();
-            try{
-                return collectInput();
-            }catch (InvalidInputException exception){
-                errorMessage = exception.getMessage();
-            }
-        }
+    public void show(){
+        displayText();
+        executeViewLogic();
     }
     
     // show map

@@ -1,9 +1,12 @@
 package com.game.controller;
 
+import com.game.view.gui.DisplayView;
 import com.game.view.terminal.AnsiTextColor;
 import com.game.view.terminal.ConsoleText;
 import com.game.view.terminal.ConsoleView;
 import com.google.gson.Gson;
+
+import javax.swing.text.JTextComponent;
 import java.io.FileReader;
 import java.util.*;
 
@@ -19,7 +22,7 @@ class MapLoaderController {
 
     // StringBuilders that are used to create the map UI layout
     // each map layout is made up of a List<StringBuilder> with 7 StringBuilders
-    // the layout goes form 1 on top to 3 on the bottom
+    // the layout goes from 1 on top to 3 on the bottom
     private List<StringBuilder> mapLayout1 = new ArrayList<>();
     private List<StringBuilder> mapLayout2 = new ArrayList<>();
     private List<StringBuilder> mapLayout3 = new ArrayList<>();
@@ -71,16 +74,24 @@ class MapLoaderController {
                 //      the layer and level of the map
                 for(String roomKey : getGameMap().get(layerKey).get(levelKey).keySet()) {
                     // if the layer is 1 and the room is the player's current location or the room is blank
-                    if (layerKey.equals("1") && playerHistory.contains(roomKey) || roomKey.equals("blank")) {
+                    if (layerKey.equals("1") && (playerHistory.contains(roomKey) || roomKey.equals("blank"))) {
                         // iterate through the gameMap for each line of the room and print them in order
                         for(String line : getGameMap().get(layerKey).get(levelKey).get(roomKey).values()){
                             // player location is equal to the room key print it out in green to indicate
                             //      that the player is in this room
                             if(playerLocation.equals(roomKey)){
-                                // turn on the green font and turn it off with RESET
-                                getMapLayout1().get(countLine).append(AnsiTextColor.GREEN.getColor());
-                                getMapLayout1().get(countLine).append(line);
-                                getMapLayout1().get(countLine).append(AnsiTextColor.RESET.getColor());
+                                if(!MainController.PLAY_IN_GUI) {
+                                    // turn on the green font and turn it off with RESET
+                                    getMapLayout1().get(countLine).append(AnsiTextColor.GREEN.getColor());
+                                    getMapLayout1().get(countLine).append(line);
+                                    getMapLayout1().get(countLine).append(AnsiTextColor.RESET.getColor());
+                                } else {
+                                    if(countLine != 5) {
+                                        getMapLayout1().get(countLine).append(line);
+                                    } else {
+                                        getMapLayout1().get(countLine).append("| (Current Location)|");
+                                    }
+                                }
                             } else {
                                 // if the player is not in the room print it out in standard color (white)
                                 getMapLayout1().get(countLine).append(line);
@@ -89,16 +100,24 @@ class MapLoaderController {
                             countLine ++;
                         }
                         // if the layer is 2 and the room is the player's current location or the room is blank
-                    } else if (layerKey.equals("2") && playerHistory.contains(roomKey) || roomKey.equals("blank")) {
+                    } else if (layerKey.equals("2") && (playerHistory.contains(roomKey) || roomKey.equals("blank"))) {
                         // iterate through the gameMap for each line of the room and print them in order
                         for(String line : getGameMap().get(layerKey).get(levelKey).get(roomKey).values()){
                             // if the player location is equal to the room key print it out in green to indicate
                             //      that the player is in this room
                             if(playerLocation.equals(roomKey)){
-                                // turn on the green font and turn it off with RESET
-                                getMapLayout2().get(countLine).append(AnsiTextColor.GREEN.getColor());
-                                getMapLayout2().get(countLine).append(line);
-                                getMapLayout2().get(countLine).append(AnsiTextColor.RESET.getColor());
+                                if(!MainController.PLAY_IN_GUI) {
+                                    // turn on the green font and turn it off with RESET
+                                    getMapLayout2().get(countLine).append(AnsiTextColor.GREEN.getColor());
+                                    getMapLayout2().get(countLine).append(line);
+                                    getMapLayout2().get(countLine).append(AnsiTextColor.RESET.getColor());
+                                } else {
+                                    if(countLine != 5) {
+                                        getMapLayout2().get(countLine).append(line);
+                                    } else {
+                                        getMapLayout2().get(countLine).append("| (Current Location)|");
+                                    }
+                                }
                             } else {
                                 // if the player is not in the room print it out in standard color (white)
                                 getMapLayout2().get(countLine).append(line);
@@ -107,16 +126,24 @@ class MapLoaderController {
                             countLine ++;
                         }
                         // if the layer is 3 and the room is the player's current location or the room is blank
-                    } else if (layerKey.equals("3") && playerHistory.contains(roomKey) || roomKey.equals("blank")) {
+                    } else if (layerKey.equals("3") && (playerHistory.contains(roomKey) || roomKey.equals("blank"))) {
                         // iterate through the gameMap for each line of the room and print them in order
                         for(String line : getGameMap().get(layerKey).get(levelKey).get(roomKey).values()){
                             // if the player location is equal to the room key print it out in green to indicate
                             //      that the player is in this room
                             if(playerLocation.equals(roomKey)){
-                                // turn on the green font and turn it off with RESET
-                                getMapLayout3().get(countLine).append(AnsiTextColor.GREEN.getColor());
-                                getMapLayout3().get(countLine).append(line);
-                                getMapLayout3().get(countLine).append(AnsiTextColor.RESET.getColor());
+                                if(!MainController.PLAY_IN_GUI) {
+                                    // turn on the green font and turn it off with RESET
+                                    getMapLayout3().get(countLine).append(AnsiTextColor.GREEN.getColor());
+                                    getMapLayout3().get(countLine).append(line);
+                                    getMapLayout3().get(countLine).append(AnsiTextColor.RESET.getColor());
+                                } else {
+                                    if(countLine != 5) {
+                                        getMapLayout3().get(countLine).append(line);
+                                    } else {
+                                        getMapLayout3().get(countLine).append("| (Current Location)|");
+                                    }
+                                }
                             } else {
                                 // if the player is not in the room print it out in standard color (white)
                                 getMapLayout3().get(countLine).append(line);
@@ -148,6 +175,28 @@ class MapLoaderController {
         }
         // print the consoleView that contains the Map
         consoleView.showMap();
+    }
+    
+    // display the built map layout
+    public void displayMap(JTextComponent textComponent){
+        // create the DisplayView object
+        DisplayView displayView = new DisplayView();
+        displayView.setDisplayComponent(textComponent);
+        displayView.clearText();
+        
+        // add the map layout to the ConsoleView object one at a time for each layer, level, and position
+        // the map is 3x3 in size (3 rooms horizontally and 3 rooms vertically) (check out the Map.json file)
+        for(StringBuilder line : getMapLayout1()) {
+            displayView.getTextList().add(List.of(new ConsoleText(line.toString())));
+        }
+        for (StringBuilder line : getMapLayout2()) {
+            displayView.getTextList().add(List.of(new ConsoleText(line.toString())));
+        }
+        for (StringBuilder line : getMapLayout3()) {
+            displayView.getTextList().add(List.of(new ConsoleText(line.toString())));
+        }
+        // print the displayView that contains the Map
+        displayView.showMap();
     }
 
     // GETTERS AND SETTERS
