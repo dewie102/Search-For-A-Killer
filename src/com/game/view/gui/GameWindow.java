@@ -75,6 +75,7 @@ public class GameWindow {
         mainPanel.add(containerPanel, gbcMain);
 
         mapArea = createTextArea();
+        mapArea.setFont(new Font("Courier New", Font.PLAIN, 12));
         JPanel mapPanel = createTextPanel(mapArea);
         gbcMain.gridx = 1;
         gbcMain.weightx = 0.5;

@@ -69,7 +69,6 @@ public class GameController {
         entityDictionary.putAll(rooms);
         entityDictionary.putAll(items);
         entityDictionary.putAll(characters);
-        mainText = getViewText();
         commandMap.put("go", new Command("go", List.of("run", "move", "walk", "travel"), "Go to a room. e.g. go kitchen", CommandType.TWO_PARTS, this::goCommand));
         commandMap.put("look", new Command("look", List.of("see", "inspect", "read"), "Look at an object or room. e.g. look knife", CommandType.HYBRID, this::lookCommand));
         commandMap.put("drop", new Command("drop", List.of("place", "put"), "Drop an object from your inventory into your current location", CommandType.TWO_PARTS, this::dropCommand));
@@ -86,10 +85,16 @@ public class GameController {
     
         // List of words to ignore
         ignoreList = gameText.getIgnoreList();
+        
+        // TODO: Temporary code to add all rooms to players history
+        /*for(Room room : rooms.values()) {
+            player.addToPlayerHistory(room.getName());
+        }*/
     }
 
     // This is only called for terminal run
     public GameResult run() {
+        mainText = getViewText();
         consoleView = new CommandConsoleView(List.of(mainText, secondaryText), new ArrayList<>(commandMap.values()), entities, ignoreList);
         GameResult gameResult = GameResult.UNDEFINED;
         while (gameResult == GameResult.UNDEFINED){
@@ -160,7 +165,7 @@ public class GameController {
         }
 
         gameResult = checkForWinningConditions();
-        player.getPlayerHistory().clear();
+        //player.getPlayerHistory().clear();
         
         // Clear the component and display the text
         mainView.clearText();
@@ -172,8 +177,8 @@ public class GameController {
         playerView.clearText();
         playerView.show();
         // This handles the map displaying and building
-        //mapLoaderController.buildMap(player.getCurrentLocation(), player.getPlayerHistory());
-        //mapLoaderController.displayMap();
+        mapLoaderController.buildMap(player.getCurrentLocation(), player.getPlayerHistory());
+        mapLoaderController.displayMap(GameWindow.mapArea);
         return gameResult;
 
     }
