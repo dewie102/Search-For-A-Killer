@@ -1,7 +1,9 @@
 package com.game.view.gui;
 
 import com.game.controller.GameController;
+import com.game.controller.GameResult;
 import com.game.controller.GsonParserController;
+import com.game.model.Item;
 
 import javax.swing.*;
 import javax.swing.text.JTextComponent;
@@ -21,6 +23,11 @@ public class GameWindow {
     public static JTextArea mapArea;
     public static JTextField commandTextField;
     public static JTextArea helpTextArea;
+    public static JTextArea talkTextArea;
+    public static JPanel gameTextPanel;
+    public static JPanel talkTextPanel;
+    public static JPanel talkButtonPanel;
+    public static JPanel mainTextPanel;
 
     static void createAndShowGUI() {
         JFrame frame = new JFrame("Search For A Killer");
@@ -33,6 +40,7 @@ public class GameWindow {
 
         // Window open in center
         frame.setLocationRelativeTo(null);
+        frame.setResizable(false);
 
         // Game Banner Panel
         JPanel gameBannerPanel = createBannerPanel();
@@ -52,11 +60,28 @@ public class GameWindow {
         containerPanel.setPreferredSize(new Dimension(gameTextAreaWidth, 0));
 
         gameTextArea = createTextPane();
-        JPanel gameTextPanel = createTextPanel(gameTextArea);
+        gameTextPanel = createTextPanel(gameTextArea);
+        gameTextPanel.setVisible(true);
 
         containerPanel.add(gameTextPanel);
 
         mainPanel.add(gameTextPanel, gbcMain);
+
+        talkTextArea = createTextArea();
+        mainTextPanel = new JPanel(new GridLayout(2,1));
+        mainTextPanel.setBackground(new Color(50, 50, 50));
+        JScrollPane scrollPane = new JScrollPane(talkTextArea);
+        talkButtonPanel = new JPanel(new GridLayout(4,1));
+        talkButtonPanel.setBackground(new Color(50, 50, 50));
+        mainTextPanel.setPreferredSize(new Dimension(0, 350));
+        mainTextPanel.add(scrollPane);
+        mainTextPanel.add(talkButtonPanel);
+        containerPanel.add(mainTextPanel);
+        mainPanel.add(mainTextPanel, gbcMain);
+        mainTextPanel.setVisible(false);
+        int padding = 10;
+        mainTextPanel.setBorder(BorderFactory.createEmptyBorder(padding, padding, padding, padding));
+
 
         JPanel informationPanel = new JPanel(new GridLayout(1, 2));
         informationPanel.setBackground(new Color(50, 50, 50));
@@ -288,6 +313,9 @@ public class GameWindow {
         helpTextArea.setBackground(new Color(50, 50, 50));
         helpTextArea.setForeground(Color.WHITE);
 
+        int padding = 10;
+        helpTextArea.setBorder(BorderFactory.createEmptyBorder(padding, padding, padding, padding));
+
         // Set text content in help window
         //helpTextArea.setText("Help Window");
         GameController.getInstance().displayHelpMessage();
@@ -303,6 +331,57 @@ public class GameWindow {
         helpFrame.setVisible(true);
     }
 
+    public static JPanel createGridLayoutPanel() {
+        JPanel panel = new JPanel(new GridLayout(5, 1)); // 5 rows, 1 column
+        panel.setBackground(new Color(50, 50, 50));
+
+        return panel;
+    }
+
+    public static JButton createButtonWithId(String label, int id) {
+        JButton button = new JButton(label);
+        button.setActionCommand(String.valueOf(id));
+
+        button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String command = e.getActionCommand();
+                int buttonID = Integer.parseInt(command);
+
+                GameController gameController = GameController.getInstance();
+
+                if (!gameController.conversationController.followedUpQuestion) {
+                    gameController.conversationController.result = buttonID;
+                } else {
+                    if (gameController.items.containsKey(button.getText())) {
+                        GameController.getInstance().reportCommand(GameController.getInstance().items.get(button.getText()));
+                    } else {
+                        GameController.getInstance().reportCommand(GameController.getInstance().characters.get(button.getText()));
+                    }
+//                    GameController.getInstance().character.getConversation().getDialog(gameController.conversationController.result).getFollowUpConversation().getDialog(buttonID).reportIfAble();
+//                    System.out.println(GameController.getInstance().checkForWinningConditions());
+
+                    GameResult result = GameController.getInstance().checkForWinningConditions();
+
+                    if (!result.equals(GameResult.UNDEFINED)) {
+                        if (result.equals(GameResult.WIN)) {
+                            JOptionPane.showMessageDialog(null, "You WON the game\nThanks for playing.", "Result", JOptionPane.INFORMATION_MESSAGE);
+                        } else {
+                            JOptionPane.showMessageDialog(null, "You LOST the game\nThanks for playing.", "Result", JOptionPane.INFORMATION_MESSAGE);
+                        }
+                        System.exit(0);
+                    }
+
+                    gameController.conversationController.followedUpQuestion = false;
+                    gameController.conversationController.result = -1;
+                }
+                gameController.conversationController.run(GameController.getInstance().player, GameController.getInstance().character);
+
+            }
+        });
+
+        return button;
+    }
 
     private static void gameTextAreaPrintln(String message) {
         //gameTextArea.append(message + "\n");

@@ -46,6 +46,7 @@ public class DisplayView implements View {
     }
     
     public void displayText(){
+        getDisplayComponent().setText(""); // pending checking for any effect on the rest of the game
         // Print all the text on this View
         for(var list : textList) {
             if(list != null) {

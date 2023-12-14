@@ -30,10 +30,11 @@ public class GameController {
     private final List<ConsoleText> playerText = new ArrayList<>();
     private boolean titleScreenShown = true;
     
-    private final Player player = LoadController.getPlayer();
+    public final Player player = LoadController.getPlayer();
+    public Character character = null;
     private final Map<String, Room> rooms = LoadController.getRooms();
-    private final Map<String, Item> items = LoadController.getItems();
-    private final Map<String, Character> characters = LoadController.getCharacters();
+    public final Map<String, Item> items = LoadController.getItems();
+    public final Map<String, Character> characters = LoadController.getCharacters();
     // gameText is an object that has multiple Lists/Maps [general, error, info]
     //      that contain text used in the game
     private static final JsonMessageParser gameText = new JsonMessageParser();
@@ -41,7 +42,7 @@ public class GameController {
     private final List<ConsoleText> secondaryText = new ArrayList<>();
     private final Map<String, Command> commandMap = new TreeMap<>();
     private final MapLoaderController mapLoaderController = new MapLoaderController();
-    private final ConversationController conversationController = new ConversationController(mainText, this::checkForWinningConditions);
+    public final ConversationController conversationController = new ConversationController(mainText, this::checkForWinningConditions);
     private Character reportedMurder = null;
     private Item reportedMurderWeapon = null;
     private final Map<String, Entity> entityDictionary = new HashMap<>();
@@ -113,7 +114,6 @@ public class GameController {
     // This is only called for terminal run
     public GameResult run() {
         mainText = getViewText();
-        //consoleView = new CommandConsoleView(List.of(mainText, secondaryText), new ArrayList<>(commandMap.values()), entities, ignoreList);
         GameResult gameResult = GameResult.UNDEFINED;
         while (gameResult == GameResult.UNDEFINED){
             commandView.show();
@@ -340,6 +340,7 @@ public class GameController {
             Character character = (Character) target;
             //If the target is in the same room as the player
             if (((Character) target).getCurrentLocation().equals(player.getCurrentLocation())){
+                this.character = character; // ?
                 conversationController.run(player, character);
                 return true;
             }
@@ -447,7 +448,7 @@ public class GameController {
         return result;
     }
 
-    private boolean reportCommand(Entity target) {
+    public boolean reportCommand(Entity target){
         if(target instanceof Item){
             reportedMurderWeapon = (Item)target;
         }
@@ -457,11 +458,13 @@ public class GameController {
         return true;
     }
 
-    private GameResult checkForWinningConditions() {
+    public GameResult checkForWinningConditions(){
         if(reportedMurder == null || reportedMurderWeapon == null)
             return GameResult.UNDEFINED;
         else{
-            return (reportedMurder == LoadController.getMurderer() && reportedMurderWeapon == LoadController.getMurderWeapon())
+            // TODO: clean up and check return statement
+            System.out.println(LoadController.getMurderer() + " " + LoadController.getMurderWeapon() + reportedMurder + " " + reportedMurderWeapon);
+            return (Objects.equals(reportedMurder.getName(), LoadController.getMurderer().getName()) && Objects.equals(reportedMurderWeapon.getName(), LoadController.getMurderWeapon().getName()))
                     ? GameResult.WIN : GameResult.LOSS;
         }
     }
