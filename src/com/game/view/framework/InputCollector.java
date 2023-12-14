@@ -42,20 +42,24 @@ public class InputCollector {
     public static String collectInput(List<Command> commands, List<String> entities, List<String> ignoreList) throws InvalidInputException {
         String line = collectInput();
 
+        return validateCommandInput(line, commands, entities, ignoreList);
+    }
+    
+    public static String validateCommandInput(String input, List<Command> commands, List<String> entities, List<String> ignoreList) throws InvalidInputException {
         // Trim the input then replace multiple spaces with a single space
-        line = line.trim().toLowerCase().replaceAll(" +", " ");
-
+        input = input.trim().toLowerCase().replaceAll(" +", " ");
+    
         // Getting rid of any word that matches the ignoreList
-        String[] lineArray = line.split(" ");
-        line = "";
+        String[] lineArray = input.split(" ");
+        input = "";
         for (String word : lineArray) {
             if (ignoreList == null || !ignoreList.contains(word.toLowerCase())) {
-                line += " " + word;
+                input += " " + word;
             }
         }
         // Trimming one more time to remove the leading space we introduced
-        line = line.trim();
-        String[] parts = line.split(" ", 2);
+        input = input.trim();
+        String[] parts = input.split(" ", 2);
         if(parts.length == 0)
             throw new InvalidInputException(INVALID_COMMAND_ERROR_MESSAGE);
         String commandString = parts[0];
@@ -85,11 +89,11 @@ public class InputCollector {
         // If the command is two parts, but the user only entered one then we also throw an exception
         if(parts.length < 2 && command.getCommandType() == CommandType.TWO_PARTS)
             throw new InvalidInputException(INVALID_COMMAND_ERROR_MESSAGE);
-
+    
         String result = commandString;
         if(targetString != null)
             result += " " + targetString;
-
+    
         return result;
     }
 
@@ -100,13 +104,17 @@ public class InputCollector {
      */
     public static String collectInput(List<ConsoleText> options) throws InvalidInputException {
         String line = collectInput().trim().toLowerCase();
-        String result = null;
+        
+        return validateNumberChoice(line, options);
+    }
+    
+    public static String validateNumberChoice(String input, List<ConsoleText> options) throws InvalidInputException {
         int optionNumber;
         try{
-            optionNumber = Integer.parseInt(line);
+            optionNumber = Integer.parseInt(input);
         }catch (Exception e){
             for (int i = 0; i < options.size(); i++){
-                if(options.get(i).getText().toLowerCase().equals(line)) {
+                if(options.get(i).getText().toLowerCase().equals(input)) {
                     return ((Integer)i).toString();
                 }
             }

@@ -5,6 +5,7 @@ import com.game.controller.controllers.ConversationController;
 import com.game.controller.controllers.QuitGameController;
 import com.game.controller.io.JsonMessageParser;
 import com.game.model.*;
+import com.game.view.gui.CommandDisplayView;
 import com.game.view.gui.DisplayView;
 import com.game.view.gui.GameWindow;
 import com.game.view.terminal.AnsiTextColor;
@@ -16,6 +17,7 @@ import java.util.*;
 
 public class GameController {
     private CommandConsoleView consoleView;
+    private CommandDisplayView displayView;
     
     // DisplayViews available to the command and other functions
     private DisplayView mainView;
@@ -68,27 +70,32 @@ public class GameController {
         entityDictionary.putAll(rooms);
         entityDictionary.putAll(items);
         entityDictionary.putAll(characters);
-        mainText = getViewText();
         commandMap.put("go", new Command("go", List.of("run", "move", "walk", "travel"), "Go to a room. e.g. go kitchen", CommandType.TWO_PARTS, this::goCommand));
-        commandMap.put("look", new Command("look", List.of("see", "inspect", "read"), "Look at an object or room. e.g. look knife", CommandType.HYBRID, this::lookCommand));
-        commandMap.put("quit", new Command("quit", List.of("exit"), "Quits the game, no questions asked.", CommandType.STANDALONE, this::quitCommand));
-        if(!MainController.PLAY_IN_GUI) {
-            commandMap.put("help", new Command("help", List.of(), "It displays this menu.", CommandType.STANDALONE, this::helpCommand));
-        }
+        commandMap.put("look", new Command("look", List.of("see", "inspect", "read", ""), "Look at an object or room. e.g. look knife", CommandType.HYBRID, this::lookCommand));
         commandMap.put("drop", new Command("drop", List.of("place", "put"), "Drop an object from your inventory into your current location", CommandType.TWO_PARTS, this::dropCommand));
         commandMap.put("get", new Command("get", List.of("grab", "pickup", "take"), "Get an object from your current location put into your inventory", CommandType.TWO_PARTS, this::getCommand));
         commandMap.put("talk", new Command("talk", List.of("chat", "speak"), "Talk to another character", CommandType.TWO_PARTS, this::talkCommand));
-        commandMap.put("volume", new Command("volume", List.of("sound", "vol"), "Change the volume settings", CommandType.STANDALONE, this::volCommand));
+        if(!MainController.PLAY_IN_GUI) {
+            commandMap.put("quit", new Command("quit", List.of("exit"), "Quits the game, no questions asked.", CommandType.STANDALONE, this::quitCommand));
+            commandMap.put("help", new Command("help", List.of(), "It displays this menu.", CommandType.STANDALONE, this::helpCommand));
+            commandMap.put("volume", new Command("volume", List.of("sound", "vol"), "Change the volume settings", CommandType.STANDALONE, this::volCommand));
+        }
     
         // List of entities
         entities = new ArrayList<>(entityDictionary.keySet());
     
         // List of words to ignore
         ignoreList = gameText.getIgnoreList();
+        
+        // TODO: Temporary code to add all rooms to players history
+        /*for(Room room : rooms.values()) {
+            player.addToPlayerHistory(room.getName());
+        }*/
     }
 
     // This is only called for terminal run
     public GameResult run() {
+        mainText = getViewText();
         consoleView = new CommandConsoleView(List.of(mainText, secondaryText), new ArrayList<>(commandMap.values()), entities, ignoreList);
         GameResult gameResult = GameResult.UNDEFINED;
         while (gameResult == GameResult.UNDEFINED){
@@ -120,13 +127,15 @@ public class GameController {
         return gameResult;
     }
     
-    
     // The idea here is whenever a command is entered in the GUI it runs this function
     public GameResult runCommand(String command) {
         // display views for each thing, maybe refactor this into a controller
         mainView = new DisplayView(List.of(mainText, secondaryText), GameWindow.gameTextArea);
         roomView = new DisplayView(List.of(roomText), GameWindow.roomInformationArea);
         playerView = new DisplayView(List.of(playerText), GameWindow.playerInformationArea);
+        displayView = new CommandDisplayView(null, null, new ArrayList<>(commandMap.values()), entities, ignoreList);
+        
+        command = displayView.validateInput(command);
         
         GameResult gameResult = GameResult.UNDEFINED;
         
@@ -157,7 +166,7 @@ public class GameController {
         }
 
         gameResult = checkForWinningConditions();
-        player.getPlayerHistory().clear();
+        //player.getPlayerHistory().clear();
         
         // Clear the component and display the text
         mainView.clearText();
@@ -169,8 +178,8 @@ public class GameController {
         playerView.clearText();
         playerView.show();
         // This handles the map displaying and building
-        //mapLoaderController.buildMap(player.getCurrentLocation(), player.getPlayerHistory());
-        //mapLoaderController.displayMap();
+        mapLoaderController.buildMap(player.getCurrentLocation(), player.getPlayerHistory());
+        mapLoaderController.displayMap(GameWindow.mapArea);
         return gameResult;
 
     }
