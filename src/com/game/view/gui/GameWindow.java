@@ -346,8 +346,16 @@ public class GameWindow {
 
                 System.out.println(buttonID);
 
-                GameController.getInstance().conversationController.result = buttonID;
+                if (!GameController.getInstance().conversationController.followedUpQuestion) {
+                    GameController.getInstance().conversationController.result = buttonID;
+                } else {
+                    System.out.println("dealing with suspect dialog");
+                    GameController.getInstance().conversationController.followedUpQuestion = false;
+                    GameController.getInstance().conversationController.result = -1;
+                }
                 GameController.getInstance().conversationController.run(GameController.getInstance().player, GameController.getInstance().character);
+
+                // check win or loss / report
             }
         });
 

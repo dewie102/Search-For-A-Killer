@@ -25,6 +25,7 @@ public class ConversationController {
     private Character character;
     private CheckWinningConditions checkWinningConditions;
     public int result = -1;
+    public boolean followedUpQuestion = false;
 
 
     public ConversationController(List<ConsoleText> mainText, CheckWinningConditions checkWinningConditions){
@@ -64,36 +65,52 @@ public class ConversationController {
 
 
         if (result != -1) {
-            secondaryText.clear();
-            secondaryText.add(new ConsoleText(String.format("This is a conversation between you and %s:", character.getName())));
-            secondaryText.add(new ConsoleText(String.format("%s: %s", player.getName(), questions.get(result))));
-            secondaryText.add(new ConsoleText(String.format("%s: %s", character.getName(), currentConversation.getDialog(result).getResponse())));
-            // This will report in case is possible, triggering a callback to report when the player tells the detective which one was the murder
+                secondaryText.clear();
+                secondaryText.add(new ConsoleText(String.format("This is a conversation between you and %s:", character.getName())));
+                secondaryText.add(new ConsoleText(String.format("%s: %s", player.getName(), questions.get(result))));
+                secondaryText.add(new ConsoleText(String.format("%s: %s", character.getName(), currentConversation.getDialog(result).getResponse())));
+                // This will report in case is possible, triggering a callback to report when the player tells the detective which one was the murder
         }
             // We check if the option selected has follow-up questions/dialog
 //            result = Integer.parseInt(consoleView.show());
         displayView.show();
         if (result != -1) {
-            currentConversation.getDialog(result).reportIfAble();
+            currentConversation.getDialog(result).reportIfAble(); //report murder
             if(currentConversation.getDialog(result).getFollowUpConversation() != null){
                 System.out.println("going to call with new questions: " + currentConversation.getDialog(result).getFollowUpConversation().getConversation());
-                run(player, character, currentConversation.getDialog(result).getFollowUpConversation());
+//                run(player, character, currentConversation.getDialog(result).getFollowUpConversation());
+                handleFollowUp(currentConversation.getDialog(result).getFollowUpConversation());
                 result = -1;
                 // This fixes the loop but we lost the secondary text
             } else if(currentConversation.getDialog(result).endsConversation()) {
                 System.out.println(result + "final end");
 //               result = questions.size() - 1;
             }
-//            else if (result == questions.size() - 1) {
-//                System.out.println("here");
-//                GameWindow.gameTextPanel.setVisible(true);
-//                GameWindow.mainTextPanel.setVisible(false);
-//                result = -1;
-//                secondaryText.clear();
-//            }
+            else if (result == questions.size() - 1) {
+                System.out.println("here");
+                GameWindow.gameTextPanel.setVisible(true);
+                GameWindow.mainTextPanel.setVisible(false);
+                result = -1;
+                secondaryText.clear();
+            }
         }
     }
 
+    private void handleFollowUp(Conversation conversation) {
+        List<String> questions = conversation.getConversationQuestions();
+
+        MultipleChoiceDisplayView displayView = new MultipleChoiceDisplayView(List.of(secondaryText), questions, GameWindow.talkTextArea, GameWindow.talkButtonPanel);
+
+        GameWindow.talkButtonPanel.removeAll();
+        GameWindow.talkButtonPanel.revalidate();
+        GameWindow.talkButtonPanel.repaint();
+
+        displayView.show();
+
+        followedUpQuestion = true;
+        secondaryText.clear();
+
+    }
 
     public void setCheckWinningConditions(CheckWinningConditions checkWinningConditions) {
         this.checkWinningConditions = checkWinningConditions;
