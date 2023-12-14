@@ -20,6 +20,11 @@ public class GameWindow {
     public static JTextArea mapArea;
     public static JTextField commandTextField;
     public static JTextArea helpTextArea;
+    public static JTextArea talkTextArea;
+    public static JPanel gameTextPanel;
+    public static JPanel talkTextPanel;
+    public static JPanel talkButtonPanel;
+    public static JPanel mainTextPanel;
 
     static void createAndShowGUI() {
         JFrame frame = new JFrame("Search For A Killer");
@@ -32,6 +37,7 @@ public class GameWindow {
 
         // Window open in center
         frame.setLocationRelativeTo(null);
+        frame.setResizable(false);
 
         // Game Banner Panel
         JPanel gameBannerPanel = createBannerPanel();
@@ -51,11 +57,43 @@ public class GameWindow {
         containerPanel.setPreferredSize(new Dimension(gameTextAreaWidth, 0));
 
         gameTextArea = createTextArea();
-        JPanel gameTextPanel = createTextPanel(gameTextArea);
+        gameTextPanel = createTextPanel(gameTextArea);
+        gameTextPanel.setVisible(true);
 
         containerPanel.add(gameTextPanel);
 
         mainPanel.add(gameTextPanel, gbcMain);
+
+
+
+
+        talkTextArea = createTextArea();
+        mainTextPanel = new JPanel(new GridLayout(2,1));
+        JScrollPane scrollPane = new JScrollPane(talkTextArea);
+        talkButtonPanel = new JPanel(new GridLayout(4,1));
+        mainTextPanel.setPreferredSize(new Dimension(0, 350));
+        mainTextPanel.add(scrollPane);
+        mainTextPanel.add(talkButtonPanel);
+        containerPanel.add(mainTextPanel);
+        mainPanel.add(mainTextPanel, gbcMain);
+        mainTextPanel.setVisible(false);
+        int padding = 10;
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(padding, padding, padding, padding));
+
+
+
+
+
+
+        // talk panel
+//        talkTextArea = createTextArea();
+//        talkTextPanel = createGridLayoutPanel();
+//        talkTextPanel.setVisible(false);
+//        talkTextPanel.setPreferredSize(new Dimension(0, 350));
+//
+//        containerPanel.add(talkTextPanel);
+//
+//        mainPanel.add(talkTextPanel, gbcMain);
 
         JPanel informationPanel = new JPanel(new GridLayout(1, 2));
         informationPanel.setBackground(new Color(50, 50, 50));
@@ -271,6 +309,9 @@ public class GameWindow {
         helpTextArea.setBackground(new Color(50, 50, 50));
         helpTextArea.setForeground(Color.WHITE);
 
+        int padding = 10;
+        helpTextArea.setBorder(BorderFactory.createEmptyBorder(padding, padding, padding, padding));
+
         // Set text content in help window
         //helpTextArea.setText("Help Window");
         GameController.getInstance().displayHelpMessage();
@@ -286,6 +327,32 @@ public class GameWindow {
         helpFrame.setVisible(true);
     }
 
+    public static JPanel createGridLayoutPanel() {
+        JPanel panel = new JPanel(new GridLayout(5, 1)); // 5 rows, 1 column
+        panel.setBackground(new Color(50, 50, 50));
+
+        return panel;
+    }
+
+    public static JButton createButtonWithId(String label, int id) {
+        JButton button = new JButton(label);
+        button.setActionCommand(String.valueOf(id));
+
+        button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String command = e.getActionCommand();
+                int buttonID = Integer.parseInt(command);
+
+                System.out.println(buttonID);
+
+                GameController.getInstance().conversationController.result = buttonID;
+                GameController.getInstance().conversationController.run(GameController.getInstance().player, GameController.getInstance().character);
+            }
+        });
+
+        return button;
+    }
 
     private static void gameTextAreaPrintln(String message) {
         gameTextArea.append(message + "\n");
