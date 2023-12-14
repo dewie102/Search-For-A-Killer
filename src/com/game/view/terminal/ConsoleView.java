@@ -1,5 +1,6 @@
 package com.game.view.terminal;
 
+import com.game.view.View;
 import com.game.view.framework.InputCollector;
 import com.game.view.framework.InvalidInputException;
 
@@ -13,7 +14,7 @@ import java.util.List;
  * from within the show() method.
  */
 
-public class ConsoleView {
+public class ConsoleView implements View {
     // INSTANCE VARIABLES
     // This holds the text that will be presented in the screen, a List of List of Strings so we can individualy manage each list
     public List<List<ConsoleText>> textList = new ArrayList<>();
@@ -29,16 +30,9 @@ public class ConsoleView {
     }
 
     // For each ConsoleText in text call Console.print and pass the color and text
-    public String show(){
-        while (true){
-            displayText();
-            executeViewLogic();
-            try{
-                return collectInput();
-            }catch (InvalidInputException exception){
-                errorMessage = exception.getMessage();
-            }
-        }
+    public void show(){
+        displayText();
+        executeViewLogic();
     }
 
     // show map
@@ -46,11 +40,11 @@ public class ConsoleView {
         displayText();
     }
 
-    void executeViewLogic(){
+    public void executeViewLogic(){
         // EMPTY ON PURPOSE :D
     }
 
-    void displayText(){
+    public void displayText(){
         // Print all the text on this View
         for(var list : textList) {
             if(list != null) {
@@ -63,9 +57,18 @@ public class ConsoleView {
         if(errorMessage != null)
             Console.printNewLine(new ConsoleText(errorMessage, AnsiTextColor.RED));
     }
+    
+    // Function needed for Display so this one is empty
+    public void clearText(){}
 
-    String collectInput(){
-        return InputCollector.collectInput();
+    public String collectInput() {
+        while(true) {
+            try {
+                return InputCollector.collectInput();
+            } catch (InvalidInputException exception) {
+                errorMessage = exception.getMessage();
+            }
+        }
     }
 
     public String getErrorMessage() {

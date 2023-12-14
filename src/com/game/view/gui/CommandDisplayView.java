@@ -5,15 +5,12 @@ import com.game.view.framework.InputCollector;
 import com.game.view.terminal.ConsoleText;
 
 import javax.swing.text.JTextComponent;
-import java.util.ArrayList;
 import java.util.List;
 
 public class CommandDisplayView extends DisplayView {
-    List<Command> commands = new ArrayList<>();
-    private List<String> entities = new ArrayList<>();
-    private List<String> ignoreList = new ArrayList<>();
-    private List<String> standaloneCommands = new ArrayList<>();
-    private String escapeCommand = "quit";
+    private final List<Command> commands;
+    private final List<String> entities;
+    private final List<String> ignoreList;
     
     public CommandDisplayView(List<List<ConsoleText>> text, JTextComponent textComponent, List<Command> commands, List<String> entities, List<String> ignoreList){
         super(text, textComponent);
@@ -23,7 +20,7 @@ public class CommandDisplayView extends DisplayView {
     }
     
     @Override
-    String collectInput() {
+    public String collectInput() {
         return InputCollector.collectInput(commands, entities, ignoreList);
     }
     

@@ -6,6 +6,7 @@ import com.game.controller.GsonParserController;
 import com.game.model.Item;
 
 import javax.swing.*;
+import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,7 +17,7 @@ public class GameWindow {
     public static final int FRAME_WIDTH = 1400;
     public static final int FRAME_HEIGHT = 800;
 
-    public static JTextArea gameTextArea;
+    public static JTextPane gameTextArea;
     public static JTextArea roomInformationArea;
     public static JTextArea playerInformationArea;
     public static JTextArea mapArea;
@@ -58,7 +59,7 @@ public class GameWindow {
         containerPanel.setBackground(new Color(50, 50, 50));
         containerPanel.setPreferredSize(new Dimension(gameTextAreaWidth, 0));
 
-        gameTextArea = createTextArea();
+        gameTextArea = createTextPane();
         gameTextPanel = createTextPanel(gameTextArea);
         gameTextPanel.setVisible(true);
 
@@ -181,12 +182,10 @@ public class GameWindow {
             }
         });
         
-        
-        // TODO: POC
         GsonParserController introText = new GsonParserController("data/IntroText.json");
-    
-        //developmentPage.printJson();
         introText.printJson();
+        
+        GameController.getInstance().initializeGUIComponents();
     }
 
     private static JTextArea createTextArea() {
@@ -206,9 +205,26 @@ public class GameWindow {
 
         return textArea;
     }
+    
+    private static JTextPane createTextPane() {
+        JTextPane textPane = new JTextPane();
+        textPane.setEditable(false);
+        textPane.setBackground(new Color(50, 50, 50));
+        textPane.setForeground(Color.WHITE);
+        textPane.setFont(new Font("Courier", Font.PLAIN, 14));
+        
+        // Wrapping text for both line and word if it cannot fit in the text area width
+        /*textPane.setLineWrap(true);
+        textPane.setWrapStyleWord(true);*/
+        
+        // Add padding around the text area
+        int padding = 10;
+        textPane.setBorder(BorderFactory.createEmptyBorder(padding, padding, padding, padding));
+        
+        return textPane;
+    }
 
-
-    private static JPanel createTextPanel(JTextArea textArea) {
+    private static JPanel createTextPanel(JTextComponent textArea) {
         JPanel panel = new JPanel(new BorderLayout());
         JScrollPane scrollPane = new JScrollPane(textArea);
         panel.add(scrollPane, BorderLayout.CENTER);
@@ -368,7 +384,8 @@ public class GameWindow {
     }
 
     private static void gameTextAreaPrintln(String message) {
-        gameTextArea.append(message + "\n");
+        //gameTextArea.append(message + "\n");
+        gameTextArea.setText(gameTextArea.getText() + message + "\n");
     }
 
     private static void roomInformationAreaPrintln() {
