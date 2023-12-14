@@ -29,7 +29,7 @@ public class MultipleChoiceConsoleView extends ConsoleView{
     }
 
     @Override
-    void executeViewLogic() {
+    public void executeViewLogic() {
         for (int i = 0; i < options.size(); i++){
             Console.print(Integer.toString(i + 1) + ": ");
             Console.printNewLine(this.options.get(i));
@@ -37,7 +37,7 @@ public class MultipleChoiceConsoleView extends ConsoleView{
     }
 
     @Override
-    String collectInput() {
+    public String collectInput() {
         return InputCollector.collectInput(options);
     }
 

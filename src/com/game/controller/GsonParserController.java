@@ -1,5 +1,6 @@
 package com.game.controller;
 
+import com.game.view.View;
 import com.game.view.gui.DisplayView;
 import com.game.view.gui.GameWindow;
 import com.game.view.terminal.ConsoleText;
@@ -35,11 +36,8 @@ public class GsonParserController {
 
     public void printJson(JTextComponent textArea) {
         try (FileReader reader = new FileReader(getFilePath())) {
-            // Create a JSON parser
-            JsonParser parser = new JsonParser();
-
             // Parse the JSON file
-            JsonElement jsonElement = parser.parse(reader);
+            JsonElement jsonElement = JsonParser.parseReader(reader);
 
             // Check if the root element is an object
             if (jsonElement.isJsonObject()) {
@@ -47,12 +45,11 @@ public class GsonParserController {
                 List<ConsoleText> mainText = new ArrayList<>();
                 
                 // Initialize these to null so one is actually initialized whether playing in GUI or terminal
-                ConsoleView consoleView = null;
-                DisplayView displayView = null;
+                View view = null;
                 if(!MainController.PLAY_IN_GUI) {
-                    consoleView = new ConsoleView(List.of(mainText));
+                    view = new ConsoleView(List.of(mainText));
                 } else {
-                    displayView = new DisplayView(List.of(mainText), (textArea != null) ? textArea : GameWindow.gameTextArea);
+                    view = new DisplayView(List.of(mainText), (textArea != null) ? textArea : GameWindow.gameTextArea);
                 }
 
                 // Iterate through the JSON object
@@ -78,11 +75,7 @@ public class GsonParserController {
                 }
                 
                 // Call the appropriate show command
-                if(!MainController.PLAY_IN_GUI) {
-                    consoleView.show();
-                } else {
-                    displayView.show();
-                }
+                view.show();
             }
         } catch (Exception e) {
             e.printStackTrace();

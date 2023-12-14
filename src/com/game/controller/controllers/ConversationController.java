@@ -48,7 +48,8 @@ public class ConversationController {
                 // This will report in case is possible, triggering a callback to report when the player tells the detective which one was the murder
             }
             // We check if the option selected has follow-up questions/dialog
-            result = Integer.parseInt(consoleView.show());
+            consoleView.show();
+            result = Integer.parseInt(consoleView.collectInput());
             currentConversation.getDialog(result).reportIfAble();
 
             if(currentConversation.getDialog(result).getFollowUpConversation() != null){

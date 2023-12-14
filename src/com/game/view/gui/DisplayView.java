@@ -1,16 +1,15 @@
 package com.game.view.gui;
 
+import com.game.view.View;
 import com.game.view.framework.InputCollector;
-import com.game.view.framework.InvalidInputException;
-import com.game.view.terminal.AnsiTextColor;
-import com.game.view.terminal.Console;
 import com.game.view.terminal.ConsoleText;
 
 import javax.swing.text.JTextComponent;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DisplayView {
+public class DisplayView implements View {
     // INSTANCE VARIABLES
     // This holds the text that will be presented in the screen, a List of Lists of Strings, so we can individually manage each list
     public List<List<ConsoleText>> textList = new ArrayList<>();
@@ -38,11 +37,11 @@ public class DisplayView {
         displayText();
     }
     
-    void executeViewLogic(){
+    public void executeViewLogic(){
         // EMPTY ON PURPOSE :D
     }
     
-    void displayText(){
+    public void displayText(){
         // Print all the text on this View
         for(var list : textList) {
             if(list != null) {
@@ -55,6 +54,7 @@ public class DisplayView {
         // Print any error message
         if(errorMessage != null)
             //Console.printNewLine(new ConsoleText(errorMessage, AnsiTextColor.RED));
+            getDisplayComponent().setCaretColor(Color.RED);
             Display.printNewLine(errorMessage, getDisplayComponent());
     }
     
@@ -62,7 +62,7 @@ public class DisplayView {
         getDisplayComponent().setText("");
     }
     
-    String collectInput(){
+    public String collectInput(){
         return InputCollector.collectInput();
     }
     

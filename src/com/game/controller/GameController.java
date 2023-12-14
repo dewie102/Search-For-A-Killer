@@ -5,6 +5,8 @@ import com.game.controller.controllers.ConversationController;
 import com.game.controller.controllers.QuitGameController;
 import com.game.controller.io.JsonMessageParser;
 import com.game.model.*;
+import com.game.view.View;
+import com.game.view.framework.InvalidInputException;
 import com.game.view.gui.CommandDisplayView;
 import com.game.view.gui.DisplayView;
 import com.game.view.gui.GameWindow;
@@ -16,15 +18,17 @@ import com.game.model.Character;
 import java.util.*;
 
 public class GameController {
-    private CommandConsoleView consoleView;
-    private CommandDisplayView displayView;
+    //private CommandConsoleView consoleView;
+    //private CommandDisplayView displayView;
+    private View commandView;
     
     // DisplayViews available to the command and other functions
     private DisplayView mainView;
     private DisplayView roomView;
     private DisplayView playerView;
-    private List<ConsoleText> roomText = new ArrayList<>();
-    private List<ConsoleText> playerText = new ArrayList<>();
+    private final List<ConsoleText> roomText = new ArrayList<>();
+    private final List<ConsoleText> playerText = new ArrayList<>();
+    private boolean titleScreenShown = true;
     
     private final Player player = LoadController.getPlayer();
     private final Map<String, Room> rooms = LoadController.getRooms();
@@ -34,13 +38,13 @@ public class GameController {
     //      that contain text used in the game
     private static final JsonMessageParser gameText = new JsonMessageParser();
     private List<ConsoleText> mainText = new ArrayList<>();
-    private List<ConsoleText> secondaryText = new ArrayList<>();
+    private final List<ConsoleText> secondaryText = new ArrayList<>();
     private final Map<String, Command> commandMap = new TreeMap<>();
     private final MapLoaderController mapLoaderController = new MapLoaderController();
     private final ConversationController conversationController = new ConversationController(mainText, this::checkForWinningConditions);
     private Character reportedMurder = null;
     private Item reportedMurderWeapon = null;
-    private Map<String, Entity> entityDictionary = new HashMap<>();
+    private final Map<String, Entity> entityDictionary = new HashMap<>();
     private List<String> entities;
     private List<String> ignoreList;
 
@@ -55,7 +59,7 @@ public class GameController {
         return instance;
     }
     
-    private GameController(){
+    private GameController() {
         setDetectiveEndGameConversation();
     }
     
@@ -90,15 +94,30 @@ public class GameController {
         /*for(Room room : rooms.values()) {
             player.addToPlayerHistory(room.getName());
         }*/
+        
+        if(!MainController.PLAY_IN_GUI) {
+            commandView = new CommandConsoleView(List.of(mainText, secondaryText), new ArrayList<>(commandMap.values()), entities, ignoreList);
+        } else {
+            commandView = new CommandDisplayView(null, null, new ArrayList<>(commandMap.values()), entities, ignoreList);
+        }
+    }
+    
+    public void initializeGUIComponents() {
+        // Different displayViews for different GUI areas
+        mainView = new DisplayView(List.of(mainText, secondaryText), GameWindow.gameTextArea);
+        roomView = new DisplayView(List.of(roomText), GameWindow.roomInformationArea);
+        playerView = new DisplayView(List.of(playerText), GameWindow.playerInformationArea);
+        //displayView = new CommandDisplayView(null, null, new ArrayList<>(commandMap.values()), entities, ignoreList);
     }
 
     // This is only called for terminal run
     public GameResult run() {
         mainText = getViewText();
-        consoleView = new CommandConsoleView(List.of(mainText, secondaryText), new ArrayList<>(commandMap.values()), entities, ignoreList);
+        //consoleView = new CommandConsoleView(List.of(mainText, secondaryText), new ArrayList<>(commandMap.values()), entities, ignoreList);
         GameResult gameResult = GameResult.UNDEFINED;
         while (gameResult == GameResult.UNDEFINED){
-            String userInput = consoleView.show();
+            commandView.show();
+            String userInput = commandView.collectInput();
             String[] parts = userInput.split(" ", 2);
             boolean result = false;
 
@@ -106,7 +125,7 @@ public class GameController {
 
             if ((commandMap.get(parts[0]).getCommandType() == CommandType.TWO_PARTS)) {
                 if (entity == null) {
-                    consoleView.setErrorMessage(gameText.getErrorMessages().get("invalidAction"));
+                    commandView.setErrorMessage(gameText.getErrorMessages().get("invalidAction"));
                     continue;
                 }
             }
@@ -116,7 +135,7 @@ public class GameController {
             mainText.addAll(getViewText());
 
             if(result){
-                consoleView.clearErrorMessage();
+                commandView.clearErrorMessage();
             }
             gameResult = checkForWinningConditions();
         }
@@ -127,16 +146,20 @@ public class GameController {
     }
     
     // The idea here is whenever a command is entered in the GUI it runs this function
-    public GameResult runCommand(String command) {
-        // display views for each thing, maybe refactor this into a controller
-        mainView = new DisplayView(List.of(mainText, secondaryText), GameWindow.gameTextArea);
-        roomView = new DisplayView(List.of(roomText), GameWindow.roomInformationArea);
-        playerView = new DisplayView(List.of(playerText), GameWindow.playerInformationArea);
-        displayView = new CommandDisplayView(null, null, new ArrayList<>(commandMap.values()), entities, ignoreList);
+    public void runCommand(String command) {
+        if(titleScreenShown) {
+            titleScreenShown = false;
+            mainView.clearText();
+        }
         
-        command = displayView.validateInput(command);
-        
-        GameResult gameResult = GameResult.UNDEFINED;
+        try {
+            command = ((CommandDisplayView) commandView).validateInput(command);
+        } catch(InvalidInputException e) {
+            mainView.clearText();
+            mainView.setErrorMessage("\n\n" + e.getMessage());
+            mainView.show();
+            return;
+        }
         
         String[] parts = command.split(" ", 2);
         boolean result = false;
@@ -145,7 +168,7 @@ public class GameController {
 
         if ((commandMap.get(parts[0]).getCommandType() == CommandType.TWO_PARTS)) {
             if (entity == null) {
-                consoleView.setErrorMessage(gameText.getErrorMessages().get("invalidAction"));
+                commandView.setErrorMessage(gameText.getErrorMessages().get("invalidAction"));
             }
         }
 
@@ -163,9 +186,6 @@ public class GameController {
         if(result){
             mainView.clearErrorMessage();
         }
-
-        gameResult = checkForWinningConditions();
-        //player.getPlayerHistory().clear();
         
         // Clear the component and display the text
         mainView.clearText();
@@ -179,11 +199,9 @@ public class GameController {
         // This handles the map displaying and building
         mapLoaderController.buildMap(player.getCurrentLocation(), player.getPlayerHistory());
         mapLoaderController.displayMap(GameWindow.mapArea);
-        return gameResult;
-
     }
 
-    private boolean goCommand(Entity target){
+    private boolean goCommand(Entity target) {
         if(target instanceof Room){
             //if the room they are trying to go to is in current location's adjacent rooms
             if (rooms.get(player.getCurrentLocation()).getAdjacentRooms().contains(target)) {
@@ -200,15 +218,15 @@ public class GameController {
                 return true;
             }
             //if they are trying to go to a room, but not an adjacent one
-            consoleView.setErrorMessage(String.format(gameText.getErrorMessages().get("invalidRoomTravers"), target.getName()));
+            commandView.setErrorMessage(String.format(gameText.getErrorMessages().get("invalidRoomTravers"), target.getName()));
             return false;
         }
         //if they are not trying to go to a valid room
-        consoleView.setErrorMessage(String.format(gameText.getErrorMessages().get("invalidRoomName"), target != null ? target.getName() : gameText.getErrorMessages().get("invalidDefaultThat")));
+        commandView.setErrorMessage(String.format(gameText.getErrorMessages().get("invalidRoomName"), target != null ? target.getName() : gameText.getErrorMessages().get("invalidDefaultThat")));
         return false;
     }
 
-    private boolean lookCommand(Entity target){
+    private boolean lookCommand(Entity target) {
         if(target == null && !MainController.PLAY_IN_GUI){
             if(lookRoom(rooms.get(player.getCurrentLocation())))
                 return true;
@@ -225,11 +243,11 @@ public class GameController {
         } else if(MainController.PLAY_IN_GUI) {
             return true;
         }
-        //consoleView.setErrorMessage(String.format(gameText.getErrorMessages().get("invalidLook"), target != null ? target.getName() : gameText.getErrorMessages().get("invalidDefaultThat")));
+        commandView.setErrorMessage(String.format(gameText.getErrorMessages().get("invalidLook"), target != null ? target.getName() : gameText.getErrorMessages().get("invalidDefaultThat")));
         return false;
     }
 
-    private boolean lookRoom(Room room){
+    private boolean lookRoom(Room room) {
         secondaryText.clear();
         //If the room they are looking at is the currentLocation
         if(room == rooms.get(player.getCurrentLocation())){
@@ -250,7 +268,7 @@ public class GameController {
         return false;
     }
 
-    private boolean lookItem(Item item){
+    private boolean lookItem(Item item) {
         secondaryText.clear();
         //if the item is in your inventory
         // or in the inventory of the room are you currently in
@@ -265,7 +283,7 @@ public class GameController {
         return false;
     }
     
-    private boolean lookCharacter(Character character){
+    private boolean lookCharacter(Character character) {
         if(player.getCurrentLocation().equals(character.getCurrentLocation())){
             secondaryText.add(new ConsoleText(character.getDescription()));
             secondaryText.add(new ConsoleText(gameText.getGeneralMessages().get("divider"), AnsiTextColor.BLUE));
@@ -292,7 +310,7 @@ public class GameController {
         }
     }
 
-    private boolean dropCommand(Entity target){
+    private boolean dropCommand(Entity target) {
         secondaryText.clear();
         //if target is instance of Item
         if (target instanceof Item){
@@ -309,10 +327,10 @@ public class GameController {
                 return true;
             }
             //that item is not in your inventory, so you can't drop it
-            consoleView.setErrorMessage(gameText.getErrorMessages().get("invalidInventoryDropItem"));
+            commandView.setErrorMessage(gameText.getErrorMessages().get("invalidInventoryDropItem"));
             return false;
         }
-        consoleView.setErrorMessage(gameText.getErrorMessages().get("invalidTypeDropItem"));
+        commandView.setErrorMessage(gameText.getErrorMessages().get("invalidTypeDropItem"));
         return false;
     }
 
@@ -325,21 +343,21 @@ public class GameController {
                 conversationController.run(player, character);
                 return true;
             }
-            consoleView.setErrorMessage(String.format(gameText.getErrorMessages().get("invalidCharacterPresence")));
+            commandView.setErrorMessage(String.format(gameText.getErrorMessages().get("invalidCharacterPresence")));
             return false;
         }
-        consoleView.setErrorMessage(String.format(gameText.getErrorMessages().get("invalidCharacterType")));
+        commandView.setErrorMessage(String.format(gameText.getErrorMessages().get("invalidCharacterType")));
         return false;
     }
 
-    private boolean getCommand(Entity target){
+    private boolean getCommand(Entity target) {
         secondaryText.clear();
         if(target instanceof Item){
             Room currentRoom = rooms.get(player.getCurrentLocation());
             Item item = (Item)target;
             if(!item.isPickUpable())
             {
-                consoleView.setErrorMessage(String.format(gameText.getErrorMessages().get("invalidItemPickup"), item.getName()));
+                commandView.setErrorMessage(String.format(gameText.getErrorMessages().get("invalidItemPickup"), item.getName()));
                 return false;
             }
             if(currentRoom.getInventory().contains(item)){
@@ -352,13 +370,13 @@ public class GameController {
                 secondaryText.add(new ConsoleText(gameText.getGeneralMessages().get("divider"), AnsiTextColor.BLUE));
                 return true;
             }
-            consoleView.setErrorMessage(gameText.getErrorMessages().get("invalidItemNotPresent"));
+            commandView.setErrorMessage(gameText.getErrorMessages().get("invalidItemNotPresent"));
         }
-        consoleView.setErrorMessage(gameText.getErrorMessages().get("invalidNotAnItem"));
+        commandView.setErrorMessage(gameText.getErrorMessages().get("invalidNotAnItem"));
         return false;
     }
 
-    private boolean quitCommand(Entity target){
+    private boolean quitCommand(Entity target) {
         QuitGameController quitGameController = new QuitGameController(mainText, secondaryText);
         if(quitGameController.run()){
             System.exit(0);
@@ -366,19 +384,19 @@ public class GameController {
         return true;
     }
 
-    private boolean volCommand(Entity target){
+    private boolean volCommand(Entity target) {
         boolean success = AudioController.volMenu();
         if(success){
             return true;
         }
-        consoleView.setErrorMessage("The action could not be taken.");
+        commandView.setErrorMessage("The action could not be taken.");
         return false;
 
     }
 
     // Extracted the player and room information out, allowing the terminal to work as expected but GUI can call
     // the separate methods
-    private List<ConsoleText> getViewText(){
+    private List<ConsoleText> getViewText() {
 
         // View text to be passed to our view
         List<ConsoleText> result = new ArrayList<>();
@@ -429,7 +447,7 @@ public class GameController {
         return result;
     }
 
-    private boolean reportCommand(Entity target){
+    private boolean reportCommand(Entity target) {
         if(target instanceof Item){
             reportedMurderWeapon = (Item)target;
         }
@@ -439,7 +457,7 @@ public class GameController {
         return true;
     }
 
-    private GameResult checkForWinningConditions(){
+    private GameResult checkForWinningConditions() {
         if(reportedMurder == null || reportedMurderWeapon == null)
             return GameResult.UNDEFINED;
         else{
@@ -448,8 +466,7 @@ public class GameController {
         }
     }
 
-    private void setDetectiveEndGameConversation(){
-        Conversation mainConversation = new Conversation();
+    private void setDetectiveEndGameConversation() {
         Dialog murdererDialog = new Dialog("I know who the murderer is", "Perfect, who do you think committed the murder?");
         Dialog murdererWeaponDialog = new Dialog("I know which one was the murder weapon", "Perfect, which was the murder weapon?");
 

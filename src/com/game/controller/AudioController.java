@@ -40,7 +40,8 @@ public class AudioController {
 
         MultipleChoiceConsoleView consoleView = new MultipleChoiceConsoleView(
                 List.of(List.of(new ConsoleText("What would you like to do? Type 'exit' to exit the menu."))), audioOptions);
-        String userInput = consoleView.show();
+        consoleView.show();
+        String userInput = consoleView.collectInput();
         switch (userInput){
             case "0": // M on
                 loopMusic();

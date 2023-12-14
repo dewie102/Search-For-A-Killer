@@ -156,12 +156,10 @@ public class GameWindow {
             }
         });
         
-        
-        // TODO: POC
         GsonParserController introText = new GsonParserController("data/IntroText.json");
-    
-        //developmentPage.printJson();
         introText.printJson();
+        
+        GameController.getInstance().initializeGUIComponents();
     }
 
     private static JTextArea createTextArea() {
