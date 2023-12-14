@@ -29,7 +29,8 @@ public class QuitGameController {
         commandMap.put("no", new Command("no", List.of("n"), null, CommandType.STANDALONE, null));
 
         consoleView = new CommandConsoleView(List.of(mainText, secondaryText, quitGameText), new ArrayList<>(commandMap.values()), null, null);
-        String userInput = consoleView.show();
+        consoleView.show();
+        String userInput = consoleView.collectInput();
 
         return userInput.equalsIgnoreCase("yes");
     }

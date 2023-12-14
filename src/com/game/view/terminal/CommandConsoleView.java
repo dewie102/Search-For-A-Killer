@@ -6,14 +6,12 @@ import com.game.view.framework.InputCollector;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CommandConsoleView extends ConsoleView{
+public class CommandConsoleView extends ConsoleView {
 
-    List<Command> commands = new ArrayList<>();
-    private List<String> entities = new ArrayList<>();
-    private List<String> ignoreList = new ArrayList<>();
-    private List<String> standaloneCommands = new ArrayList<>();
-    private String escapeCommand = "quit";
-
+    List<Command> commands;
+    private final List<String> entities;
+    private final List<String> ignoreList;
+    
     public CommandConsoleView(List<List<ConsoleText>> text, List<Command> commands, List<String> entities, List<String> ignoreList){
         super(text);
         this.commands = commands;
@@ -22,7 +20,7 @@ public class CommandConsoleView extends ConsoleView{
     }
 
     @Override
-    String collectInput() {
+    public String collectInput() {
         return InputCollector.collectInput(commands, entities, ignoreList);
     }
 }

@@ -1,6 +1,8 @@
 package com.game.view.gui;
 
+import javax.swing.*;
 import javax.swing.text.JTextComponent;
+import java.awt.*;
 
 public class Display {
     // print method without a color selector
@@ -10,5 +12,13 @@ public class Display {
     
     public static void printNewLine(String message, JTextComponent component){
         component.setText(component.getText() + message + "\n");
+    }
+
+    public static void printNewLineWithButton(String message, int optionId, JTextComponent component, JPanel panel){
+        JButton button = GameWindow.createButtonWithId(message, optionId);
+        button.setBackground(new Color(50, 50, 50));
+        button.setForeground(Color.WHITE);
+        panel.add(button);
+
     }
 }

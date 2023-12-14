@@ -1,20 +1,23 @@
 package com.game.view.gui;
 
+import com.game.view.View;
 import com.game.view.framework.InputCollector;
-import com.game.view.framework.InvalidInputException;
-import com.game.view.terminal.AnsiTextColor;
-import com.game.view.terminal.Console;
 import com.game.view.terminal.ConsoleText;
 
+import javax.swing.*;
 import javax.swing.text.JTextComponent;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DisplayView {
+public class DisplayView implements View {
     // INSTANCE VARIABLES
     // This holds the text that will be presented in the screen, a List of Lists of Strings, so we can individually manage each list
     public List<List<ConsoleText>> textList = new ArrayList<>();
-    public String errorMessage;
+    public String errorMessage = null;
     public JTextComponent displayComponent;
     
     // CONSTRUCTORS
@@ -28,16 +31,9 @@ public class DisplayView {
     }
     
     // For each ConsoleText in text call Console.print and pass the color and text
-    public String show(){
-        while (true){
-            displayText();
-            executeViewLogic();
-            try{
-                return collectInput();
-            }catch (InvalidInputException exception){
-                errorMessage = exception.getMessage();
-            }
-        }
+    public void show(){
+        displayText();
+        executeViewLogic();
     }
     
     // show map
@@ -45,11 +41,12 @@ public class DisplayView {
         displayText();
     }
     
-    void executeViewLogic(){
+    public void executeViewLogic(){
         // EMPTY ON PURPOSE :D
     }
     
-    void displayText(){
+    public void displayText(){
+        getDisplayComponent().setText(""); // pending checking for any effect on the rest of the game
         // Print all the text on this View
         for(var list : textList) {
             if(list != null) {
@@ -60,12 +57,24 @@ public class DisplayView {
             }
         }
         // Print any error message
-        if(errorMessage != null)
-            //Console.printNewLine(new ConsoleText(errorMessage, AnsiTextColor.RED));
+        if(errorMessage != null) {
+            /*StyledDocument styledDocument = ((JTextPane)getDisplayComponent()).getStyledDocument();
+            int startPos = getDisplayComponent().getDocument().getLength();*/
+            
             Display.printNewLine(errorMessage, getDisplayComponent());
+            
+            /*int endPos = getDisplayComponent().getDocument().getLength();
+            SimpleAttributeSet attrs = new SimpleAttributeSet();
+            StyleConstants.setForeground(attrs, Color.red);
+            styledDocument.setCharacterAttributes(startPos, endPos, attrs, false);*/
+        }
     }
     
-    String collectInput(){
+    public void clearText() {
+        getDisplayComponent().setText("");
+    }
+    
+    public String collectInput(){
         return InputCollector.collectInput();
     }
     

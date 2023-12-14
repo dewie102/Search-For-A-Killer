@@ -8,7 +8,7 @@ import com.game.view.terminal.MultipleChoiceConsoleView;
 import java.util.ArrayList;
 import java.util.List;
 
-class OptionsMenuController {
+public class OptionsMenuController {
     List<ConsoleText> options = new ArrayList<>();
     private List<ConsoleText> mainText = new ArrayList<>();
     private List<ConsoleText> secondaryText = new ArrayList<>();
@@ -26,7 +26,8 @@ class OptionsMenuController {
         secondaryText.add(new ConsoleText("Main Menu:", AnsiTextColor.BLUE));
         MultipleChoiceConsoleView consoleView = new MultipleChoiceConsoleView(List.of(mainText, secondaryText), options);
         while (true) {
-            String userInput = consoleView.show();
+            consoleView.show();
+            String userInput = consoleView.collectInput();
             switch (userInput) {
                 case "0":
                     newGame();
@@ -38,11 +39,10 @@ class OptionsMenuController {
         }
     }
 
-    private void newGame(){
-        LoadController.loadAllEntities();
+    // Method for the terminal new game
+    public void newGame(){
         mainText.clear();
-        GameController gameController = new GameController();
-        GameResult gameResult = gameController.run();
+        GameResult gameResult = GameController.getInstance().run();
         if (gameResult == GameResult.LOSS){
             mainText.add(new ConsoleText(JsonMessageParser.getEndGameMessages().get("lose"), AnsiTextColor.RED));
         }else {
