@@ -16,6 +16,8 @@ public class Display {
 
     public static void printNewLineWithButton(String message, int optionId, JTextComponent component, JPanel panel){
         JButton button = GameWindow.createButtonWithId(message, optionId);
+        button.setBackground(new Color(50, 50, 50));
+        button.setForeground(Color.WHITE);
         panel.add(button);
 
     }

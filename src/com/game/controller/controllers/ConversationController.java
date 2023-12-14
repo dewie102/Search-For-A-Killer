@@ -97,6 +97,7 @@ public class ConversationController {
     }
 
     private void handleFollowUp(Conversation conversation) {
+        conversation.getDialog(result).reportIfAble();
         List<String> questions = conversation.getConversationQuestions();
 
         MultipleChoiceDisplayView displayView = new MultipleChoiceDisplayView(List.of(secondaryText), questions, GameWindow.talkTextArea, GameWindow.talkButtonPanel);

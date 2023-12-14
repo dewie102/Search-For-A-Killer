@@ -1,7 +1,9 @@
 package com.game.view.gui;
 
 import com.game.controller.GameController;
+import com.game.controller.GameResult;
 import com.game.controller.GsonParserController;
+import com.game.model.Item;
 
 import javax.swing.*;
 import java.awt.*;
@@ -64,13 +66,12 @@ public class GameWindow {
 
         mainPanel.add(gameTextPanel, gbcMain);
 
-
-
-
         talkTextArea = createTextArea();
         mainTextPanel = new JPanel(new GridLayout(2,1));
+        mainTextPanel.setBackground(new Color(50, 50, 50));
         JScrollPane scrollPane = new JScrollPane(talkTextArea);
         talkButtonPanel = new JPanel(new GridLayout(4,1));
+        talkButtonPanel.setBackground(new Color(50, 50, 50));
         mainTextPanel.setPreferredSize(new Dimension(0, 350));
         mainTextPanel.add(scrollPane);
         mainTextPanel.add(talkButtonPanel);
@@ -78,22 +79,8 @@ public class GameWindow {
         mainPanel.add(mainTextPanel, gbcMain);
         mainTextPanel.setVisible(false);
         int padding = 10;
-        mainPanel.setBorder(BorderFactory.createEmptyBorder(padding, padding, padding, padding));
+        mainTextPanel.setBorder(BorderFactory.createEmptyBorder(padding, padding, padding, padding));
 
-
-
-
-
-
-        // talk panel
-//        talkTextArea = createTextArea();
-//        talkTextPanel = createGridLayoutPanel();
-//        talkTextPanel.setVisible(false);
-//        talkTextPanel.setPreferredSize(new Dimension(0, 350));
-//
-//        containerPanel.add(talkTextPanel);
-//
-//        mainPanel.add(talkTextPanel, gbcMain);
 
         JPanel informationPanel = new JPanel(new GridLayout(1, 2));
         informationPanel.setBackground(new Color(50, 50, 50));
@@ -344,18 +331,33 @@ public class GameWindow {
                 String command = e.getActionCommand();
                 int buttonID = Integer.parseInt(command);
 
-                System.out.println(buttonID);
+                GameController gameController = GameController.getInstance();
 
-                if (!GameController.getInstance().conversationController.followedUpQuestion) {
-                    GameController.getInstance().conversationController.result = buttonID;
+                if (!gameController.conversationController.followedUpQuestion) {
+                    gameController.conversationController.result = buttonID;
                 } else {
-                    System.out.println("dealing with suspect dialog");
-                    GameController.getInstance().conversationController.followedUpQuestion = false;
-                    GameController.getInstance().conversationController.result = -1;
-                }
-                GameController.getInstance().conversationController.run(GameController.getInstance().player, GameController.getInstance().character);
+//                    if (gameController.items.containsKey(button.getText())) {
+//                        GameController.getInstance().reportCommand(GameController.getInstance().items.get(button.getText()));
+//                    } else {
+//                        GameController.getInstance().reportCommand(GameController.getInstance().characters.get(button.getText()));
+//                    }
 
-                // check win or loss / report
+                    GameResult result = GameController.getInstance().checkForWinningConditions();
+
+                    if (!result.equals(GameResult.UNDEFINED)) {
+                        if (result.equals(GameResult.WIN)) {
+                            JOptionPane.showMessageDialog(null, "You WON the game\nThanks for playing.", "Result", JOptionPane.INFORMATION_MESSAGE);
+                        } else {
+                            JOptionPane.showMessageDialog(null, "You LOST the game\nThanks for playing.", "Result", JOptionPane.INFORMATION_MESSAGE);
+                        }
+                        System.exit(0);
+                    }
+
+                    gameController.conversationController.followedUpQuestion = false;
+                    gameController.conversationController.result = -1;
+                }
+                gameController.conversationController.run(GameController.getInstance().player, GameController.getInstance().character);
+
             }
         });
 
