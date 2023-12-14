@@ -4,7 +4,11 @@ import com.game.view.View;
 import com.game.view.framework.InputCollector;
 import com.game.view.terminal.ConsoleText;
 
+import javax.swing.*;
 import javax.swing.text.JTextComponent;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +17,7 @@ public class DisplayView implements View {
     // INSTANCE VARIABLES
     // This holds the text that will be presented in the screen, a List of Lists of Strings, so we can individually manage each list
     public List<List<ConsoleText>> textList = new ArrayList<>();
-    public String errorMessage;
+    public String errorMessage = null;
     public JTextComponent displayComponent;
     
     // CONSTRUCTORS
@@ -52,10 +56,15 @@ public class DisplayView implements View {
             }
         }
         // Print any error message
-        if(errorMessage != null)
-            //Console.printNewLine(new ConsoleText(errorMessage, AnsiTextColor.RED));
-            getDisplayComponent().setCaretColor(Color.RED);
+        if(errorMessage != null) {
+            StyledDocument styledDocument = ((JTextPane)getDisplayComponent()).getStyledDocument();
+            int startPos = getDisplayComponent().getDocument().getLength();
             Display.printNewLine(errorMessage, getDisplayComponent());
+            int endPos = getDisplayComponent().getDocument().getLength();
+            SimpleAttributeSet attrs = new SimpleAttributeSet();
+            StyleConstants.setForeground(attrs, Color.red);
+            styledDocument.setCharacterAttributes(startPos, endPos, attrs, false);
+        }
     }
     
     public void clearText() {
