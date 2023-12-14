@@ -1,8 +1,5 @@
 package com.game.view.gui;
 
-import com.game.view.framework.InputCollector;
-import com.game.view.framework.InvalidInputException;
-import com.game.view.terminal.Console;
 import com.game.view.terminal.ConsoleText;
 
 import javax.swing.*;
@@ -11,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class MultipleChoiceDisplayView extends DisplayView{
+public class MultipleChoiceDisplayView extends DisplayView {
     private final List<ConsoleText> options;
     private JPanel panel;
 
@@ -33,14 +30,14 @@ public class MultipleChoiceDisplayView extends DisplayView{
     }
 
     @Override
-    void executeViewLogic() {
+    public void executeViewLogic() {
         for (int i = 0; i < options.size(); i++){
             Display.printNewLineWithButton(this.options.get(i).getText(), i, getDisplayComponent(), panel);
         }
     }
 
     @Override
-    String collectInput() {
+    public String collectInput() {
         return "";
     }
 
@@ -51,17 +48,5 @@ public class MultipleChoiceDisplayView extends DisplayView{
     public void setOptions(List<ConsoleText> options) {
         this.options.clear();
         this.options.addAll(options);
-    }
-
-    public String show(){
-        while (true){
-            displayText();
-            executeViewLogic();
-            try{
-                return "";
-            }catch (InvalidInputException exception){
-                errorMessage = exception.getMessage();
-            }
-        }
     }
 }

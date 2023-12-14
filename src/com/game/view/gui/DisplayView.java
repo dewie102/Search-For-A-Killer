@@ -58,13 +58,15 @@ public class DisplayView implements View {
         }
         // Print any error message
         if(errorMessage != null) {
-            StyledDocument styledDocument = ((JTextPane)getDisplayComponent()).getStyledDocument();
-            int startPos = getDisplayComponent().getDocument().getLength();
+            /*StyledDocument styledDocument = ((JTextPane)getDisplayComponent()).getStyledDocument();
+            int startPos = getDisplayComponent().getDocument().getLength();*/
+            
             Display.printNewLine(errorMessage, getDisplayComponent());
-            int endPos = getDisplayComponent().getDocument().getLength();
+            
+            /*int endPos = getDisplayComponent().getDocument().getLength();
             SimpleAttributeSet attrs = new SimpleAttributeSet();
             StyleConstants.setForeground(attrs, Color.red);
-            styledDocument.setCharacterAttributes(startPos, endPos, attrs, false);
+            styledDocument.setCharacterAttributes(startPos, endPos, attrs, false);*/
         }
     }
     
