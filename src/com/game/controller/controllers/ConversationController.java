@@ -75,7 +75,7 @@ public class ConversationController {
 //            result = Integer.parseInt(consoleView.show());
         displayView.show();
         if (result != -1) {
-            currentConversation.getDialog(result).reportIfAble(); //report murder
+//            currentConversation.getDialog(result).reportIfAble(); //report murder
             if(currentConversation.getDialog(result).getFollowUpConversation() != null){
                 System.out.println("going to call with new questions: " + currentConversation.getDialog(result).getFollowUpConversation().getConversation());
 //                run(player, character, currentConversation.getDialog(result).getFollowUpConversation());
@@ -97,7 +97,7 @@ public class ConversationController {
     }
 
     private void handleFollowUp(Conversation conversation) {
-        conversation.getDialog(result).reportIfAble();
+//        conversation.getDialog(result).reportIfAble();
         List<String> questions = conversation.getConversationQuestions();
 
         MultipleChoiceDisplayView displayView = new MultipleChoiceDisplayView(List.of(secondaryText), questions, GameWindow.talkTextArea, GameWindow.talkButtonPanel);

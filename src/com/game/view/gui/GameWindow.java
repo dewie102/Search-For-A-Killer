@@ -336,11 +336,13 @@ public class GameWindow {
                 if (!gameController.conversationController.followedUpQuestion) {
                     gameController.conversationController.result = buttonID;
                 } else {
-//                    if (gameController.items.containsKey(button.getText())) {
-//                        GameController.getInstance().reportCommand(GameController.getInstance().items.get(button.getText()));
-//                    } else {
-//                        GameController.getInstance().reportCommand(GameController.getInstance().characters.get(button.getText()));
-//                    }
+                    if (gameController.items.containsKey(button.getText())) {
+                        GameController.getInstance().reportCommand(GameController.getInstance().items.get(button.getText()));
+                    } else {
+                        GameController.getInstance().reportCommand(GameController.getInstance().characters.get(button.getText()));
+                    }
+//                    GameController.getInstance().character.getConversation().getDialog(gameController.conversationController.result).getFollowUpConversation().getDialog(buttonID).reportIfAble();
+//                    System.out.println(GameController.getInstance().checkForWinningConditions());
 
                     GameResult result = GameController.getInstance().checkForWinningConditions();
 
