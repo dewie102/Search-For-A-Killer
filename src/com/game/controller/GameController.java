@@ -33,8 +33,8 @@ public class GameController {
     public final Player player = LoadController.getPlayer();
     public Character character = null;
     private final Map<String, Room> rooms = LoadController.getRooms();
-    public final Map<String, Item> items = LoadController.getItems();
-    public final Map<String, Character> characters = LoadController.getCharacters();
+    private final Map<String, Item> items = LoadController.getItems();
+    private final Map<String, Character> characters = LoadController.getCharacters();
     // gameText is an object that has multiple Lists/Maps [general, error, info]
     //      that contain text used in the game
     private static final JsonMessageParser gameText = new JsonMessageParser();
@@ -448,7 +448,7 @@ public class GameController {
         return result;
     }
 
-    public boolean reportCommand(Entity target){
+    private boolean reportCommand(Entity target){
         if(target instanceof Item){
             reportedMurderWeapon = (Item)target;
         }
@@ -458,12 +458,11 @@ public class GameController {
         return true;
     }
 
-    public GameResult checkForWinningConditions(){
+    private GameResult checkForWinningConditions(){
         if(reportedMurder == null || reportedMurderWeapon == null)
             return GameResult.UNDEFINED;
         else{
             // TODO: clean up and check return statement
-            System.out.println(LoadController.getMurderer() + " " + LoadController.getMurderWeapon() + reportedMurder + " " + reportedMurderWeapon);
             return (Objects.equals(reportedMurder.getName(), LoadController.getMurderer().getName()) && Objects.equals(reportedMurderWeapon.getName(), LoadController.getMurderWeapon().getName()))
                     ? GameResult.WIN : GameResult.LOSS;
         }
