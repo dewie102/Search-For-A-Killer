@@ -27,6 +27,9 @@ public class GameWindow {
     public static JPanel gameTextPanel;
     public static JPanel talkButtonPanel;
     public static JPanel mainTalkPanel;
+    private static int currentVolume = 10;
+    private static boolean isMuted = false;
+    private static String currentVolumeOption = "1";
     public static JPanel mapButtonPanel;
 
     static void createAndShowGUI() {
@@ -107,16 +110,16 @@ public class GameWindow {
         // "Courier New" is a monospaced font, used to keep the map from deforming
         mapArea.setFont(new Font("Courier New", Font.PLAIN, 12));
         JPanel mapPanel = createTextPanel(mapArea);
-    
+
         /*// This is the panel for the map buttons
         mapButtonPanel = new JPanel(new GridBagLayout());
         mapButtonPanel.setOpaque(false);
         mapButtonPanel.setBackground(new Color(0, 0, 0, 0));
         //mapButtonPanel.setBackground(Color.red);
-        
+
         GridBagConstraints mapConstraints = new GridBagConstraints();
         mapConstraints.fill = GridBagConstraints.HORIZONTAL;
-        
+
         JButton testBtn1 = new JButton("1");
         ImageIcon test = new ImageIcon("data/test.PNG");
         test = new ImageIcon(test.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH));
@@ -130,32 +133,45 @@ public class GameWindow {
         mapConstraints.gridwidth = 1;
         mapConstraints.gridheight = 1;
         mapButtonPanel.add(testBtn1, mapConstraints);
-        
+
         JButton testBtn2 = new JButton("2");
         //testBtn.setSize(200, 200);
         mapConstraints.gridx = 1;
         mapConstraints.gridy = 0;
         mapButtonPanel.add(testBtn2, mapConstraints);
-    
+
         JButton testBtn3 = new JButton("3");
         //testBtn.setSize(200, 200);
         mapConstraints.gridx = 2;
         mapConstraints.gridy = 0;
         mapButtonPanel.add(testBtn3, mapConstraints);
-        
+
         mapButtonPanel.setPreferredSize(new Dimension(60, 60));
 
         //mapPanel.add(mapButtonPanel);*/
-        
+
         gbcMain.gridx = 1;
         gbcMain.weightx = 0.5;
         gbcMain.weighty = 1.0;
         gbcMain.gridheight = 2;
         mainPanel.add(mapPanel, gbcMain);
-    
-        
 
-        // Add space around the panels
+
+
+        // Add space around the panelsmapArea = createTextArea();
+        //        mapArea.setFont(new Font("Courier New", Font.PLAIN, 12));
+        //        JPanel mapPanel = createTextPanel(mapArea);
+        //        gbcMain.gridx = 1;
+        //        gbcMain.weightx = 0.5;
+        //        gbcMain.weighty = 1.0;
+        //        gbcMain.gridheight = 2;
+        //        mainPanel.add(mapPanel, gbcMain);
+        //
+        //        // Add space around the panels
+        //        int panelSpace = 10;
+        //        gameTextPanel.setBorder(BorderFactory.createEmptyBorder(panelSpace, panelSpace, panelSpace, panelSpace));
+        //        informationPanel.setBorder(BorderFactory.createEmptyBorder(panelSpace, panelSpace, panelSpace, panelSpace));
+        //        mapPanel.setBorder(BorderFactory.createEmptyBorder(panelSpace, panelSpace, panelSpace, panelSpace));mappane;
         int panelSpace = 10;
         gameTextPanel.setBorder(BorderFactory.createEmptyBorder(panelSpace, panelSpace, panelSpace, panelSpace));
         informationPanel.setBorder(BorderFactory.createEmptyBorder(panelSpace, panelSpace, panelSpace, panelSpace));
@@ -258,7 +274,7 @@ public class GameWindow {
         textPane.setBackground(MAIN_BACKGROUND_COLOR);
         textPane.setForeground(Color.WHITE);
         textPane.setFont(new Font("Courier", Font.PLAIN, 14));
-        
+
         // Add padding around the text area
         int padding = 10;
         textPane.setBorder(BorderFactory.createEmptyBorder(padding, padding, padding, padding));
@@ -286,15 +302,40 @@ public class GameWindow {
         return panel;
     }
 
+    public static void setCurrentVolume(int volume) {
+        currentVolume = volume;
+    }
+
+    public static int getCurrentVolume() {
+        return currentVolume;
+    }
+
+    public static void toggleMute() {
+        isMuted = !isMuted;
+    }
+
+    public static boolean isMuted() {
+        return isMuted;
+    }
+
+    public static String getCurrentVolumeOption() {
+        return currentVolumeOption;
+    }
+
+    public static void setCurrentVolumeOption(String currentVolumeOption) {
+        GameWindow.currentVolumeOption = currentVolumeOption;
+    }
+
     private static JPanel adjustSoundPanel() {
         JPanel panel = new JPanel(new BorderLayout());
 
-        JLabel label = new JLabel("Volume");
-        label.setHorizontalAlignment(JLabel.CENTER);
-        label.setForeground(Color.WHITE);
+        // Label to display current volume
+        JLabel currentVolumeLabel = new JLabel("Current Volume: " + getCurrentVolume());
+        currentVolumeLabel.setHorizontalAlignment(JLabel.CENTER);
+        currentVolumeLabel.setForeground(Color.WHITE);
         panel.setBackground(MAIN_BACKGROUND_COLOR);
         panel.setOpaque(true);
-        panel.add(label, BorderLayout.NORTH);
+        panel.add(currentVolumeLabel, BorderLayout.NORTH);
 
         // Volume Control scroll bar
         JScrollBar volumeScrollBar = new JScrollBar(JScrollBar.HORIZONTAL, 50, 10, 0, 100);
@@ -303,19 +344,55 @@ public class GameWindow {
 
         volumeScrollBar.addAdjustmentListener(new AdjustmentListener() {
             @Override
-            // Called when adjust volume
             public void adjustmentValueChanged(AdjustmentEvent e) {
                 int volume = e.getValue();
 
-                // Volume control logic here
-
-                gameTextAreaPrintln("Volume Adjusted: " + volume);
+                // volume scroll adjust label text and run command
+                currentVolumeLabel.setText("Current Volume: " + volume);
+                setCurrentVolumeOption("2"); // will be determined
+                setCurrentVolume(volume);
+                System.out.println(getCurrentVolume());
+                GameController.getInstance().runCommand("volume");
             }
         });
 
-        panel.add(volumeScrollBar, BorderLayout.SOUTH);
+        ImageIcon soundIcon = resizeImageIcon(new ImageIcon("data/volume.png"));
+        JButton muteButton = new JButton(soundIcon);
+        muteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                toggleMute();
+
+                // update the icon based on the mute state and run command with appropriate value
+                if (isMuted()) {
+                    System.out.println("muted");
+                    GameController.getInstance().runCommand("volume");
+                    setCurrentVolumeOption("0");
+                    muteButton.setIcon(resizeImageIcon(new ImageIcon("data/mute.png")));
+                } else {
+                    GameController.getInstance().runCommand("volume");
+                    setCurrentVolumeOption("1");
+                    muteButton.setIcon(soundIcon);
+                }
+            }
+        });
+
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        buttonPanel.add(muteButton);
+
+        JPanel controlPanel = new JPanel(new BorderLayout());
+        controlPanel.add(volumeScrollBar, BorderLayout.CENTER);
+        controlPanel.add(buttonPanel, BorderLayout.EAST);
+
+        panel.add(controlPanel, BorderLayout.SOUTH);
 
         return panel;
+    }
+
+    private static ImageIcon resizeImageIcon(ImageIcon originalIcon) {
+        Image image = originalIcon.getImage();
+        Image scaledImage = image.getScaledInstance(10, 10, Image.SCALE_SMOOTH);
+        return new ImageIcon(scaledImage);
     }
 
     private static JPanel createInputCommandPanel() {
@@ -379,17 +456,17 @@ public class GameWindow {
 
         return panel;
     }
-    
+
     public static JButton createMapButton(String roomValue) {
         JButton button = new JButton();
         button.setActionCommand(roomValue);
-        
+
         button.addActionListener((evt) -> {
             String room = evt.getActionCommand();
             System.out.printf("Printing room value: %s\n", room);
             //DO something
         });
-        
+
         return button;
     }
 

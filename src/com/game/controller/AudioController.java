@@ -1,6 +1,7 @@
 package com.game.controller;
 
 import com.game.controller.io.JsonMessageParser;
+import com.game.view.gui.GameWindow;
 import com.game.view.terminal.ConsoleText;
 import com.game.view.terminal.MultipleChoiceConsoleView;
 
@@ -52,6 +53,59 @@ public class AudioController {
             case "2": // M up
                 try {
                     musicVolUp();
+                    return true;
+                } catch (IllegalArgumentException e){
+                    return false;
+                }
+
+            case "3": // M down
+                musicVolDown();
+                return true;
+            case "4": //SFX on
+                setSfxOn(true);
+                return true;
+            case "5": //SFX off
+                setSfxOn(false);
+                return true;
+            case "6"://SFX up
+                try {
+                    sfxVolUp();
+                    return true;
+                } catch (IllegalArgumentException e){
+                    return false;
+                }
+            case "7"://SFX down
+                sfxVolDown();
+                return true;
+            case "8":
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    public static boolean volControl(){
+        JsonMessageParser.loadAudioOptions();
+        if(audioOptions.isEmpty()) {
+            for (String option : JsonMessageParser.getAudioOptions()) {
+                audioOptions.add(new ConsoleText(option));
+            }
+        }
+
+        String userInput = GameWindow.getCurrentVolumeOption();
+        float newVolume = GameWindow.getCurrentVolume();
+        System.out.println("here option: " + userInput + " " + newVolume);
+        switch (userInput){
+            case "0": // M on
+                loopMusic();
+                return true;
+            case "1": // M off
+                stopSound(0);
+                return true;
+            case "2": // M up
+                try {
+                    System.out.println("increasing new volume");
+                    musicVolUp(newVolume);
                     return true;
                 } catch (IllegalArgumentException e){
                     return false;
