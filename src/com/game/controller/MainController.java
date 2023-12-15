@@ -13,6 +13,7 @@ public class MainController {
 
         AudioController.loadMusic();
         AudioController.musicVolDown(30f);
+        AudioController.musicVolUp(10.f);
         //AudioController.loopMusic(); //<<<<Uncomment to have music play by default
         
         // Initialize all game components before doing specific terminal and GUI stuff
