@@ -448,7 +448,7 @@ public class GameController {
         return result;
     }
 
-    public boolean reportCommand(Entity target){
+    private boolean reportCommand(Entity target){
         if(target instanceof Item){
             reportedMurderWeapon = (Item)target;
         }
@@ -458,7 +458,7 @@ public class GameController {
         return true;
     }
 
-    public GameResult checkForWinningConditions(){
+    private GameResult checkForWinningConditions(){
         if(reportedMurder == null || reportedMurderWeapon == null)
             return GameResult.UNDEFINED;
         else{

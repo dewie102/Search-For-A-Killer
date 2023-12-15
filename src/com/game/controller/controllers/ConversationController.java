@@ -19,7 +19,7 @@ public class ConversationController {
     private List<ConsoleText> mainText = new ArrayList<>();
     private List<ConsoleText> secondaryText = new ArrayList<>();
     private Character character;
-    private CheckWinningConditions checkWinningConditions;
+    public CheckWinningConditions checkWinningConditions;
     public int result = -1;
     public boolean followedUpQuestion = false;
 

@@ -358,7 +358,8 @@ public class GameWindow {
                     // report weapon/suspect
                     GameController.getInstance().character.getConversation().getDialog(gameController.conversationController.result).getFollowUpConversation().getDialog(buttonID).reportIfAble();
 
-                    GameResult result = GameController.getInstance().checkForWinningConditions();
+                    // check winning condition
+                    GameResult result = gameController.conversationController.checkWinningConditions.checkWinningConditions();
 
                     // check for result after reporting suspect/weapon
                     if (!result.equals(GameResult.UNDEFINED)) {
