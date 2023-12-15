@@ -92,9 +92,9 @@ public class GameController {
         ignoreList = gameText.getIgnoreList();
         
         // TODO: Temporary code to add all rooms to players history
-        /*for(Room room : rooms.values()) {
+        for(Room room : rooms.values()) {
             player.addToPlayerHistory(room.getName());
-        }*/
+        }
         
         if(!MainController.PLAY_IN_GUI) {
             commandView = new CommandConsoleView(List.of(mainText, secondaryText), new ArrayList<>(commandMap.values()), entities, ignoreList);
@@ -108,7 +108,6 @@ public class GameController {
         mainView = new DisplayView(List.of(mainText, secondaryText), GameWindow.gameTextArea);
         roomView = new DisplayView(List.of(roomText), GameWindow.roomInformationArea);
         playerView = new DisplayView(List.of(playerText), GameWindow.playerInformationArea);
-        //displayView = new CommandDisplayView(null, null, new ArrayList<>(commandMap.values()), entities, ignoreList);
     }
 
     // This is only called for terminal run
