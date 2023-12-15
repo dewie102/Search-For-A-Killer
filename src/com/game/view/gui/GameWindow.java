@@ -15,6 +15,7 @@ import java.awt.event.AdjustmentListener;
 public class GameWindow {
     public static final int FRAME_WIDTH = 1400;
     public static final int FRAME_HEIGHT = 800;
+    public static final Color MAIN_BACKGROUND_COLOR = new Color(50, 50, 50);
 
     public static JTextPane gameTextArea;
     public static JTextArea roomInformationArea;
@@ -26,6 +27,7 @@ public class GameWindow {
     public static JPanel gameTextPanel;
     public static JPanel talkButtonPanel;
     public static JPanel mainTalkPanel;
+    public static JPanel mapButtonPanel;
 
     static void createAndShowGUI() {
         JFrame frame = new JFrame("Search For A Killer");
@@ -46,7 +48,7 @@ public class GameWindow {
 
         // Main Panel, consist of game text, player/room info and map
         JPanel mainPanel = new JPanel(new GridBagLayout());
-        mainPanel.setBackground(new Color(50, 50, 50));
+        mainPanel.setBackground(MAIN_BACKGROUND_COLOR);
 
         GridBagConstraints gbcMain = new GridBagConstraints();
         gbcMain.fill = GridBagConstraints.BOTH;
@@ -54,7 +56,7 @@ public class GameWindow {
         int gameTextAreaWidth = (int) (FRAME_WIDTH * 0.6);
 
         JPanel containerPanel = new JPanel(new BorderLayout());
-        containerPanel.setBackground(new Color(50, 50, 50));
+        containerPanel.setBackground(MAIN_BACKGROUND_COLOR);
         containerPanel.setPreferredSize(new Dimension(gameTextAreaWidth, 0));
 
 
@@ -69,10 +71,10 @@ public class GameWindow {
         // talk panel
         talkTextArea = createTextArea();
         mainTalkPanel = new JPanel(new GridLayout(2, 1, 0, 5));
-        mainTalkPanel.setBackground(new Color(50, 50, 50));
+        mainTalkPanel.setBackground(MAIN_BACKGROUND_COLOR);
         JScrollPane scrollPane = new JScrollPane(talkTextArea);
         talkButtonPanel = new JPanel(new GridLayout(0,1));
-        talkButtonPanel.setBackground(new Color(50, 50, 50));
+        talkButtonPanel.setBackground(MAIN_BACKGROUND_COLOR);
         mainTalkPanel.setPreferredSize(new Dimension(0, (int) (FRAME_HEIGHT/2.2)));
         mainTalkPanel.add(scrollPane);
         mainTalkPanel.add(talkButtonPanel);
@@ -84,7 +86,7 @@ public class GameWindow {
 
 
         JPanel informationPanel = new JPanel(new GridLayout(1, 2, 10, 0));
-        informationPanel.setBackground(new Color(50, 50, 50));
+        informationPanel.setBackground(MAIN_BACKGROUND_COLOR);
 
         roomInformationArea = createTextArea();
         JPanel roomInformationPanel = createTextPanel(roomInformationArea);
@@ -100,14 +102,58 @@ public class GameWindow {
         gbcMain.weighty = 1.0;
         mainPanel.add(containerPanel, gbcMain);
 
+        // This is the main map text area, where the text is displayed
         mapArea = createTextArea();
+        // "Courier New" is a monospaced font, used to keep the map from deforming
         mapArea.setFont(new Font("Courier New", Font.PLAIN, 12));
         JPanel mapPanel = createTextPanel(mapArea);
+    
+        /*// This is the panel for the map buttons
+        mapButtonPanel = new JPanel(new GridBagLayout());
+        mapButtonPanel.setOpaque(false);
+        mapButtonPanel.setBackground(new Color(0, 0, 0, 0));
+        //mapButtonPanel.setBackground(Color.red);
+        
+        GridBagConstraints mapConstraints = new GridBagConstraints();
+        mapConstraints.fill = GridBagConstraints.HORIZONTAL;
+        
+        JButton testBtn1 = new JButton("1");
+        ImageIcon test = new ImageIcon("data/test.PNG");
+        test = new ImageIcon(test.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH));
+        testBtn1.setIcon(test);
+        testBtn1.setPreferredSize(new Dimension(200, 200));
+        testBtn1.setOpaque(false);
+        testBtn1.setContentAreaFilled(false); // Maybe just this one?
+        testBtn1.setBorderPainted(false);
+        mapConstraints.gridx = 0;
+        mapConstraints.gridy = 0;
+        mapConstraints.gridwidth = 1;
+        mapConstraints.gridheight = 1;
+        mapButtonPanel.add(testBtn1, mapConstraints);
+        
+        JButton testBtn2 = new JButton("2");
+        //testBtn.setSize(200, 200);
+        mapConstraints.gridx = 1;
+        mapConstraints.gridy = 0;
+        mapButtonPanel.add(testBtn2, mapConstraints);
+    
+        JButton testBtn3 = new JButton("3");
+        //testBtn.setSize(200, 200);
+        mapConstraints.gridx = 2;
+        mapConstraints.gridy = 0;
+        mapButtonPanel.add(testBtn3, mapConstraints);
+        
+        mapButtonPanel.setPreferredSize(new Dimension(60, 60));
+
+        //mapPanel.add(mapButtonPanel);*/
+        
         gbcMain.gridx = 1;
         gbcMain.weightx = 0.5;
         gbcMain.weighty = 1.0;
         gbcMain.gridheight = 2;
         mainPanel.add(mapPanel, gbcMain);
+    
+        
 
         // Add space around the panels
         int panelSpace = 10;
@@ -119,7 +165,7 @@ public class GameWindow {
 
         // Action Panel, consist of command input, volume control and help/quit buttons
         JPanel actionPanel = new JPanel(new GridBagLayout());
-        actionPanel.setBackground(new Color(50, 50, 50));
+        actionPanel.setBackground(MAIN_BACKGROUND_COLOR);
 
         GridBagConstraints gbcAction = new GridBagConstraints();
         gbcAction.fill = GridBagConstraints.BOTH;
@@ -137,7 +183,7 @@ public class GameWindow {
         JPanel helpPanel = new JPanel(new FlowLayout());
         JButton helpButton = new JButton("Help");
         JButton quitButton = new JButton("Quit");
-        helpPanel.setBackground(new Color(50, 50, 50));
+        helpPanel.setBackground(MAIN_BACKGROUND_COLOR);
         helpButton.setBackground(Color.GREEN);
         helpButton.setForeground(Color.BLACK);
         quitButton.setBackground(Color.RED);
@@ -191,7 +237,7 @@ public class GameWindow {
     private static JTextArea createTextArea() {
         JTextArea textArea = new JTextArea();
         textArea.setEditable(false);
-        textArea.setBackground(new Color(50, 50, 50));
+        textArea.setBackground(MAIN_BACKGROUND_COLOR);
         textArea.setForeground(Color.WHITE);
         textArea.setFont(new Font("Courier", Font.PLAIN, 14));
 
@@ -209,13 +255,9 @@ public class GameWindow {
     private static JTextPane createTextPane() {
         JTextPane textPane = new JTextPane();
         textPane.setEditable(false);
-        textPane.setBackground(new Color(50, 50, 50));
+        textPane.setBackground(MAIN_BACKGROUND_COLOR);
         textPane.setForeground(Color.WHITE);
         textPane.setFont(new Font("Courier", Font.PLAIN, 14));
-        
-        // Wrapping text for both line and word if it cannot fit in the text area width
-        /*textPane.setLineWrap(true);
-        textPane.setWrapStyleWord(true);*/
         
         // Add padding around the text area
         int padding = 10;
@@ -228,7 +270,7 @@ public class GameWindow {
         JPanel panel = new JPanel(new BorderLayout());
         JScrollPane scrollPane = new JScrollPane(textArea);
         panel.add(scrollPane, BorderLayout.CENTER);
-        panel.setBackground(new Color(50, 50, 50));
+        panel.setBackground(MAIN_BACKGROUND_COLOR);
         panel.setOpaque(true);
         return panel;
     }
@@ -250,13 +292,13 @@ public class GameWindow {
         JLabel label = new JLabel("Volume");
         label.setHorizontalAlignment(JLabel.CENTER);
         label.setForeground(Color.WHITE);
-        panel.setBackground(new Color(50, 50, 50));
+        panel.setBackground(MAIN_BACKGROUND_COLOR);
         panel.setOpaque(true);
         panel.add(label, BorderLayout.NORTH);
 
         // Volume Control scroll bar
         JScrollBar volumeScrollBar = new JScrollBar(JScrollBar.HORIZONTAL, 50, 10, 0, 100);
-        volumeScrollBar.setBackground(new Color(50, 50, 50));
+        volumeScrollBar.setBackground(MAIN_BACKGROUND_COLOR);
         volumeScrollBar.setForeground(Color.WHITE);
 
         volumeScrollBar.addAdjustmentListener(new AdjustmentListener() {
@@ -278,10 +320,10 @@ public class GameWindow {
 
     private static JPanel createInputCommandPanel() {
         JPanel panel = new JPanel(new BorderLayout());
-        panel.setBackground(new Color(50, 50, 50));
+        panel.setBackground(MAIN_BACKGROUND_COLOR);
 
         commandTextField = new JTextField();
-        commandTextField.setBackground(new Color(50, 50, 50));
+        commandTextField.setBackground(MAIN_BACKGROUND_COLOR);
         commandTextField.setForeground(Color.WHITE);
 
         commandTextField.addActionListener(new ActionListener() {
@@ -310,7 +352,7 @@ public class GameWindow {
 
         helpTextArea = new JTextArea();
         helpTextArea.setEditable(false);
-        helpTextArea.setBackground(new Color(50, 50, 50));
+        helpTextArea.setBackground(MAIN_BACKGROUND_COLOR);
         helpTextArea.setForeground(Color.WHITE);
 
         int padding = 10;
@@ -323,7 +365,7 @@ public class GameWindow {
         JScrollPane scrollPane = new JScrollPane(helpTextArea);
 
         JPanel helpPanel = new JPanel(new BorderLayout());
-        helpPanel.setBackground(new Color(50, 50, 50));
+        helpPanel.setBackground(MAIN_BACKGROUND_COLOR);
         helpPanel.add(scrollPane, BorderLayout.CENTER);
 
         helpFrame.add(helpPanel);
@@ -331,11 +373,24 @@ public class GameWindow {
         helpFrame.setVisible(true);
     }
 
-    public static JPanel createGridLayoutPanel() {
-        JPanel panel = new JPanel(new GridLayout(5, 1)); // 5 rows, 1 column
-        panel.setBackground(new Color(50, 50, 50));
+    public static JPanel createGridLayoutPanel(int rows, int columns) {
+        JPanel panel = new JPanel(new GridLayout(rows, columns)); // 5 rows, 1 column
+        panel.setBackground(MAIN_BACKGROUND_COLOR);
 
         return panel;
+    }
+    
+    public static JButton createMapButton(String roomValue) {
+        JButton button = new JButton();
+        button.setActionCommand(roomValue);
+        
+        button.addActionListener((evt) -> {
+            String room = evt.getActionCommand();
+            System.out.printf("Printing room value: %s\n", room);
+            //DO something
+        });
+        
+        return button;
     }
 
     public static JButton createButtonWithId(String label, int id) {
