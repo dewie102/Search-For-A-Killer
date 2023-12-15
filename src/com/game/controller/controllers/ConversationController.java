@@ -2,19 +2,15 @@ package com.game.controller.controllers;
 
 
 import com.game.controller.CheckWinningConditions;
-import com.game.controller.GameResult;
 import com.game.model.Conversation;
 import com.game.model.Player;
-import com.game.view.gui.DisplayView;
 import com.game.view.gui.GameWindow;
 import com.game.view.gui.MultipleChoiceDisplayView;
 import com.game.view.terminal.ConsoleText;
 import com.game.view.terminal.MultipleChoiceConsoleView;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.game.model.Character;
 
@@ -58,7 +54,7 @@ public class ConversationController {
         MultipleChoiceDisplayView displayView = new MultipleChoiceDisplayView(List.of(secondaryText), questions, GameWindow.talkTextArea, GameWindow.talkButtonPanel);
 
         GameWindow.gameTextPanel.setVisible(false);
-        GameWindow.mainTextPanel.setVisible(true);
+        GameWindow.mainTalkPanel.setVisible(true);
         GameWindow.talkButtonPanel.removeAll();
         GameWindow.talkButtonPanel.revalidate();
         GameWindow.talkButtonPanel.repaint();
@@ -77,19 +73,16 @@ public class ConversationController {
         if (result != -1) {
 //            currentConversation.getDialog(result).reportIfAble(); //report murder
             if(currentConversation.getDialog(result).getFollowUpConversation() != null){
-                System.out.println("going to call with new questions: " + currentConversation.getDialog(result).getFollowUpConversation().getConversation());
 //                run(player, character, currentConversation.getDialog(result).getFollowUpConversation());
                 handleFollowUp(currentConversation.getDialog(result).getFollowUpConversation());
-                result = -1;
+//                result = -1;
                 // This fixes the loop but we lost the secondary text
             } else if(currentConversation.getDialog(result).endsConversation()) {
-                System.out.println(result + "final end");
 //               result = questions.size() - 1;
             }
             else if (result == questions.size() - 1) {
-                System.out.println("here");
                 GameWindow.gameTextPanel.setVisible(true);
-                GameWindow.mainTextPanel.setVisible(false);
+                GameWindow.mainTalkPanel.setVisible(false);
                 result = -1;
                 secondaryText.clear();
             }
@@ -97,7 +90,6 @@ public class ConversationController {
     }
 
     private void handleFollowUp(Conversation conversation) {
-//        conversation.getDialog(result).reportIfAble();
         List<String> questions = conversation.getConversationQuestions();
 
         MultipleChoiceDisplayView displayView = new MultipleChoiceDisplayView(List.of(secondaryText), questions, GameWindow.talkTextArea, GameWindow.talkButtonPanel);

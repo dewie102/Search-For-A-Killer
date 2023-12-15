@@ -3,7 +3,6 @@ package com.game.view.gui;
 import com.game.controller.GameController;
 import com.game.controller.GameResult;
 import com.game.controller.GsonParserController;
-import com.game.model.Item;
 
 import javax.swing.*;
 import javax.swing.text.JTextComponent;
@@ -25,9 +24,8 @@ public class GameWindow {
     public static JTextArea helpTextArea;
     public static JTextArea talkTextArea;
     public static JPanel gameTextPanel;
-    public static JPanel talkTextPanel;
     public static JPanel talkButtonPanel;
-    public static JPanel mainTextPanel;
+    public static JPanel mainTalkPanel;
 
     static void createAndShowGUI() {
         JFrame frame = new JFrame("Search For A Killer");
@@ -59,31 +57,33 @@ public class GameWindow {
         containerPanel.setBackground(new Color(50, 50, 50));
         containerPanel.setPreferredSize(new Dimension(gameTextAreaWidth, 0));
 
+
+        // game text panel
         gameTextArea = createTextPane();
         gameTextPanel = createTextPanel(gameTextArea);
         gameTextPanel.setVisible(true);
-
+        gameTextPanel.setPreferredSize(new Dimension(0, (int) (FRAME_HEIGHT/2.2)));
         containerPanel.add(gameTextPanel);
-
         mainPanel.add(gameTextPanel, gbcMain);
 
+        // talk panel
         talkTextArea = createTextArea();
-        mainTextPanel = new JPanel(new GridLayout(2,1));
-        mainTextPanel.setBackground(new Color(50, 50, 50));
+        mainTalkPanel = new JPanel(new GridLayout(2, 1, 0, 5));
+        mainTalkPanel.setBackground(new Color(50, 50, 50));
         JScrollPane scrollPane = new JScrollPane(talkTextArea);
-        talkButtonPanel = new JPanel(new GridLayout(4,1));
+        talkButtonPanel = new JPanel(new GridLayout(0,1));
         talkButtonPanel.setBackground(new Color(50, 50, 50));
-        mainTextPanel.setPreferredSize(new Dimension(0, 350));
-        mainTextPanel.add(scrollPane);
-        mainTextPanel.add(talkButtonPanel);
-        containerPanel.add(mainTextPanel);
-        mainPanel.add(mainTextPanel, gbcMain);
-        mainTextPanel.setVisible(false);
+        mainTalkPanel.setPreferredSize(new Dimension(0, (int) (FRAME_HEIGHT/2.2)));
+        mainTalkPanel.add(scrollPane);
+        mainTalkPanel.add(talkButtonPanel);
+        containerPanel.add(mainTalkPanel);
+        mainPanel.add(mainTalkPanel, gbcMain);
+        mainTalkPanel.setVisible(false);
         int padding = 10;
-        mainTextPanel.setBorder(BorderFactory.createEmptyBorder(padding, padding, padding, padding));
+        mainTalkPanel.setBorder(BorderFactory.createEmptyBorder(padding, padding, padding, padding));
 
 
-        JPanel informationPanel = new JPanel(new GridLayout(1, 2));
+        JPanel informationPanel = new JPanel(new GridLayout(1, 2, 10, 0));
         informationPanel.setBackground(new Color(50, 50, 50));
 
         roomInformationArea = createTextArea();
@@ -350,28 +350,28 @@ public class GameWindow {
 
                 GameController gameController = GameController.getInstance();
 
+                // if conversation does not have a followup questions
                 if (!gameController.conversationController.followedUpQuestion) {
                     gameController.conversationController.result = buttonID;
                 } else {
-                    if (gameController.items.containsKey(button.getText())) {
-                        GameController.getInstance().reportCommand(GameController.getInstance().items.get(button.getText()));
-                    } else {
-                        GameController.getInstance().reportCommand(GameController.getInstance().characters.get(button.getText()));
-                    }
-//                    GameController.getInstance().character.getConversation().getDialog(gameController.conversationController.result).getFollowUpConversation().getDialog(buttonID).reportIfAble();
-//                    System.out.println(GameController.getInstance().checkForWinningConditions());
+
+                    // report weapon/suspect
+                    GameController.getInstance().character.getConversation().getDialog(gameController.conversationController.result).getFollowUpConversation().getDialog(buttonID).reportIfAble();
 
                     GameResult result = GameController.getInstance().checkForWinningConditions();
 
+                    // check for result after reporting suspect/weapon
                     if (!result.equals(GameResult.UNDEFINED)) {
                         if (result.equals(GameResult.WIN)) {
                             JOptionPane.showMessageDialog(null, "You WON the game\nThanks for playing.", "Result", JOptionPane.INFORMATION_MESSAGE);
                         } else {
                             JOptionPane.showMessageDialog(null, "You LOST the game\nThanks for playing.", "Result", JOptionPane.INFORMATION_MESSAGE);
+
                         }
                         System.exit(0);
                     }
 
+                    // reset followup questions and result after answering followup question
                     gameController.conversationController.followedUpQuestion = false;
                     gameController.conversationController.result = -1;
                 }
