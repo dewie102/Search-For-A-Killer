@@ -1,5 +1,6 @@
 package com.game.view.gui;
 
+import com.formdev.flatlaf.FlatLightLaf;
 import com.game.controller.GsonParserController;
 
 import javax.swing.*;
@@ -11,6 +12,7 @@ public class TitleWindow extends JFrame {
     private static JTextArea developmentTitleTextArea;
 
     public TitleWindow() {
+        FlatLightLaf.setup();
         setTitle("Search For A Killer");
         setSize(1000, 500);
         setResizable(false);
@@ -54,27 +56,30 @@ public class TitleWindow extends JFrame {
 
         logoTextPanel.add(developmentTitleTextArea, BorderLayout.SOUTH);
 
-        // Create a separate panel for buttons
-        JPanel buttonPanel = new JPanel(new FlowLayout());
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 20)); // Adjust the horizontal gap (20 in this case)
         buttonPanel.setBackground(new Color(34, 34, 34));
 
-        // Use a custom font for the buttons
-        Font buttonFont = new Font("Impact", Font.PLAIN, 15);
+// Use a custom font for the buttons
+        Font buttonFont = new Font("Impact", Font.PLAIN, 20); // Adjust the font size to make it larger
 
         JButton playGameButton = new JButton("Play Game");
         playGameButton.setFont(buttonFont);
-        playGameButton.setBackground(Color.GREEN);
-        playGameButton.setForeground(Color.BLACK);
+        playGameButton.setBackground(new Color(89, 166, 94));
+        playGameButton.setForeground(Color.WHITE);
         playGameButton.setFocusPainted(false);
 
         JButton quitButton = new JButton("Quit");
         quitButton.setFont(buttonFont);
-        quitButton.setBackground(Color.RED);
-        quitButton.setForeground(Color.BLACK);
+        quitButton.setBackground(new Color(207, 74, 74));
+        quitButton.setForeground(Color.WHITE);
 
-        // Add buttons to the button panel
+        Dimension buttonSize = new Dimension(150, 40); // Adjust the width and height as needed
+        playGameButton.setPreferredSize(buttonSize);
+        quitButton.setPreferredSize(buttonSize);
+
         buttonPanel.add(playGameButton);
         buttonPanel.add(quitButton);
+
 
         // Add the main panel to the frame
         panel.add(gameBanner, BorderLayout.NORTH);

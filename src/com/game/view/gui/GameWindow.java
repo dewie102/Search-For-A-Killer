@@ -1,5 +1,7 @@
 package com.game.view.gui;
 
+import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.FlatLightLaf;
 import com.game.controller.GameController;
 import com.game.controller.GameResult;
 import com.game.controller.GsonParserController;
@@ -36,6 +38,8 @@ public class GameWindow {
     public static JPanel mapButtonPanel;
 
     static void createAndShowGUI() {
+        FlatLightLaf.setup();
+        UIManager.put("TextComponent.arc", 20);
         JFrame frame = new JFrame("Search For A Killer");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(FRAME_WIDTH, FRAME_HEIGHT);
@@ -199,16 +203,25 @@ public class GameWindow {
         gbcAction.weightx = 0.139;
         actionPanel.add(soundAdjustPanel, gbcAction);
 
-        JPanel helpPanel = new JPanel(new FlowLayout());
+        JPanel helpPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 40, 30));
         JButton helpButton = new JButton("Help");
         JButton quitButton = new JButton("Quit");
+
         helpPanel.setBackground(MAIN_BACKGROUND_COLOR);
-        helpButton.setBackground(Color.GREEN);
-        helpButton.setForeground(Color.BLACK);
-        quitButton.setBackground(Color.RED);
-        quitButton.setForeground(Color.BLACK);
+
+        Font buttonFont = new Font("Arial", Font.BOLD, 16); // Adjust the font size as needed
+        helpButton.setFont(buttonFont);
+        quitButton.setFont(buttonFont);
+
+
+        helpButton.setBackground(new Color(89, 166, 94)); // Adjust the RGB values for your preferred color
+        helpButton.setForeground(Color.WHITE);
+        quitButton.setBackground(new Color(207, 74, 74)); // Adjust the RGB values for your preferred color
+        quitButton.setForeground(Color.WHITE);
+
         helpPanel.add(helpButton);
         helpPanel.add(quitButton);
+
         gbcAction.gridx = 2;
         gbcAction.weightx = 0.144;
         actionPanel.add(helpPanel, gbcAction);
@@ -313,7 +326,10 @@ public class GameWindow {
         JPanel volumePanel = new JPanel(new GridLayout(2, 1));
         volumePanel.setBackground(MAIN_BACKGROUND_COLOR);
         volumePanel.setOpaque(true);
-
+        UIManager.put("ScrollBar.track", Color.WHITE);
+        UIManager.put("ScrollBar.thumb", MAIN_BACKGROUND_COLOR);
+        UIManager.put("ScrollBar.trackArc", 20);
+        UIManager.put("ScrollBar.thumbArc", 25);
         JLabel currentVolumeLabel = new JLabel("Volume: " + getCurrentVolume());
         currentVolumeLabel.setHorizontalAlignment(JLabel.CENTER);
         currentVolumeLabel.setForeground(Color.WHITE);
