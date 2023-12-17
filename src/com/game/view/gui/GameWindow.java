@@ -16,11 +16,11 @@ public class GameWindow {
     public static final int FRAME_WIDTH = 1400;
     public static final int FRAME_HEIGHT = 800;
     public static final Color MAIN_BACKGROUND_COLOR = new Color(50, 50, 50);
+    public static final int PANEL_SPACE = 10;
 
     public static JTextPane gameTextArea;
     public static JTextArea roomInformationArea;
     public static JTextArea playerInformationArea;
-    public static JTextArea mapArea;
     public static JTextField commandTextField;
     public static JTextArea helpTextArea;
     public static JTextArea talkTextArea;
@@ -104,60 +104,17 @@ public class GameWindow {
         gbcMain.weightx = 0.0; // use gameTextAreaWidth as it is
         gbcMain.weighty = 1.0;
         mainPanel.add(containerPanel, gbcMain);
-
-        // This is the main map text area, where the text is displayed
-        mapArea = createTextArea();
-        // "Courier New" is a monospaced font, used to keep the map from deforming
-        mapArea.setFont(new Font("Courier New", Font.PLAIN, 12));
-        JPanel mapPanel = createTextPanel(mapArea);
-
-        /*// This is the panel for the map buttons
-        mapButtonPanel = new JPanel(new GridBagLayout());
-        mapButtonPanel.setOpaque(false);
-        mapButtonPanel.setBackground(new Color(0, 0, 0, 0));
-        //mapButtonPanel.setBackground(Color.red);
-
-        GridBagConstraints mapConstraints = new GridBagConstraints();
-        mapConstraints.fill = GridBagConstraints.HORIZONTAL;
-
-        JButton testBtn1 = new JButton("1");
-        ImageIcon test = new ImageIcon("data/test.PNG");
-        test = new ImageIcon(test.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH));
-        testBtn1.setIcon(test);
-        testBtn1.setPreferredSize(new Dimension(200, 200));
-        testBtn1.setOpaque(false);
-        testBtn1.setContentAreaFilled(false); // Maybe just this one?
-        testBtn1.setBorderPainted(false);
-        mapConstraints.gridx = 0;
-        mapConstraints.gridy = 0;
-        mapConstraints.gridwidth = 1;
-        mapConstraints.gridheight = 1;
-        mapButtonPanel.add(testBtn1, mapConstraints);
-
-        JButton testBtn2 = new JButton("2");
-        //testBtn.setSize(200, 200);
-        mapConstraints.gridx = 1;
-        mapConstraints.gridy = 0;
-        mapButtonPanel.add(testBtn2, mapConstraints);
-
-        JButton testBtn3 = new JButton("3");
-        //testBtn.setSize(200, 200);
-        mapConstraints.gridx = 2;
-        mapConstraints.gridy = 0;
-        mapButtonPanel.add(testBtn3, mapConstraints);
-
-        mapButtonPanel.setPreferredSize(new Dimension(60, 60));
-
-        //mapPanel.add(mapButtonPanel);*/
-
+    
+        JPanel mapPanel = createMapPanel();
+    
         gbcMain.gridx = 1;
-        gbcMain.weightx = 0.5;
-        gbcMain.weighty = 1.0;
+        gbcMain.gridwidth = 1;
         gbcMain.gridheight = 2;
+        gbcMain.weightx = 1;
+        gbcMain.weighty = 1;
+        gbcMain.fill = GridBagConstraints.BOTH;
         mainPanel.add(mapPanel, gbcMain);
-
-
-
+        
         // Add space around the panelsmapArea = createTextArea();
         //        mapArea.setFont(new Font("Courier New", Font.PLAIN, 12));
         //        JPanel mapPanel = createTextPanel(mapArea);
@@ -222,7 +179,7 @@ public class GameWindow {
         gameTextAreaPrintln("Welcome to the game!");
         roomInformationAreaPrintln();
         playerInformationAreaPrintln();
-        mapAreaPrintln();
+        //mapAreaPrintln();
 
         // Action Listeners
 
@@ -388,6 +345,46 @@ public class GameWindow {
 
         return panel;
     }
+    
+    private static JPanel createMapPanel() {
+        JPanel mapPanel = new JPanel();
+        int mapWidth = (int)(FRAME_WIDTH * 0.4) - (PANEL_SPACE * 2); // 40% of the total size minus the 2 padding spaces
+        int mapHeight = (int)(FRAME_HEIGHT) - (PANEL_SPACE * 4) - 125;
+        
+        mapPanel.setMinimumSize(new Dimension(mapWidth, mapHeight));
+        mapPanel.setMaximumSize(new Dimension(mapWidth, mapHeight));
+        mapPanel.setPreferredSize(new Dimension(mapWidth, mapHeight));
+        mapPanel.setBackground(MAIN_BACKGROUND_COLOR);
+    
+        mapButtonPanel = new JPanel(new GridBagLayout());
+        mapButtonPanel.setMinimumSize(new Dimension(mapWidth - (PANEL_SPACE * 2), mapHeight - (PANEL_SPACE * 2)));
+        mapButtonPanel.setMaximumSize(new Dimension(mapWidth - (PANEL_SPACE * 2), mapHeight - (PANEL_SPACE * 2)));
+        mapButtonPanel.setPreferredSize(new Dimension(mapWidth - (PANEL_SPACE * 2), mapHeight - (PANEL_SPACE * 2)));
+        
+        mapButtonPanel.setOpaque(false);
+        
+        GridBagConstraints mapConstraints = new GridBagConstraints();
+        
+        //ImageIcon test = new ImageIcon("data/test.PNG");
+        
+        for(int row = 0; row < 3; row++) {
+            for(int column = 0; column < 3; column++) {
+                JButton btn = createMapButton(new Dimension(150, 100));
+                mapConstraints.gridx = column;
+                mapConstraints.gridy = row;
+                mapConstraints.gridwidth = 1;
+                mapConstraints.gridheight = 1;
+                // This adds the btn to the panel
+                mapButtonPanel.add(btn, mapConstraints);
+                btn.setActionCommand("" + row+column);
+            }
+        }
+        
+        mapPanel.add(mapButtonPanel, BorderLayout.CENTER);
+        mapButtonPanel.setBorder(BorderFactory.createLineBorder(Color.lightGray, 2, true));
+        
+        return mapPanel;
+    }
 
     private static ImageIcon resizeImageIcon(ImageIcon originalIcon) {
         Image image = originalIcon.getImage();
@@ -456,18 +453,22 @@ public class GameWindow {
 
         return panel;
     }
-
-    public static JButton createMapButton(String roomValue) {
-        JButton button = new JButton();
-        button.setActionCommand(roomValue);
-
-        button.addActionListener((evt) -> {
+    
+    public static JButton createMapButton(Dimension size) {
+        JButton btn = new JButton();
+        ImageIcon test = new ImageIcon("data/icons/test.PNG");
+        btn.setIcon(test);
+        btn.setPreferredSize(size);
+        btn.setContentAreaFilled(false);
+        btn.setBorderPainted(false);
+        
+        btn.addActionListener((evt) -> {
             String room = evt.getActionCommand();
             System.out.printf("Printing room value: %s\n", room);
             //DO something
         });
-
-        return button;
+        
+        return btn;
     }
 
     public static JButton createButtonWithId(String label, int id) {
@@ -529,9 +530,9 @@ public class GameWindow {
         playerInformationArea.append("Player Information Area" + "\n");
     }
 
-    private static void mapAreaPrintln() {
+    /*private static void mapAreaPrintln() {
         mapArea.append("Map Area" + "\n");
-    }
+    }*/
 
     private static void executeCommand(String command) {
         gameTextAreaPrintln("Player entered command: " + command);

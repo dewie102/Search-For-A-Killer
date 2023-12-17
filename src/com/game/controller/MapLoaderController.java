@@ -1,11 +1,13 @@
 package com.game.controller;
 
 import com.game.view.gui.DisplayView;
+import com.game.view.gui.GameWindow;
 import com.game.view.terminal.AnsiTextColor;
 import com.game.view.terminal.ConsoleText;
 import com.game.view.terminal.ConsoleView;
 import com.google.gson.Gson;
 
+import javax.swing.*;
 import javax.swing.text.JTextComponent;
 import java.io.FileReader;
 import java.util.*;
@@ -26,6 +28,11 @@ class MapLoaderController {
     private List<StringBuilder> mapLayout1 = new ArrayList<>();
     private List<StringBuilder> mapLayout2 = new ArrayList<>();
     private List<StringBuilder> mapLayout3 = new ArrayList<>();
+    
+    private final Map<String, ImageIcon> roomIcons = new HashMap<>();
+    
+    private final int rows = 3;
+    private int columns = 0;
 
     // METHODS
     public void loadMap(){
@@ -44,10 +51,14 @@ class MapLoaderController {
         } catch (Exception e) {
             System.out.printf("Error loading the game map: %s", e.getMessage());
         }
+        
+        columns = gameMap.get("1").size();
     }
 
     // build the map layout
     public void buildMap(String playerLocation, List<String> playerHistory){
+    
+        loadIcons();
 
         // clear the map StringBuilders
         getMapLayout1().clear();
@@ -197,6 +208,27 @@ class MapLoaderController {
         }
         // print the displayView that contains the Map
         displayView.showMap();
+    }
+    
+    private void loadIcons() {
+        String path = "data/icons";
+    
+        // iterate through the gameMap variable for each layer of the map (total of 3)
+        for(String layerKey : getGameMap().keySet()){
+            // iterate through the gameMap for each level of the map (3 total levels)
+            for(String levelKey : getGameMap().get(layerKey).keySet()) {
+                for(String roomName : getGameMap().get(layerKey).get(levelKey).keySet()) {
+                    ImageIcon roomIcon = new ImageIcon(String.format("%s/%s.png", path, roomName));
+                    roomIcons.put(roomName, roomIcon);
+                }
+            }
+        }
+        
+        // TODO: Temp to test dynamically setting btn value
+        int row = 1;
+        int column = 1;
+        JButton btn = (JButton)GameWindow.mapButtonPanel.getComponent(columns * row + column);
+        btn.setActionCommand("Should be 1,1");
     }
 
     // GETTERS AND SETTERS

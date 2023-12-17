@@ -197,7 +197,7 @@ public class GameController {
         playerView.show();
         // This handles the map displaying and building
         mapLoaderController.buildMap(player.getCurrentLocation(), player.getPlayerHistory());
-        mapLoaderController.displayMap(GameWindow.mapArea);
+        //mapLoaderController.displayMap(GameWindow.mapArea);
     }
 
     private boolean goCommand(Entity target) {
