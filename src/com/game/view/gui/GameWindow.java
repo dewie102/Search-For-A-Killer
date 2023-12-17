@@ -27,8 +27,12 @@ public class GameWindow {
     public static JPanel gameTextPanel;
     public static JPanel talkButtonPanel;
     public static JPanel mainTalkPanel;
-    private static int currentVolume = 10;
+    private static int currentVolume = 25;
+    private static int previousVolume = 25;
+    private static int currentSfxVolume = 25;
+    private static int previousSfxVolume = 25;
     private static boolean isMuted = false;
+    private static boolean isSfxMuted = false;
     private static String currentVolumeOption = "1";
     public static JPanel mapButtonPanel;
 
@@ -310,12 +314,48 @@ public class GameWindow {
         return currentVolume;
     }
 
+    public static JTextPane getGameTextArea() {
+        return gameTextArea;
+    }
+
+    public static void setGameTextArea(JTextPane gameTextArea) {
+        GameWindow.gameTextArea = gameTextArea;
+    }
+
+    public static int getCurrentSfxVolume() {
+        return currentSfxVolume;
+    }
+
+    public static void setCurrentSfxVolume(int currentSfxVolume) {
+        GameWindow.currentSfxVolume = currentSfxVolume;
+    }
+
+    public static int getPreviousSfxVolume() {
+        return previousSfxVolume;
+    }
+
+    public static void setPreviousSfxVolume(int previousSfxVolume) {
+        GameWindow.previousSfxVolume = previousSfxVolume;
+    }
+
     public static void toggleMute() {
         isMuted = !isMuted;
     }
 
+    public static void toggleSfxMute() {
+        isSfxMuted = !isSfxMuted;
+    }
+
     public static boolean isMuted() {
         return isMuted;
+    }
+
+    public static boolean isSfxMuted() {
+        return isSfxMuted;
+    }
+
+    public static void setSfxMuted(boolean isSfxMuted) {
+        GameWindow.isSfxMuted = isSfxMuted;
     }
 
     public static String getCurrentVolumeOption() {
@@ -328,17 +368,19 @@ public class GameWindow {
 
     private static JPanel adjustSoundPanel() {
         JPanel panel = new JPanel(new BorderLayout());
+        panel.setBackground(MAIN_BACKGROUND_COLOR);
+        panel.setOpaque(true);
 
         // Label to display current volume
         JLabel currentVolumeLabel = new JLabel("Current Volume: " + getCurrentVolume());
         currentVolumeLabel.setHorizontalAlignment(JLabel.CENTER);
         currentVolumeLabel.setForeground(Color.WHITE);
-        panel.setBackground(MAIN_BACKGROUND_COLOR);
-        panel.setOpaque(true);
-        panel.add(currentVolumeLabel, BorderLayout.NORTH);
+
+        ImageIcon soundIcon = resizeImageIcon(new ImageIcon("data/volume.png"));
+        JButton muteButton = new JButton(soundIcon);
 
         // Volume Control scroll bar
-        JScrollBar volumeScrollBar = new JScrollBar(JScrollBar.HORIZONTAL, 50, 10, 0, 100);
+        JScrollBar volumeScrollBar = new JScrollBar(JScrollBar.HORIZONTAL, getCurrentVolume(), 10, 0, 110);
         volumeScrollBar.setBackground(MAIN_BACKGROUND_COLOR);
         volumeScrollBar.setForeground(Color.WHITE);
 
@@ -346,34 +388,15 @@ public class GameWindow {
             @Override
             public void adjustmentValueChanged(AdjustmentEvent e) {
                 int volume = e.getValue();
-
-                // volume scroll adjust label text and run command
-                currentVolumeLabel.setText("Current Volume: " + volume);
-                setCurrentVolumeOption("2"); // will be determined
-                setCurrentVolume(volume);
-                System.out.println(getCurrentVolume());
-                GameController.getInstance().runCommand("volume");
+                updateVolumeControls(volume, currentVolumeLabel, muteButton);
             }
         });
 
-        ImageIcon soundIcon = resizeImageIcon(new ImageIcon("data/volume.png"));
-        JButton muteButton = new JButton(soundIcon);
         muteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 toggleMute();
-
-                // update the icon based on the mute state and run command with appropriate value
-                if (isMuted()) {
-                    System.out.println("muted");
-                    GameController.getInstance().runCommand("volume");
-                    setCurrentVolumeOption("0");
-                    muteButton.setIcon(resizeImageIcon(new ImageIcon("data/mute.png")));
-                } else {
-                    GameController.getInstance().runCommand("volume");
-                    setCurrentVolumeOption("1");
-                    muteButton.setIcon(soundIcon);
-                }
+                updateMuteButton(muteButton, soundIcon);
             }
         });
 
@@ -384,9 +407,109 @@ public class GameWindow {
         controlPanel.add(volumeScrollBar, BorderLayout.CENTER);
         controlPanel.add(buttonPanel, BorderLayout.EAST);
 
-        panel.add(controlPanel, BorderLayout.SOUTH);
+        // Adding SFX volume controls
+        JLabel sfxVolumeLabel = new JLabel("SFX Volume: " + currentSfxVolume); // Displaying SFX volume label
+        sfxVolumeLabel.setHorizontalAlignment(JLabel.CENTER);
+        sfxVolumeLabel.setForeground(Color.WHITE);
+
+        // SFX Control scroll bar
+        JScrollBar sfxVolumeScrollBar = new JScrollBar(JScrollBar.HORIZONTAL, currentSfxVolume, 10, 0, 110);
+        sfxVolumeScrollBar.setBackground(MAIN_BACKGROUND_COLOR);
+        sfxVolumeScrollBar.setForeground(Color.WHITE);
+
+        JButton sfxMuteButton = new JButton(soundIcon); // Mute button for SFX
+        sfxMuteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                toggleSfxMute();
+                updateSfxMuteButton(sfxMuteButton, soundIcon);
+            }
+        });
+
+        sfxVolumeScrollBar.addAdjustmentListener(new AdjustmentListener() {
+            @Override
+            public void adjustmentValueChanged(AdjustmentEvent e) {
+                int sfxVolume = e.getValue();
+                updateSfxVolumeControls(sfxVolume, sfxVolumeLabel,sfxMuteButton);
+                // You can perform additional actions for SFX volume if needed
+            }
+        });
+
+        JPanel sfxButtonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        sfxButtonPanel.add(sfxMuteButton);
+
+        JPanel sfxControlPanel = new JPanel(new BorderLayout());
+        sfxControlPanel.add(sfxVolumeScrollBar, BorderLayout.CENTER);
+        sfxControlPanel.add(sfxVolumeLabel, BorderLayout.NORTH);
+        sfxControlPanel.add(sfxButtonPanel, BorderLayout.EAST);
+
+        // Adding components to the main panel
+        panel.add(currentVolumeLabel, BorderLayout.NORTH);
+        panel.add(controlPanel, BorderLayout.CENTER);
+        panel.add(sfxControlPanel, BorderLayout.SOUTH);
 
         return panel;
+    }
+
+    // Helper method to update volume controls
+    private static void updateVolumeControls(int volume, JLabel volumeLabel, JButton muteButton) {
+        volumeLabel.setText("Current Volume: " + volume);
+        setCurrentVolumeOption("2");
+        setCurrentVolume(volume);
+        System.out.println(getCurrentVolume());
+        GameController.getInstance().runCommand("volume");
+
+        if (isMuted()) {
+            muteButton.setIcon(resizeImageIcon(new ImageIcon("data/volume.png")));
+            toggleMute();
+        }
+    }
+
+    private static void updateSfxVolumeControls(int volume, JLabel volumeLabel, JButton muteButton) {
+        volumeLabel.setText("Current SFX Volume: " + volume);
+        setCurrentVolumeOption("6"); // will be determined
+        setCurrentSfxVolume(volume);
+        System.out.println(getCurrentVolume());
+        GameController.getInstance().runCommand("volume");
+
+        if (isSfxMuted()) {
+            muteButton.setIcon(resizeImageIcon(new ImageIcon("data/volume.png")));
+            toggleSfxMute();
+        }
+    }
+
+    // Helper method to update mute button
+    private static void updateMuteButton(JButton muteButton, ImageIcon soundIcon) {
+        if (isMuted()) {
+            System.out.println("muted");
+            previousVolume = getCurrentVolume();
+            setCurrentVolume(0);
+            setCurrentVolumeOption("2");
+            GameController.getInstance().runCommand("volume");
+            muteButton.setIcon(resizeImageIcon(new ImageIcon("data/mute.png")));
+        } else {
+            setCurrentVolume(previousVolume);
+            setCurrentVolumeOption("2");
+            GameController.getInstance().runCommand("volume");
+            muteButton.setIcon(soundIcon);
+        }
+    }
+
+    private static void updateSfxMuteButton(JButton muteButton, ImageIcon soundIcon) {
+        if (isSfxMuted()) {
+            System.out.println("muting sfx");
+            System.out.println("muted");
+            setPreviousSfxVolume(getCurrentSfxVolume());
+            setCurrentSfxVolume(0);
+            setCurrentVolumeOption("5");
+            GameController.getInstance().runCommand("volume");
+            muteButton.setIcon(resizeImageIcon(new ImageIcon("data/mute.png")));
+        } else {
+            setCurrentSfxVolume(getPreviousSfxVolume());
+            setCurrentVolumeOption("4");
+            GameController.getInstance().runCommand("volume");
+            muteButton.setIcon(soundIcon);
+        }
     }
 
     private static ImageIcon resizeImageIcon(ImageIcon originalIcon) {
