@@ -456,8 +456,8 @@ public class GameWindow {
     
     public static JButton createMapButton(Dimension size) {
         JButton btn = new JButton();
-        ImageIcon test = new ImageIcon("data/icons/test.PNG");
-        btn.setIcon(test);
+        /*ImageIcon test = new ImageIcon("data/icons/test.PNG");
+        btn.setIcon(test);*/
         btn.setPreferredSize(size);
         btn.setContentAreaFilled(false);
         btn.setBorderPainted(false);
@@ -465,7 +465,7 @@ public class GameWindow {
         btn.addActionListener((evt) -> {
             String room = evt.getActionCommand();
             System.out.printf("Printing room value: %s\n", room);
-            //DO something
+            GameController.getInstance().runCommand(String.format("go %s", room));
         });
         
         return btn;

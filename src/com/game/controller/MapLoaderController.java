@@ -78,90 +78,19 @@ class MapLoaderController {
         for(String layerKey : getGameMap().keySet()){
             // iterate through the gameMap for each level of the map (3 total levels)
             for(String levelKey : getGameMap().get(layerKey).keySet()){
-                // int variable that keeps track of the current line of the map layout
-                // it's used to print each line in each layer
-                int countLine = 0;
                 // iterate through the gameMap for each room and display them in order based on
                 //      the layer and level of the map
                 for(String roomKey : getGameMap().get(layerKey).get(levelKey).keySet()) {
                     // if the layer is 1 and the room is the player's current location or the room is blank
                     if (layerKey.equals("1") && (playerHistory.contains(roomKey) || roomKey.equals("blank"))) {
-                        // iterate through the gameMap for each line of the room and print them in order
-                        for(String line : getGameMap().get(layerKey).get(levelKey).get(roomKey).values()){
-                            // player location is equal to the room key print it out in green to indicate
-                            //      that the player is in this room
-                            if(playerLocation.equals(roomKey)){
-                                if(!MainController.PLAY_IN_GUI) {
-                                    // turn on the green font and turn it off with RESET
-                                    getMapLayout1().get(countLine).append(AnsiTextColor.GREEN.getColor());
-                                    getMapLayout1().get(countLine).append(line);
-                                    getMapLayout1().get(countLine).append(AnsiTextColor.RESET.getColor());
-                                } else {
-                                    if(countLine != 5) {
-                                        getMapLayout1().get(countLine).append(line);
-                                    } else {
-                                        getMapLayout1().get(countLine).append("| (Current Location)|");
-                                    }
-                                }
-                            } else {
-                                // if the player is not in the room print it out in standard color (white)
-                                getMapLayout1().get(countLine).append(line);
-                            }
-                            // increment the line count to keep track of which lines are being rendered
-                            countLine ++;
-                        }
+                        setButtonRoomProperties(layerKey, levelKey, roomKey);
                         // if the layer is 2 and the room is the player's current location or the room is blank
                     } else if (layerKey.equals("2") && (playerHistory.contains(roomKey) || roomKey.equals("blank"))) {
-                        // iterate through the gameMap for each line of the room and print them in order
-                        for(String line : getGameMap().get(layerKey).get(levelKey).get(roomKey).values()){
-                            // if the player location is equal to the room key print it out in green to indicate
-                            //      that the player is in this room
-                            if(playerLocation.equals(roomKey)){
-                                if(!MainController.PLAY_IN_GUI) {
-                                    // turn on the green font and turn it off with RESET
-                                    getMapLayout2().get(countLine).append(AnsiTextColor.GREEN.getColor());
-                                    getMapLayout2().get(countLine).append(line);
-                                    getMapLayout2().get(countLine).append(AnsiTextColor.RESET.getColor());
-                                } else {
-                                    if(countLine != 5) {
-                                        getMapLayout2().get(countLine).append(line);
-                                    } else {
-                                        getMapLayout2().get(countLine).append("| (Current Location)|");
-                                    }
-                                }
-                            } else {
-                                // if the player is not in the room print it out in standard color (white)
-                                getMapLayout2().get(countLine).append(line);
-                            }
-                            // increment the line count to keep track of which lines are being rendered
-                            countLine ++;
-                        }
+                        setButtonRoomProperties(layerKey, levelKey, roomKey);
                         // if the layer is 3 and the room is the player's current location or the room is blank
                     } else if (layerKey.equals("3") && (playerHistory.contains(roomKey) || roomKey.equals("blank"))) {
                         // iterate through the gameMap for each line of the room and print them in order
-                        for(String line : getGameMap().get(layerKey).get(levelKey).get(roomKey).values()){
-                            // if the player location is equal to the room key print it out in green to indicate
-                            //      that the player is in this room
-                            if(playerLocation.equals(roomKey)){
-                                if(!MainController.PLAY_IN_GUI) {
-                                    // turn on the green font and turn it off with RESET
-                                    getMapLayout3().get(countLine).append(AnsiTextColor.GREEN.getColor());
-                                    getMapLayout3().get(countLine).append(line);
-                                    getMapLayout3().get(countLine).append(AnsiTextColor.RESET.getColor());
-                                } else {
-                                    if(countLine != 5) {
-                                        getMapLayout3().get(countLine).append(line);
-                                    } else {
-                                        getMapLayout3().get(countLine).append("| (Current Location)|");
-                                    }
-                                }
-                            } else {
-                                // if the player is not in the room print it out in standard color (white)
-                                getMapLayout3().get(countLine).append(line);
-                            }
-                            // increment the line count to keep track of which lines are being rendered
-                            countLine ++;
-                        }
+                        setButtonRoomProperties(layerKey, levelKey, roomKey);
                     }
                 }
             }
@@ -223,12 +152,20 @@ class MapLoaderController {
                 }
             }
         }
+    }
+    
+    private void setButtonRoomProperties(String layerKey, String levelKey, String roomName) {
+        int row = Integer.parseInt(layerKey) - 1;
+        int column = Integer.parseInt(levelKey) - 1;
         
-        // TODO: Temp to test dynamically setting btn value
-        int row = 1;
-        int column = 1;
         JButton btn = (JButton)GameWindow.mapButtonPanel.getComponent(columns * row + column);
-        btn.setActionCommand("Should be 1,1");
+        
+        if("blank".equals(roomName)) {
+            btn.setEnabled(false);
+        } else {
+            btn.setActionCommand(roomName);
+            btn.setIcon(roomIcons.get(roomName));
+        }
     }
 
     // GETTERS AND SETTERS
