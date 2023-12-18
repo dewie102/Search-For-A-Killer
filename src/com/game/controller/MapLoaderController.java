@@ -239,6 +239,8 @@ class MapLoaderController {
                 }
             }
         }
+        
+        toggleCurrentLocationIcon(playerLocation);
     }
     
     private void loadIcons() {
@@ -257,10 +259,7 @@ class MapLoaderController {
     }
     
     private void setButtonRoomProperties(String layerKey, String levelKey, String roomName) {
-        int row = Integer.parseInt(layerKey) - 1;
-        int column = Integer.parseInt(levelKey) - 1;
-        
-        JButton btn = (JButton)GameWindow.mapButtonPanel.getComponent(columns * row + column);
+        JButton btn = getButton(layerKey, levelKey);
         
         if("blank".equals(roomName)) {
             btn.setEnabled(false);
@@ -272,14 +271,39 @@ class MapLoaderController {
     }
     
     private void enableButton(String layerKey, String levelKey, String roomName, boolean enable) {
-        int row = Integer.parseInt(layerKey) - 1;
-        int column = Integer.parseInt(levelKey) - 1;
-        
-        JButton btn = (JButton)GameWindow.mapButtonPanel.getComponent(columns * row + column);
+        JButton btn = getButton(layerKey, levelKey);
     
         btn.setIcon(roomIcons.get(roomName));
         btn.setEnabled(enable);
         btn.setVisible(enable);
+    }
+    
+    private void toggleCurrentLocationIcon(String playerLocation) {
+        // iterate through the gameMap variable for each layer of the map (total of 3)
+        for(String layerKey : getGameMap().keySet()){
+            // iterate through the gameMap for each level of the map (3 total levels)
+            for(String levelKey : getGameMap().get(layerKey).keySet()) {
+                for(String roomName : getGameMap().get(layerKey).get(levelKey).keySet()) {
+                    JButton btn = getButton(layerKey, levelKey);
+                    JLabel icon = (JLabel)btn.getComponent(0);
+                    if(roomName.equals(playerLocation)) {
+                        icon.setVisible(true);
+                        ImageIcon playerIcon = new ImageIcon("data/logo.png");
+                        playerIcon = GameWindow.resizeImageIcon(playerIcon, 32, 32);
+                        icon.setIcon(playerIcon);
+                    } else {
+                        icon.setVisible(false);
+                    }
+                }
+            }
+        }
+    }
+    
+    private JButton getButton(String layerKey, String levelKey) {
+        int row = Integer.parseInt(layerKey) - 1;
+        int column = Integer.parseInt(levelKey) - 1;
+        
+        return (JButton)GameWindow.mapButtonPanel.getComponent(columns * row + column);
     }
 
     // GETTERS AND SETTERS

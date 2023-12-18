@@ -313,7 +313,7 @@ public class GameWindow {
             }
         });
 
-        ImageIcon soundIcon = resizeImageIcon(new ImageIcon("data/volume.png"));
+        ImageIcon soundIcon = resizeImageIcon(new ImageIcon("data/volume.png"), 10, 10);
         JButton muteButton = new JButton(soundIcon);
         muteButton.addActionListener(new ActionListener() {
             @Override
@@ -325,7 +325,7 @@ public class GameWindow {
                     System.out.println("muted");
                     GameController.getInstance().runCommand("volume");
                     setCurrentVolumeOption("0");
-                    muteButton.setIcon(resizeImageIcon(new ImageIcon("data/mute.png")));
+                    muteButton.setIcon(resizeImageIcon(new ImageIcon("data/mute.png"), 10, 10));
                 } else {
                     GameController.getInstance().runCommand("volume");
                     setCurrentVolumeOption("1");
@@ -386,9 +386,9 @@ public class GameWindow {
         return mapPanel;
     }
 
-    private static ImageIcon resizeImageIcon(ImageIcon originalIcon) {
+    public static ImageIcon resizeImageIcon(ImageIcon originalIcon, int width, int height) {
         Image image = originalIcon.getImage();
-        Image scaledImage = image.getScaledInstance(10, 10, Image.SCALE_SMOOTH);
+        Image scaledImage = image.getScaledInstance(width, height, Image.SCALE_SMOOTH);
         return new ImageIcon(scaledImage);
     }
 
@@ -461,6 +461,31 @@ public class GameWindow {
         btn.setPreferredSize(size);
         btn.setContentAreaFilled(false);
         btn.setBorderPainted(false);
+        
+        btn.setLayout(new BorderLayout());
+        
+        /*JTextArea currentLocationLabel = new JTextArea();
+        currentLocationLabel.setText("(Current Location)");
+        currentLocationLabel.setFont(new Font("Courier New", Font.PLAIN, 10));
+        currentLocationLabel.setForeground(Color.white);
+        currentLocationLabel.setBackground(MAIN_BACKGROUND_COLOR);
+        currentLocationLabel.setEnabled(false);
+        currentLocationLabel.setEditable(false);
+        currentLocationLabel.setOpaque(false);
+        btn.add(currentLocationLabel, BorderLayout.NORTH);*/
+        
+        JLabel playerLabel = new JLabel();
+        ImageIcon playerIcon = new ImageIcon("data/logo.png");
+        playerIcon = resizeImageIcon(playerIcon, 32, 32);
+        playerLabel.setIcon(playerIcon);
+        playerLabel.setVisible(false);
+        
+        btn.add(playerLabel, BorderLayout.SOUTH);
+        
+        /*btn.setText("(Current Location)");
+        btn.setForeground(Color.green);
+        btn.setFont(new Font("Courier New", Font.PLAIN, 10));
+        btn.setIconTextGap(-140);*/
         
         btn.addActionListener((evt) -> {
             String room = evt.getActionCommand();
