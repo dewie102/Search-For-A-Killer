@@ -56,11 +56,11 @@ public class TitleWindow extends JFrame {
 
         logoTextPanel.add(developmentTitleTextArea, BorderLayout.SOUTH);
 
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 20)); // Adjust the horizontal gap (20 in this case)
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 20));
         buttonPanel.setBackground(new Color(34, 34, 34));
 
-// Use a custom font for the buttons
-        Font buttonFont = new Font("Impact", Font.PLAIN, 20); // Adjust the font size to make it larger
+
+        Font buttonFont = new Font("Impact", Font.PLAIN, 20);
 
         JButton playGameButton = new JButton("Play Game");
         playGameButton.setFont(buttonFont);
@@ -73,7 +73,7 @@ public class TitleWindow extends JFrame {
         quitButton.setBackground(new Color(207, 74, 74));
         quitButton.setForeground(Color.WHITE);
 
-        Dimension buttonSize = new Dimension(150, 40); // Adjust the width and height as needed
+        Dimension buttonSize = new Dimension(150, 40);
         playGameButton.setPreferredSize(buttonSize);
         quitButton.setPreferredSize(buttonSize);
 
