@@ -22,6 +22,7 @@ public class TitleWindow extends JFrame {
         ImageIcon image = new ImageIcon("data/logo.png");
         setIconImage(image.getImage());
 
+        // main panel, consists of gameBanner, logoTextPane and buttonPanel
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
         panel.setBackground(new Color(34, 34, 34));
@@ -31,11 +32,13 @@ public class TitleWindow extends JFrame {
         ge.registerFont(customFont);
         customFont = customFont.deriveFont(Font.PLAIN, 36);
 
+        // game banner
         JLabel gameBanner = new JLabel("Search For A Killer");
         gameBanner.setFont(customFont);
         gameBanner.setForeground(Color.WHITE);
         gameBanner.setHorizontalAlignment(JLabel.CENTER);
 
+        // logoTextPane
         ImageIcon logoIcon = new ImageIcon("data/logo.png");
         JLabel logoLabel = new JLabel(logoIcon);
         logoLabel.setHorizontalAlignment(JLabel.CENTER);
@@ -56,9 +59,9 @@ public class TitleWindow extends JFrame {
 
         logoTextPanel.add(developmentTitleTextArea, BorderLayout.SOUTH);
 
+        // button panel
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 20));
         buttonPanel.setBackground(new Color(34, 34, 34));
-
 
         Font buttonFont = new Font("Impact", Font.PLAIN, 20);
 
@@ -116,6 +119,7 @@ public class TitleWindow extends JFrame {
         loadJsonData();
     }
 
+    // load developer info
     private void loadJsonData() {
         GsonParserController developmentPage = new GsonParserController("data/DevelopmentTitle.json");
         developmentPage.printJson(developmentTitleTextArea);
