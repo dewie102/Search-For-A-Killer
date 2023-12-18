@@ -17,18 +17,20 @@ import java.awt.event.*;
 public class GameWindow {
     public static final int FRAME_WIDTH = 1400;
     public static final int FRAME_HEIGHT = 800;
+    private static final int ACTION_PANEL_HEIGHT = 100;
     public static final Color MAIN_BACKGROUND_COLOR = new Color(50, 50, 50);
+    public static final int PANEL_SPACE = 10;
 
     public static JTextPane gameTextArea;
     public static JTextArea roomInformationArea;
     public static JTextArea playerInformationArea;
-    public static JTextArea mapArea;
     public static JTextField commandTextField;
     public static JTextArea helpTextArea;
     public static JTextArea talkTextArea;
     public static JPanel gameTextPanel;
     public static JPanel talkButtonPanel;
     public static JPanel mainTalkPanel;
+    private static JPanel gameBannerPanel;
     private static int currentVolume = 25;
     private static int previousVolume = 25;
     private static int currentSfxVolume = 25;
@@ -55,7 +57,7 @@ public class GameWindow {
         frame.setResizable(false);
 
         // 1. Game Banner Panel
-        JPanel gameBannerPanel = createBannerPanel();
+        gameBannerPanel = createBannerPanel();
         frame.add(gameBannerPanel, BorderLayout.NORTH);
 
         // 2. Main Panel, consist of game text, player/room info and map panels
@@ -76,7 +78,9 @@ public class GameWindow {
         gameTextArea = createTextPane();
         gameTextPanel = createTextPanel(gameTextArea);
         gameTextPanel.setVisible(true);
-        gameTextPanel.setPreferredSize(new Dimension(0, (int) (FRAME_HEIGHT/2.2)));
+        gameTextPanel.setMinimumSize(new Dimension(gameTextAreaWidth, (int) (FRAME_HEIGHT/2.2)));
+        gameTextPanel.setMaximumSize(new Dimension(gameTextAreaWidth, (int) (FRAME_HEIGHT/2.2)));
+        gameTextPanel.setPreferredSize(new Dimension(gameTextAreaWidth, (int) (FRAME_HEIGHT/2.2)));
         containerPanel.add(gameTextPanel);
         mainPanel.add(gameTextPanel, gbcMain);
 
@@ -113,74 +117,17 @@ public class GameWindow {
         gbcMain.weightx = 0.0; // use gameTextAreaWidth as it is
         gbcMain.weighty = 1.0;
         mainPanel.add(containerPanel, gbcMain);
-
-        // This is the main map text area, where the text is displayed
-        mapArea = createTextArea();
-        // "Courier New" is a monospaced font, used to keep the map from deforming
-        mapArea.setFont(new Font("Courier New", Font.PLAIN, 12));
-        JPanel mapPanel = createTextPanel(mapArea);
-
-        /*// This is the panel for the map buttons
-        mapButtonPanel = new JPanel(new GridBagLayout());
-        mapButtonPanel.setOpaque(false);
-        mapButtonPanel.setBackground(new Color(0, 0, 0, 0));
-        //mapButtonPanel.setBackground(Color.red);
-
-        GridBagConstraints mapConstraints = new GridBagConstraints();
-        mapConstraints.fill = GridBagConstraints.HORIZONTAL;
-
-        JButton testBtn1 = new JButton("1");
-        ImageIcon test = new ImageIcon("data/test.PNG");
-        test = new ImageIcon(test.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH));
-        testBtn1.setIcon(test);
-        testBtn1.setPreferredSize(new Dimension(200, 200));
-        testBtn1.setOpaque(false);
-        testBtn1.setContentAreaFilled(false); // Maybe just this one?
-        testBtn1.setBorderPainted(false);
-        mapConstraints.gridx = 0;
-        mapConstraints.gridy = 0;
-        mapConstraints.gridwidth = 1;
-        mapConstraints.gridheight = 1;
-        mapButtonPanel.add(testBtn1, mapConstraints);
-
-        JButton testBtn2 = new JButton("2");
-        //testBtn.setSize(200, 200);
-        mapConstraints.gridx = 1;
-        mapConstraints.gridy = 0;
-        mapButtonPanel.add(testBtn2, mapConstraints);
-
-        JButton testBtn3 = new JButton("3");
-        //testBtn.setSize(200, 200);
-        mapConstraints.gridx = 2;
-        mapConstraints.gridy = 0;
-        mapButtonPanel.add(testBtn3, mapConstraints);
-
-        mapButtonPanel.setPreferredSize(new Dimension(60, 60));
-
-        //mapPanel.add(mapButtonPanel);*/
-
+    
+        JPanel mapPanel = createMapPanel();
+    
         gbcMain.gridx = 1;
-        gbcMain.weightx = 0.5;
-        gbcMain.weighty = 1.0;
+        gbcMain.gridwidth = 1;
         gbcMain.gridheight = 2;
+        gbcMain.weightx = 1;
+        gbcMain.weighty = 1;
+        gbcMain.fill = GridBagConstraints.BOTH;
         mainPanel.add(mapPanel, gbcMain);
-
-
-
-        // Add space around the panelsmapArea = createTextArea();
-        //        mapArea.setFont(new Font("Courier New", Font.PLAIN, 12));
-        //        JPanel mapPanel = createTextPanel(mapArea);
-        //        gbcMain.gridx = 1;
-        //        gbcMain.weightx = 0.5;
-        //        gbcMain.weighty = 1.0;
-        //        gbcMain.gridheight = 2;
-        //        mainPanel.add(mapPanel, gbcMain);
-        //
-        //        // Add space around the panels
-        //        int panelSpace = 10;
-        //        gameTextPanel.setBorder(BorderFactory.createEmptyBorder(panelSpace, panelSpace, panelSpace, panelSpace));
-        //        informationPanel.setBorder(BorderFactory.createEmptyBorder(panelSpace, panelSpace, panelSpace, panelSpace));
-        //        mapPanel.setBorder(BorderFactory.createEmptyBorder(panelSpace, panelSpace, panelSpace, panelSpace));mappane;
+        
         int panelSpace = 10;
         gameTextPanel.setBorder(BorderFactory.createEmptyBorder(panelSpace, panelSpace, panelSpace, panelSpace));
         informationPanel.setBorder(BorderFactory.createEmptyBorder(panelSpace, panelSpace, panelSpace, panelSpace));
@@ -191,7 +138,7 @@ public class GameWindow {
         // Action Panel, consist of command input, volume control and help/quit buttons
         JPanel actionPanel = new JPanel(new GridBagLayout());
         actionPanel.setBackground(MAIN_BACKGROUND_COLOR);
-        actionPanel.setPreferredSize(new Dimension(FRAME_WIDTH, 100));
+        actionPanel.setPreferredSize(new Dimension(FRAME_WIDTH, ACTION_PANEL_HEIGHT));
 
         GridBagConstraints gbcAction = new GridBagConstraints();
         gbcAction.fill = GridBagConstraints.BOTH;
@@ -242,7 +189,6 @@ public class GameWindow {
         gameTextAreaPrintln("Welcome to the game!");
         roomInformationAreaPrintln();
         playerInformationAreaPrintln();
-        mapAreaPrintln();
 
         // Add ActionListener for the Help button
         helpButton.addActionListener(new ActionListener() {
@@ -319,13 +265,13 @@ public class GameWindow {
         panel.add(label);
         return panel;
     }
-
+    
     private static JPanel adjustSoundPanel() {
         // main panel
         JPanel mainPanel = new JPanel(new GridLayout(2, 1));
         mainPanel.setBackground(MAIN_BACKGROUND_COLOR);
         mainPanel.setOpaque(true);
-
+        
         // Music volume panel
         JPanel volumePanel = new JPanel(new GridLayout(2, 1));
         volumePanel.setBackground(MAIN_BACKGROUND_COLOR);
@@ -337,13 +283,13 @@ public class GameWindow {
         JLabel currentVolumeLabel = new JLabel("Volume: " + getCurrentVolume());
         currentVolumeLabel.setHorizontalAlignment(JLabel.CENTER);
         currentVolumeLabel.setForeground(Color.WHITE);
-
+        
         JScrollBar volumeScrollBar = new JScrollBar(JScrollBar.HORIZONTAL, getCurrentVolume(), 10, 0, 110);
         volumeScrollBar.setBackground(MAIN_BACKGROUND_COLOR);
         volumeScrollBar.setForeground(Color.WHITE);
         volumeScrollBar.setPreferredSize(new Dimension(5, 5));
-
-        ImageIcon soundIcon = resizeImageIcon(new ImageIcon("data/volume.png"));
+        
+        ImageIcon soundIcon = resizeImageIcon(new ImageIcon("data/volume.png"), 10, 10);
         JButton muteButton = new JButton(soundIcon);
         muteButton.setBackground(Color.WHITE);
         muteButton.addActionListener(new ActionListener() {
@@ -353,7 +299,7 @@ public class GameWindow {
                 updateMuteButton(muteButton, soundIcon);
             }
         });
-
+        
         volumeScrollBar.addAdjustmentListener(new AdjustmentListener() {
             @Override
             public void adjustmentValueChanged(AdjustmentEvent e) {
@@ -361,24 +307,24 @@ public class GameWindow {
                 updateVolumeControls(volume, currentVolumeLabel,muteButton);
             }
         });
-
+        
         volumePanel.add(currentVolumeLabel);
         volumePanel.add(createScrollBarAndMuteButtonPanel(volumeScrollBar, muteButton));
-
+        
         // SFX Panel
         JPanel sfxPanel = new JPanel(new GridLayout(2, 1));
         sfxPanel.setBackground(MAIN_BACKGROUND_COLOR);
         sfxPanel.setOpaque(true);
-
+        
         JLabel sfxVolumeLabel = new JLabel("SFX Volume: " + currentSfxVolume);
         sfxVolumeLabel.setHorizontalAlignment(JLabel.CENTER);
         sfxVolumeLabel.setForeground(Color.WHITE);
-
+        
         JScrollBar sfxVolumeScrollBar = new JScrollBar(JScrollBar.HORIZONTAL, currentSfxVolume, 10, 0, 110);
         sfxVolumeScrollBar.setBackground(MAIN_BACKGROUND_COLOR);
         sfxVolumeScrollBar.setForeground(Color.WHITE);
         sfxVolumeScrollBar.setPreferredSize(new Dimension(5, 5));
-
+        
         JButton sfxMuteButton = new JButton(soundIcon);
         sfxMuteButton.setBackground(Color.WHITE);
         sfxMuteButton.addActionListener(new ActionListener() {
@@ -388,7 +334,7 @@ public class GameWindow {
                 updateSfxMuteButton(sfxMuteButton, soundIcon);
             }
         });
-
+        
         sfxVolumeScrollBar.addAdjustmentListener(new AdjustmentListener() {
             @Override
             public void adjustmentValueChanged(AdjustmentEvent e) {
@@ -396,14 +342,14 @@ public class GameWindow {
                 updateSfxVolumeControls(volume, sfxVolumeLabel, sfxMuteButton);
             }
         });
-
+        
         sfxPanel.add(sfxVolumeLabel);
         sfxPanel.add(createScrollBarAndMuteButtonPanel(sfxVolumeScrollBar, sfxMuteButton));
-
+        
         // Adding both panels to the main panel
         mainPanel.add(volumePanel);
         mainPanel.add(sfxPanel);
-
+        
         return mainPanel;
     }
 
@@ -442,7 +388,7 @@ public class GameWindow {
         GameController.getInstance().runCommand("volume");
 
         if (isMuted()) {
-            muteButton.setIcon(resizeImageIcon(new ImageIcon("data/volume.png")));
+            muteButton.setIcon(resizeImageIcon(new ImageIcon("data/volume.png"), 10, 10));
             toggleMute();
         }
     }
@@ -454,7 +400,7 @@ public class GameWindow {
         GameController.getInstance().runCommand("volume");
 
         if (isSfxMuted()) {
-            muteButton.setIcon(resizeImageIcon(new ImageIcon("data/volume.png")));
+            muteButton.setIcon(resizeImageIcon(new ImageIcon("data/volume.png"), 10, 10));
             toggleSfxMute();
         }
     }
@@ -466,7 +412,7 @@ public class GameWindow {
             setCurrentVolume(0);
             setCurrentVolumeOption("2");
             GameController.getInstance().runCommand("volume");
-            muteButton.setIcon(resizeImageIcon(new ImageIcon("data/mute.png")));
+            muteButton.setIcon(resizeImageIcon(new ImageIcon("data/mute.png"), 10, 10));
         } else {
             setCurrentVolume(previousVolume);
             setCurrentVolumeOption("2");
@@ -481,7 +427,7 @@ public class GameWindow {
             setCurrentSfxVolume(0);
             setCurrentVolumeOption("5");
             GameController.getInstance().runCommand("volume");
-            muteButton.setIcon(resizeImageIcon(new ImageIcon("data/mute.png")));
+            muteButton.setIcon(resizeImageIcon(new ImageIcon("data/mute.png"), 10, 10));
         } else {
             setCurrentSfxVolume(getPreviousSfxVolume());
             setCurrentVolumeOption("4");
@@ -489,10 +435,48 @@ public class GameWindow {
             muteButton.setIcon(soundIcon);
         }
     }
+    
+    private static JPanel createMapPanel() {
+        JPanel mapPanel = new JPanel();
+        int mapWidth = (int)(FRAME_WIDTH * 0.4) - (PANEL_SPACE * 2); // 40% of the total size minus the 2 padding spaces
+        int mapHeight = (int)((FRAME_HEIGHT) - (PANEL_SPACE * 4) - (ACTION_PANEL_HEIGHT * 1.5));
+        
+        mapPanel.setMinimumSize(new Dimension(mapWidth, mapHeight));
+        mapPanel.setMaximumSize(new Dimension(mapWidth, mapHeight));
+        mapPanel.setPreferredSize(new Dimension(mapWidth, mapHeight));
+        mapPanel.setBackground(MAIN_BACKGROUND_COLOR);
+    
+        mapButtonPanel = new JPanel(new GridBagLayout());
+        mapButtonPanel.setMinimumSize(new Dimension(mapWidth - (PANEL_SPACE * 2), mapHeight - (PANEL_SPACE * 2)));
+        mapButtonPanel.setMaximumSize(new Dimension(mapWidth - (PANEL_SPACE * 2), mapHeight - (PANEL_SPACE * 2)));
+        mapButtonPanel.setPreferredSize(new Dimension(mapWidth - (PANEL_SPACE * 2), mapHeight - (PANEL_SPACE * 2)));
+        
+        mapButtonPanel.setOpaque(false);
+        
+        GridBagConstraints mapConstraints = new GridBagConstraints();
+        
+        for(int row = 0; row < 3; row++) {
+            for(int column = 0; column < 3; column++) {
+                JButton btn = createMapButton(new Dimension(150, 100));
+                mapConstraints.gridx = column;
+                mapConstraints.gridy = row;
+                mapConstraints.gridwidth = 1;
+                mapConstraints.gridheight = 1;
+                // This adds the btn to the panel
+                mapButtonPanel.add(btn, mapConstraints);
+                btn.setActionCommand("" + row+column);
+            }
+        }
+        
+        mapPanel.add(mapButtonPanel, BorderLayout.CENTER);
+        mapButtonPanel.setBorder(BorderFactory.createLineBorder(Color.lightGray, 2, true));
+        
+        return mapPanel;
+    }
 
-    private static ImageIcon resizeImageIcon(ImageIcon originalIcon) {
+    public static ImageIcon resizeImageIcon(ImageIcon originalIcon, int width, int height) {
         Image image = originalIcon.getImage();
-        Image scaledImage = image.getScaledInstance(10, 10, Image.SCALE_SMOOTH);
+        Image scaledImage = image.getScaledInstance(width, height, Image.SCALE_SMOOTH);
         return new ImageIcon(scaledImage);
     }
 
@@ -586,18 +570,29 @@ public class GameWindow {
 
         return panel;
     }
-
-    public static JButton createMapButton(String roomValue) {
-        JButton button = new JButton();
-        button.setActionCommand(roomValue);
-
-        button.addActionListener((evt) -> {
+    
+    public static JButton createMapButton(Dimension size) {
+        JButton btn = new JButton();
+        btn.setPreferredSize(size);
+        btn.setContentAreaFilled(false);
+        btn.setBorderPainted(false);
+        
+        btn.setLayout(new BorderLayout());
+        
+        JLabel playerLabel = new JLabel();
+        ImageIcon playerIcon = new ImageIcon("data/logo.png");
+        playerIcon = resizeImageIcon(playerIcon, 32, 32);
+        playerLabel.setIcon(playerIcon);
+        playerLabel.setVisible(false);
+        
+        btn.add(playerLabel, BorderLayout.SOUTH);
+        
+        btn.addActionListener((evt) -> {
             String room = evt.getActionCommand();
-            System.out.printf("Printing room value: %s\n", room);
-            //DO something
+            GameController.getInstance().runCommand(String.format("go %s", room));
         });
-
-        return button;
+        
+        return btn;
     }
 
     public static JButton createButtonWithId(String label, int id) {
@@ -717,10 +712,6 @@ public class GameWindow {
 
     private static void playerInformationAreaPrintln() {
         playerInformationArea.append("Player Information Area" + "\n");
-    }
-
-    private static void mapAreaPrintln() {
-        mapArea.append("Map Area" + "\n");
     }
 
     private static void executeCommand(String command) {

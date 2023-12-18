@@ -92,9 +92,9 @@ public class GameController {
         ignoreList = gameText.getIgnoreList();
         
         // TODO: Temporary code to add all rooms to players history
-        for(Room room : rooms.values()) {
+        /*for(Room room : rooms.values()) {
             player.addToPlayerHistory(room.getName());
-        }
+        }*/
         
         if(!MainController.PLAY_IN_GUI) {
             commandView = new CommandConsoleView(List.of(mainText, secondaryText), new ArrayList<>(commandMap.values()), entities, ignoreList);
@@ -108,6 +108,9 @@ public class GameController {
         mainView = new DisplayView(List.of(mainText, secondaryText), GameWindow.gameTextArea);
         roomView = new DisplayView(List.of(roomText), GameWindow.roomInformationArea);
         playerView = new DisplayView(List.of(playerText), GameWindow.playerInformationArea);
+        mapLoaderController.buildUIMap();
+        
+        addPlayerAdjacentRoomToHistory();
     }
 
     // This is only called for terminal run
@@ -195,9 +198,11 @@ public class GameController {
         
         playerView.clearText();
         playerView.show();
+        
+        mapLoaderController.updateMap(player.getCurrentLocation(), player.getPlayerHistory());
         // This handles the map displaying and building
-        mapLoaderController.buildMap(player.getCurrentLocation(), player.getPlayerHistory());
-        mapLoaderController.displayMap(GameWindow.mapArea);
+        //mapLoaderController.buildMap(player.getCurrentLocation(), player.getPlayerHistory());
+        //mapLoaderController.displayMap(GameWindow.mapArea);
     }
 
     private boolean goCommand(Entity target) {
@@ -212,6 +217,10 @@ public class GameController {
                 // add the new room to the player's location history for map rendering
                 if(!player.getPlayerHistory().contains(room.getName())) {
                     player.addToPlayerHistory(room.getName());
+                }
+    
+                if(MainController.PLAY_IN_GUI) {
+                    addPlayerAdjacentRoomToHistory();
                 }
                 //mainText.addAll(getViewText());
                 return true;
@@ -450,6 +459,12 @@ public class GameController {
         result.add(new ConsoleText(gameText.getInfoMessages().get("traversableRooms"), room.getJsonAdjacentRooms()));
         
         return result;
+    }
+    
+    private void addPlayerAdjacentRoomToHistory() {
+        for(Room adjacentRoom : rooms.get(player.getCurrentLocation()).getAdjacentRooms()) {
+            player.addToPlayerHistory(adjacentRoom.getName());
+        }
     }
 
     private boolean reportCommand(Entity target){

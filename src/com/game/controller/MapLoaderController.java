@@ -1,11 +1,13 @@
 package com.game.controller;
 
 import com.game.view.gui.DisplayView;
+import com.game.view.gui.GameWindow;
 import com.game.view.terminal.AnsiTextColor;
 import com.game.view.terminal.ConsoleText;
 import com.game.view.terminal.ConsoleView;
 import com.google.gson.Gson;
 
+import javax.swing.*;
 import javax.swing.text.JTextComponent;
 import java.io.FileReader;
 import java.util.*;
@@ -26,6 +28,11 @@ class MapLoaderController {
     private List<StringBuilder> mapLayout1 = new ArrayList<>();
     private List<StringBuilder> mapLayout2 = new ArrayList<>();
     private List<StringBuilder> mapLayout3 = new ArrayList<>();
+    
+    private final Map<String, ImageIcon> roomIcons = new HashMap<>();
+    
+    private final int rows = 3;
+    private int columns = 0;
 
     // METHODS
     public void loadMap(){
@@ -44,6 +51,9 @@ class MapLoaderController {
         } catch (Exception e) {
             System.out.printf("Error loading the game map: %s", e.getMessage());
         }
+        
+        // Get the number of columns from the recently loaded map, used for later index calculations
+        columns = gameMap.get("1").size();
     }
 
     // build the map layout
@@ -156,6 +166,22 @@ class MapLoaderController {
             }
         }
     }
+    
+    // Should only need to build the map once, we will enable and disable the buttons as necessary
+    public void buildUIMap() {
+        loadIcons();
+        // iterate through the gameMap variable for each layer of the map (total of 3)
+        for(String layerKey : getGameMap().keySet()){
+            // iterate through the gameMap for each level of the map (3 total levels)
+            for(String levelKey : getGameMap().get(layerKey).keySet()){
+                // iterate through the gameMap for each room and display them in order based on
+                //      the layer and level of the map
+                for(String roomKey : getGameMap().get(layerKey).get(levelKey).keySet()) {
+                    setButtonRoomProperties(layerKey, levelKey, roomKey);
+                }
+            }
+        }
+    }
 
     // display the built map layout
     public void displayMap(){
@@ -197,6 +223,87 @@ class MapLoaderController {
         }
         // print the displayView that contains the Map
         displayView.showMap();
+    }
+    
+    public void updateMap(String playerLocation, List<String> playerHistory) {
+        // Take in play location to update player current room status indicator (somehow?)
+    
+        // iterate through the gameMap variable for each layer of the map (total of 3)
+        for(String layerKey : getGameMap().keySet()){
+            // iterate through the gameMap for each level of the map (3 total levels)
+            for(String levelKey : getGameMap().get(layerKey).keySet()) {
+                for(String roomName : getGameMap().get(layerKey).get(levelKey).keySet()) {
+                    if(playerHistory.contains(roomName)) {
+                        enableButton(layerKey, levelKey, roomName, true);
+                    }
+                }
+            }
+        }
+        
+        toggleCurrentLocationIcon(playerLocation);
+    }
+    
+    private void loadIcons() {
+        String path = "data/icons";
+    
+        // iterate through the gameMap variable for each layer of the map (total of 3)
+        for(String layerKey : getGameMap().keySet()){
+            // iterate through the gameMap for each level of the map (3 total levels)
+            for(String levelKey : getGameMap().get(layerKey).keySet()) {
+                for(String roomName : getGameMap().get(layerKey).get(levelKey).keySet()) {
+                    ImageIcon roomIcon = new ImageIcon(String.format("%s/%s.png", path, roomName));
+                    roomIcons.put(roomName, roomIcon);
+                }
+            }
+        }
+    }
+    
+    private void setButtonRoomProperties(String layerKey, String levelKey, String roomName) {
+        JButton btn = getButton(layerKey, levelKey);
+        
+        if("blank".equals(roomName)) {
+            btn.setEnabled(false);
+        } else {
+            btn.setActionCommand(roomName);
+            btn.setEnabled(false);
+            btn.setVisible(false);
+        }
+    }
+    
+    private void enableButton(String layerKey, String levelKey, String roomName, boolean enable) {
+        JButton btn = getButton(layerKey, levelKey);
+    
+        btn.setIcon(roomIcons.get(roomName));
+        btn.setEnabled(enable);
+        btn.setVisible(enable);
+    }
+    
+    private void toggleCurrentLocationIcon(String playerLocation) {
+        // iterate through the gameMap variable for each layer of the map (total of 3)
+        for(String layerKey : getGameMap().keySet()){
+            // iterate through the gameMap for each level of the map (3 total levels)
+            for(String levelKey : getGameMap().get(layerKey).keySet()) {
+                for(String roomName : getGameMap().get(layerKey).get(levelKey).keySet()) {
+                    JButton btn = getButton(layerKey, levelKey);
+                    JLabel icon = (JLabel)btn.getComponent(0);
+                    if(roomName.equals(playerLocation)) {
+                        icon.setVisible(true);
+                        ImageIcon playerIcon = new ImageIcon("data/logo.png");
+                        playerIcon = GameWindow.resizeImageIcon(playerIcon, 32, 32);
+                        icon.setIcon(playerIcon);
+                    } else {
+                        icon.setVisible(false);
+                    }
+                }
+            }
+        }
+    }
+    
+    private JButton getButton(String layerKey, String levelKey) {
+        int row = Integer.parseInt(layerKey) - 1;
+        int column = Integer.parseInt(levelKey) - 1;
+        
+        return (JButton)GameWindow.mapButtonPanel.getComponent(columns * row + column);
     }
 
     // GETTERS AND SETTERS
