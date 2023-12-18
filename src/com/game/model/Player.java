@@ -14,7 +14,7 @@ public class Player extends Character {
     private List<String> playerHistory = new ArrayList<>();
 
     // CONSTRUCTOR
-    public Player(String name, String description, String currentLocation) {
+    public Player(String name, List<String> description, String currentLocation) {
         super(name, description, currentLocation);
         //setCurrentLocation(currentLocation);
     }

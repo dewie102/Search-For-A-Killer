@@ -1,5 +1,8 @@
 package com.game.model;
 
+import com.game.controller.GameController;
+import com.game.controller.MainController;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,7 +11,7 @@ import java.util.List;
  */
 public abstract class Entity {
     private String name;
-    private String description;
+    private List<String> description;
     private Inventory inventory = new Inventory();
     private List<String> jsonInventory = new ArrayList<>();
 
@@ -16,7 +19,7 @@ public abstract class Entity {
         this.inventory = new Inventory();
     }
 
-    public Entity(String name, String description){
+    public Entity(String name, List<String> description){
         this.name = name;
         this.description = description;
     }
@@ -30,10 +33,14 @@ public abstract class Entity {
     }
 
     public String getDescription() {
-        return description;
+        if(description.size() > GameController.getInstance().STORYLINE) {
+            return description.get(GameController.getInstance().STORYLINE);
+        } else {
+            return description.get(0);
+        }
     }
 
-    public void setDescription(String description) {
+    public void setDescription(List<String> description) {
         this.description = description;
     }
 

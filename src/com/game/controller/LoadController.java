@@ -4,6 +4,7 @@ import com.game.controller.io.JsonConversation;
 import com.game.model.*;
 import com.game.model.Character;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.FileReader;
 import java.util.*;
@@ -15,8 +16,10 @@ public class LoadController {
     private static Map<String, Character> characters;
     private static Player player;
     private static Character detective;
+    private static List<Story> stories;
     private static Item murderWeapon;
     private static Character murderer;
+    
     private LoadController(){}
 
     public static void loadAllEntities(){
@@ -25,6 +28,8 @@ public class LoadController {
         characters = loadCharacters();
         player = loadPlayer();
         loadConversations();
+        
+        stories = loadStories();
 
         fixAllHasAs();
     }
@@ -126,6 +131,15 @@ public class LoadController {
         }
         return null;
     }
+    
+    private static List<Story> loadStories() {
+        try (FileReader reader = new FileReader("data/story.json")) {
+            return new Gson().fromJson(reader, new TypeToken<ArrayList<Story>>(){}.getType());
+        } catch (Exception e) {
+            System.out.printf("Error reading the character json file: %s%n", e.getMessage());
+        }
+        return null;
+    }
 
     private static JsonConversation loadConversations(){
         JsonConversation conversations;
@@ -142,6 +156,25 @@ public class LoadController {
             e.printStackTrace();
         }
         return null;
+    }
+    
+    public static int selectRandomStory() {
+        int storyIndex = new Random().nextInt(stories.size());
+        
+        Character character = getCharacters().get(stories.get(storyIndex).getMurderer());
+        Item item = getItems().get(stories.get(storyIndex).getMurderWeapon());
+        
+        if(character != null && character.isSuspect()) {
+            murderer = character;
+        }
+        
+        if(item != null && item.isWeapon()) {
+            murderWeapon = item;
+        }
+    
+        System.out.println(storyIndex);
+        
+        return storyIndex;
     }
 
     public static Map<String, Room> getRooms() {

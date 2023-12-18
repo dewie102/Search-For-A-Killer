@@ -1,7 +1,7 @@
 [
   {
     "name": "Gardener",
-    "description": "A random gardener that works around the house for free. He looks like he is in a hurry.",
+    "description": ["A random gardener that works around the house for free. He looks like he is in a hurry."],
     "currentLocation": "Backyard",
     "jsonInventory": ["Glove"],
     "clue": "I don't want to go pointing fingers now, but if I find anything I'll let you know.",
@@ -9,7 +9,7 @@
   },
     {
     "name": "Nanny",
-    "description": "The live-in nanny that just submitted her two week notice a week ago. She looks distraught.",
+    "description": ["The live-in nanny that just submitted her two week notice a week ago. She looks distraught."],
     "currentLocation": "Kitchen",
     "jsonInventory": ["Pen"],
     "clue": "I'm so sad! The poor children, without their father! Who would do such a thing?? *sniffle* I have no idea!",
@@ -17,7 +17,7 @@
   },
   {
     "name": "Butler",
-    "description": "The family butler that has been in the family for several years. He looks frazzled.",
+    "description": ["The family butler that has been in the family for several years. He looks frazzled."],
     "currentLocation": "Office",
     "jsonInventory": ["Pen"],
     "clue": "It - it wasn't me!! That's all I know, not me at all! Certainly not!",
@@ -26,7 +26,7 @@
   },
   {
     "name": "Sergeant",
-    "description": "The police sergeant in charge of the case and your training.",
+    "description": ["The police sergeant in charge of the case and your training."],
     "currentLocation": "Backyard",
     "jsonInventory": [],
     "clue": "The murder happened last night. I think the culprit is \nobvious, but I want to see your investigative chops. It should be \nan easy first case for you.",

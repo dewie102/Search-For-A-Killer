@@ -18,8 +18,9 @@ import com.game.model.Character;
 import java.util.*;
 
 public class GameController {
-    //private CommandConsoleView consoleView;
-    //private CommandDisplayView displayView;
+    // This is used to select the storyline to play
+    public int STORYLINE = 0;
+    
     private View commandView;
     
     // DisplayViews available to the command and other functions
@@ -101,6 +102,8 @@ public class GameController {
         } else {
             commandView = new CommandDisplayView(null, null, new ArrayList<>(commandMap.values()), entities, ignoreList);
         }
+    
+        STORYLINE = LoadController.selectRandomStory();
     }
     
     public void initializeGUIComponents() {
@@ -270,7 +273,9 @@ public class GameController {
             }
             //print adjacent rooms
             secondaryText.add(new ConsoleText(gameText.getInfoMessages().get("traversableRooms"), room.getJsonAdjacentRooms()));
-            secondaryText.add(new ConsoleText(gameText.getGeneralMessages().get("divider"), AnsiTextColor.BLUE));
+            if(!MainController.PLAY_IN_GUI) {
+                secondaryText.add(new ConsoleText(gameText.getGeneralMessages().get("divider"), AnsiTextColor.BLUE));
+            }
             return true;
         }
         return false;
@@ -285,7 +290,9 @@ public class GameController {
             if(!item.getInventory().getItems().isEmpty()) {
                 secondaryText.add(new ConsoleText(String.format(gameText.getInfoMessages().get("observeItem"),item.getName(),item.getInventory())));
             }
-            secondaryText.add(new ConsoleText(gameText.getGeneralMessages().get("divider"), AnsiTextColor.BLUE));
+            if(!MainController.PLAY_IN_GUI) {
+                secondaryText.add(new ConsoleText(gameText.getGeneralMessages().get("divider"), AnsiTextColor.BLUE));
+            }
             return true;
         }
         return false;
@@ -294,7 +301,9 @@ public class GameController {
     private boolean lookCharacter(Character character) {
         if(player.getCurrentLocation().equals(character.getCurrentLocation())){
             secondaryText.add(new ConsoleText(character.getDescription()));
-            secondaryText.add(new ConsoleText(gameText.getGeneralMessages().get("divider"), AnsiTextColor.BLUE));
+            if(!MainController.PLAY_IN_GUI) {
+                secondaryText.add(new ConsoleText(gameText.getGeneralMessages().get("divider"), AnsiTextColor.BLUE));
+            }
             return true;
         }
         return false;
@@ -481,7 +490,6 @@ public class GameController {
         if(reportedMurder == null || reportedMurderWeapon == null)
             return GameResult.UNDEFINED;
         else{
-            // TODO: clean up and check return statement
             return (Objects.equals(reportedMurder.getName(), LoadController.getMurderer().getName()) && Objects.equals(reportedMurderWeapon.getName(), LoadController.getMurderWeapon().getName()))
                     ? GameResult.WIN : GameResult.LOSS;
         }

@@ -10,7 +10,7 @@ public class MainController {
     public static boolean PLAY_IN_GUI = true;
     
     public static void main(String[] args) throws  IOException {
-
+        
         AudioController.loadMusic();
         AudioController.loopMusic();
         AudioController.setMusicVol(-43.5f);

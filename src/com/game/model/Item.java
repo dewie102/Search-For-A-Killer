@@ -1,12 +1,14 @@
 package com.game.model;
 
+import java.util.List;
+
 public class Item extends Entity{
     private boolean pickUpable = false;
     private boolean isMurderWeapon;
     private boolean isWeapon;
 
     public Item(){}
-    public Item(String name, String decription, boolean canPickUp){
+    public Item(String name, List<String> decription, boolean canPickUp){
         super(name, decription);
         setPickUpable(canPickUp);
     }

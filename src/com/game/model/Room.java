@@ -13,7 +13,7 @@ public class Room extends Entity{
     private List<String> jsonCharactersInRoom = new ArrayList<>();
     private List<Character> charactersInRoom;
 
-    public Room(String name, String description){
+    public Room(String name, List<String> description){
         super(name, description);
     }
 
