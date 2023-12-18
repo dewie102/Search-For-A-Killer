@@ -9,6 +9,8 @@ import com.game.controller.GsonParserController;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.text.DefaultCaret;
 import javax.swing.text.JTextComponent;
 import java.awt.*;
@@ -33,12 +35,13 @@ public class GameWindow {
     private static JPanel gameBannerPanel;
     private static int currentVolume = 25;
     private static int previousVolume = 25;
-    private static int currentSfxVolume = 25;
-    private static int previousSfxVolume = 25;
+    private static int currentSfxVolume = 50;
+    private static int previousSfxVolume = 50;
     private static boolean isMuted = false;
     private static boolean isSfxMuted = false;
     private static String currentVolumeOption = "1";
     public static JPanel mapButtonPanel;
+    private static boolean initialCommandTextCleared = false;
 
     static void createAndShowGUI() {
         FlatLightLaf.setup();
@@ -205,6 +208,13 @@ public class GameWindow {
                 // Close the current window and terminate the process
                 frame.dispose();
                 System.exit(0);
+            }
+        });
+
+        // focus command text field when window loads
+        frame.addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent windowEvent) {
+                commandTextField.requestFocusInWindow();
             }
         });
         
@@ -489,7 +499,7 @@ public class GameWindow {
         commandTextField.setForeground(Color.WHITE);
 
         // placeholder text
-        String placeholder = "Enter Command and press enter";
+        String placeholder = "Press Enter to Continue";
         commandTextField.setText(placeholder);
         commandTextField.setFont(new Font("Arial", Font.BOLD, 16));
 
@@ -501,18 +511,31 @@ public class GameWindow {
         // compound border to maintain main border for text field component
         commandTextField.setBorder(compoundBorder);
 
+        // command text field focus handling
         commandTextField.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
-                if (commandTextField.getText().equals(placeholder)) {
-                    commandTextField.setText("");
+                if (!initialCommandTextCleared && commandTextField.getText().equals(placeholder) && !commandTextField.hasFocus()) {
+                    commandTextField.setText(placeholder);
+                    initialCommandTextCleared = true;
                 }
             }
 
             @Override
             public void focusLost(FocusEvent e) {
-                if (commandTextField.getText().isEmpty()) {
-                    commandTextField.setText(placeholder);
+
+            }
+
+        });
+
+        // listen for enter and clear text only if clicked for the first time
+        commandTextField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER && !initialCommandTextCleared) {
+                    // Clear the text when Initial Enter is pressed
+                    commandTextField.setText("");
+                    initialCommandTextCleared = true;
                 }
             }
         });

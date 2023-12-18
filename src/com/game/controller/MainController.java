@@ -13,7 +13,8 @@ public class MainController {
 
         AudioController.loadMusic();
         AudioController.loopMusic();
-        AudioController.setMusicVol(-58.49485f);
+        AudioController.setMusicVol(-43.5f);
+        AudioController.setSfxVol(-27.0f);
         
         // Initialize all game components before doing specific terminal and GUI stuff
         GameController.getInstance().initialize();
