@@ -243,7 +243,7 @@ class MapLoaderController {
         toggleCurrentLocationIcon(playerLocation);
     }
     
-    private void loadIcons() {
+    void loadIcons() {
         String path = "data/icons";
     
         // iterate through the gameMap variable for each layer of the map (total of 3)
@@ -337,5 +337,9 @@ class MapLoaderController {
 
     public void setMapLayout3(List<StringBuilder> mapLayout3) {
         this.mapLayout3 = mapLayout3;
+    }
+    
+    Map<String, ImageIcon> getRoomIcons() {
+        return roomIcons;
     }
 }
