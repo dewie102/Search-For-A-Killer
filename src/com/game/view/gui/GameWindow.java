@@ -464,7 +464,6 @@ public class GameWindow {
         
         btn.addActionListener((evt) -> {
             String room = evt.getActionCommand();
-            System.out.printf("Printing room value: %s\n", room);
             GameController.getInstance().runCommand(String.format("go %s", room));
         });
         
