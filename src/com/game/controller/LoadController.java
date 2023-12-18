@@ -92,8 +92,9 @@ public class LoadController {
 
             for (Item item : items) {
                 itemMap.put(item.getName(), item);
-                if(item.isMurderWeapon())
+                if(item.isMurderWeapon()) {
                     murderWeapon = item;
+                }
             }
 
             return itemMap;
@@ -136,12 +137,12 @@ public class LoadController {
         try (FileReader reader = new FileReader("data/story.json")) {
             return new Gson().fromJson(reader, new TypeToken<ArrayList<Story>>(){}.getType());
         } catch (Exception e) {
-            System.out.printf("Error reading the character json file: %s%n", e.getMessage());
+            System.out.printf("Error reading the story json file: %s%n", e.getMessage());
         }
         return null;
     }
 
-    private static JsonConversation loadConversations(){
+    private static void loadConversations() {
         JsonConversation conversations;
         try (FileReader reader = new FileReader("data/Conversation.json")) {
             conversations = new Gson().fromJson(reader, JsonConversation.class);
@@ -155,7 +156,6 @@ public class LoadController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
     }
     
     public static int selectRandomStory() {
@@ -172,6 +172,7 @@ public class LoadController {
             murderWeapon = item;
         }
     
+        // TODO: remove this print line!!!
         System.out.println(storyIndex);
         
         return storyIndex;
