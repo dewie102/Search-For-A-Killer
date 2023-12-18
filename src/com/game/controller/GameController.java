@@ -283,10 +283,20 @@ public class GameController {
 
     private boolean lookItem(Item item) {
         secondaryText.clear();
+        secondaryText.add(new ConsoleText(""));
         //if the item is in your inventory
         // or in the inventory of the room are you currently in
-        if (player.getInventory().getItems().contains(item) || rooms.get(player.getCurrentLocation()).getInventory().getItems().contains(item)) {
+        if ((player.getInventory().getItems().contains(item) || rooms.get(player.getCurrentLocation()).getInventory().getItems().contains(item)) && !item.isHidden()) {
             secondaryText.add(new ConsoleText(item.getDescription()));
+            
+            if(!"".equals(item.getJsonItemInside())) {
+                Item hiddenItem = items.get(item.getJsonItemInside());
+                if(hiddenItem != null && hiddenItem.isHidden()) {
+                    hiddenItem.setHidden(false);
+                    secondaryText.add(new ConsoleText(String.format("\nInside %s you found %s", item, hiddenItem)));
+                }
+            }
+            
             if(!item.getInventory().getItems().isEmpty()) {
                 secondaryText.add(new ConsoleText(String.format(gameText.getInfoMessages().get("observeItem"),item.getName(),item.getInventory())));
             }
@@ -458,8 +468,16 @@ public class GameController {
         Room room = rooms.get(player.getCurrentLocation());
         
         if (!room.getInventory().getItems().isEmpty()) {
-            //print items in room if there are any
-            result.add(new ConsoleText(gameText.getInfoMessages().get("visibleItems") + room.getInventory()));
+            //print items in room if there are any and if they are visible
+            Inventory visibleItems = new Inventory();
+    
+            for(Item item : room.getInventory().getItems()) {
+                if(!item.isHidden()) {
+                    visibleItems.add(item);
+                }
+            }
+    
+            result.add(new ConsoleText(gameText.getInfoMessages().get("visibleItems") + visibleItems));
         }
         if (!(room.getCharactersInRoom() == null) && !room.getCharactersInRoom().isEmpty()) {
             result.add(new ConsoleText(gameText.getInfoMessages().get("personVisible"), room.getCharactersInRoomToString()));

@@ -2,7 +2,8 @@
   {
     "name":"Dog house",
     "description":["The dog house is painted a classic red, with a wooden slab above the door bearing the name \"Pupperoni\"."],
-    "pickUpable": false
+    "pickUpable": false,
+    "jsonItemInside": "Note #5"
   },
   {
     "name":"Fire pit",
@@ -32,7 +33,8 @@
   {
     "name":"Trashcan",
     "description":["The trashcan is stuffed with junk food wrappers. A man after your own heart."],
-    "pickUpable": false
+    "pickUpable": false,
+    "jsonItemInside": "Note #4"
   },
   {
     "name":"Couch",
@@ -52,7 +54,8 @@
   {
     "name":"Rug",
     "description":["Upon closer look, you realize that what you thought was a carpet is actual just a darker spot where the floor wasn't impacted by sunlight - the actual rug is missing, leaving behind a stark outline where it likely laid for years."],
-    "pickUpable": false
+    "pickUpable": false,
+    "jsonItemInside": "Note #2"
   },
   {
     "name":"Desk",
@@ -72,7 +75,8 @@
   {
     "name":"Bookcase",
     "description":["The books on the bookshelf are mainly either history texts, manuals, or phonebooks. Strange guy."],
-    "pickUpable": false
+    "pickUpable": false,
+    "jsonItemInside": "Note #1"
   },
   {
     "name":"Billiards table",
@@ -117,35 +121,40 @@
     "description": ["The note reads:\n\"Thank goodness I was out at the movies with the children last night!\nHow scary to think I would otherwise have been home when the murder\ntook place.\"",
                     "Pretty sure it was the Nanny",
                     "Pretty sure it was the gardener"],
-    "pickUpable": true
+    "pickUpable": true,
+    "isHidden": true
   },
   {
     "name": "Note #2",
     "description": ["The note reads:\n\"I have no further need of your Butlering services. \nYour employment will be ended effective next week.\"",
                     "Yup, definitely the Nanny",
                     "All signs point to him"],
-    "pickUpable": true
+    "pickUpable": true,
+    "isHidden": true
   },
   {
     "name": "Note #3",
     "description": ["The note reads:\n\"I saw the Butler digging in the garden this morning. How peculiar!\nNote to self, search backyard after tending to the lawn\nto see what he was looking for - or trying to hide.\"",
                     "Saw her with a PEN",
                     "Most definitely the gardener"],
-    "pickUpable": true
+    "pickUpable": true,
+    "isHidden": false
   },
   {
     "name": "Note #4",
     "description": ["It looks like this was a confession letter, but there is blood smeared on the paper and so you cannot make out any of the words.",
                     "Good Luck with that",
                     "hmmm starts with g"],
-    "pickUpable": true
+    "pickUpable": true,
+    "isHidden": true
   },
   {
     "name": "Note #5",
     "description": ["The note reads:\n\"I think it was the Butler, personally! He's always disliked Mr. Cool, \nhe'd have quit a long time ago if he didn't need the money.\"",
                     "N A N N Y",
                     "G A R D E N E R"],
-    "pickUpable": true
+    "pickUpable": true,
+    "isHidden": true
   },
   {
     "name": "Crime Report",

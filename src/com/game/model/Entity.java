@@ -1,7 +1,6 @@
 package com.game.model;
 
 import com.game.controller.GameController;
-import com.game.controller.MainController;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +12,7 @@ public abstract class Entity {
     private String name;
     private List<String> description;
     private Inventory inventory = new Inventory();
-    private List<String> jsonInventory = new ArrayList<>();
+    private final List<String> jsonInventory = new ArrayList<>();
 
     public Entity(){
         this.inventory = new Inventory();
