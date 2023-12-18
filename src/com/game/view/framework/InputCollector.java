@@ -67,7 +67,6 @@ public class InputCollector {
         Command command = null;
         for (Command value : commands){
             if(value.isAMatch(commandString)){
-                System.out.println("here");
                 command = value;
                 commandString = command.getKeyWord();
                 break;
