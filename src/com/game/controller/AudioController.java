@@ -167,7 +167,6 @@ public class AudioController {
     public static void setMusicVol(float newVol) {
         FloatControl gainControl = (FloatControl) sound[0].getControl(FloatControl.Type.MASTER_GAIN);
         gainControl.setValue(newVol);
-        System.out.println(gainControl.getValue());
     }
 
     //SFX volume controls -
@@ -228,7 +227,6 @@ public class AudioController {
 
     public static void loopMusic(){
         FloatControl gainControl = (FloatControl) sound[0].getControl(FloatControl.Type.MASTER_GAIN);
-        System.out.println(gainControl.getValue());
         sound[0].loop(Clip.LOOP_CONTINUOUSLY);
     }
 

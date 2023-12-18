@@ -37,8 +37,6 @@ public class GameWindow {
     private static boolean isSfxMuted = false;
     private static String currentVolumeOption = "1";
     public static JPanel mapButtonPanel;
-    public static JPanel mainPanel;
-    public static JPanel actionPanel;
 
     static void createAndShowGUI() {
         FlatLightLaf.setup();
@@ -61,7 +59,7 @@ public class GameWindow {
         frame.add(gameBannerPanel, BorderLayout.NORTH);
 
         // 2. Main Panel, consist of game text, player/room info and map panels
-        mainPanel = new JPanel(new GridBagLayout());
+        JPanel mainPanel = new JPanel(new GridBagLayout());
         mainPanel.setBackground(MAIN_BACKGROUND_COLOR);
 
         GridBagConstraints gbcMain = new GridBagConstraints();
@@ -191,7 +189,7 @@ public class GameWindow {
         frame.add(mainPanel, BorderLayout.CENTER);
 
         // Action Panel, consist of command input, volume control and help/quit buttons
-        actionPanel = new JPanel(new GridBagLayout());
+        JPanel actionPanel = new JPanel(new GridBagLayout());
         actionPanel.setBackground(MAIN_BACKGROUND_COLOR);
         actionPanel.setPreferredSize(new Dimension(FRAME_WIDTH, 100));
 
@@ -200,12 +198,13 @@ public class GameWindow {
 
         JPanel inputCommandPanel = createInputCommandPanel();
         gbcAction.gridx = 0;
-        gbcAction.weightx = 0.31;
+        gbcAction.weightx = 0.91;
         actionPanel.add(inputCommandPanel, gbcAction);
 
         JPanel soundAdjustPanel = adjustSoundPanel();
         gbcAction.gridx = 1;
         gbcAction.weightx = 0.139;
+        gbcAction.insets = new Insets(0, 100, 0, 0);
         actionPanel.add(soundAdjustPanel, gbcAction);
 
         JPanel helpPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 40, 30));
@@ -228,6 +227,7 @@ public class GameWindow {
 
         gbcAction.gridx = 2;
         gbcAction.weightx = 0.144;
+        gbcAction.insets = new Insets(0, 10, 0, 0);
         actionPanel.add(helpPanel, gbcAction);
 
         // Add space around the action panel
@@ -419,7 +419,7 @@ public class GameWindow {
         scrollBarConstraints.gridy = 0;
         scrollBarConstraints.weightx = 0.95;
         scrollBarConstraints.fill = GridBagConstraints.BOTH;
-        scrollBarConstraints.insets = new Insets(0, 0, 0, 5); // Add 5 pixels right padding
+        scrollBarConstraints.insets = new Insets(0, 0, 0, 5);
 
         // constraints for mute button
         GridBagConstraints muteButtonConstraints = new GridBagConstraints();
@@ -428,7 +428,6 @@ public class GameWindow {
         muteButtonConstraints.weightx = 0.05;
         muteButtonConstraints.fill = GridBagConstraints.BOTH;
 
-        // Add scroll bar and mute button to the panel with constraints
         panel.add(scrollBar, scrollBarConstraints);
         panel.add(muteButton, muteButtonConstraints);
 
@@ -440,7 +439,6 @@ public class GameWindow {
         volumeLabel.setText("Volume: " + volume);
         setCurrentVolumeOption("2");
         setCurrentVolume(volume);
-        System.out.println(getCurrentVolume());
         GameController.getInstance().runCommand("volume");
 
         if (isMuted()) {
@@ -453,7 +451,6 @@ public class GameWindow {
         volumeLabel.setText("SFX Volume: " + volume);
         setCurrentVolumeOption("6");
         setCurrentSfxVolume(volume);
-        System.out.println(getCurrentVolume());
         GameController.getInstance().runCommand("volume");
 
         if (isSfxMuted()) {
@@ -465,7 +462,6 @@ public class GameWindow {
     // Helper methods to update mute button
     private static void updateMuteButton(JButton muteButton, ImageIcon soundIcon) {
         if (isMuted()) {
-            System.out.println("muted");
             previousVolume = getCurrentVolume();
             setCurrentVolume(0);
             setCurrentVolumeOption("2");
@@ -481,8 +477,6 @@ public class GameWindow {
 
     private static void updateSfxMuteButton(JButton muteButton, ImageIcon soundIcon) {
         if (isSfxMuted()) {
-            System.out.println("muting sfx");
-            System.out.println("muted");
             setPreviousSfxVolume(getCurrentSfxVolume());
             setCurrentSfxVolume(0);
             setCurrentVolumeOption("5");
@@ -520,13 +514,12 @@ public class GameWindow {
                 commandTextField.getBorder(),
                 paddingBorder
         );
-        // compound border to maintain main border
+        // compound border to maintain main border for text field component
         commandTextField.setBorder(compoundBorder);
 
         commandTextField.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
-                System.out.println("focus gained");
                 if (commandTextField.getText().equals(placeholder)) {
                     commandTextField.setText("");
                 }
@@ -534,7 +527,6 @@ public class GameWindow {
 
             @Override
             public void focusLost(FocusEvent e) {
-                System.out.println("focus lost");
                 if (commandTextField.getText().isEmpty()) {
                     commandTextField.setText(placeholder);
                 }
