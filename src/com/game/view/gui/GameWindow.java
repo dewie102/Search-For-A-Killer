@@ -9,6 +9,7 @@ import com.game.controller.GsonParserController;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
+import javax.swing.text.DefaultCaret;
 import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.awt.event.*;
@@ -36,10 +37,13 @@ public class GameWindow {
     private static boolean isSfxMuted = false;
     private static String currentVolumeOption = "1";
     public static JPanel mapButtonPanel;
+    public static JPanel mainPanel;
+    public static JPanel actionPanel;
 
     static void createAndShowGUI() {
         FlatLightLaf.setup();
         UIManager.put("TextComponent.arc", 20);
+
         JFrame frame = new JFrame("Search For A Killer");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(FRAME_WIDTH, FRAME_HEIGHT);
@@ -52,12 +56,12 @@ public class GameWindow {
         frame.setLocationRelativeTo(null);
         frame.setResizable(false);
 
-        // Game Banner Panel
+        // 1. Game Banner Panel
         JPanel gameBannerPanel = createBannerPanel();
         frame.add(gameBannerPanel, BorderLayout.NORTH);
 
-        // Main Panel, consist of game text, player/room info and map
-        JPanel mainPanel = new JPanel(new GridBagLayout());
+        // 2. Main Panel, consist of game text, player/room info and map panels
+        mainPanel = new JPanel(new GridBagLayout());
         mainPanel.setBackground(MAIN_BACKGROUND_COLOR);
 
         GridBagConstraints gbcMain = new GridBagConstraints();
@@ -187,8 +191,9 @@ public class GameWindow {
         frame.add(mainPanel, BorderLayout.CENTER);
 
         // Action Panel, consist of command input, volume control and help/quit buttons
-        JPanel actionPanel = new JPanel(new GridBagLayout());
+        actionPanel = new JPanel(new GridBagLayout());
         actionPanel.setBackground(MAIN_BACKGROUND_COLOR);
+        actionPanel.setPreferredSize(new Dimension(FRAME_WIDTH, 100));
 
         GridBagConstraints gbcAction = new GridBagConstraints();
         gbcAction.fill = GridBagConstraints.BOTH;
@@ -209,14 +214,13 @@ public class GameWindow {
 
         helpPanel.setBackground(MAIN_BACKGROUND_COLOR);
 
-        Font buttonFont = new Font("Arial", Font.BOLD, 16); // Adjust the font size as needed
+        Font buttonFont = new Font("Arial", Font.BOLD, 16);
         helpButton.setFont(buttonFont);
         quitButton.setFont(buttonFont);
 
-
-        helpButton.setBackground(new Color(89, 166, 94)); // Adjust the RGB values for your preferred color
+        helpButton.setBackground(new Color(89, 166, 94));
         helpButton.setForeground(Color.WHITE);
-        quitButton.setBackground(new Color(207, 74, 74)); // Adjust the RGB values for your preferred color
+        quitButton.setBackground(new Color(207, 74, 74));
         quitButton.setForeground(Color.WHITE);
 
         helpPanel.add(helpButton);
@@ -509,7 +513,7 @@ public class GameWindow {
         // placeholder text
         String placeholder = "Enter Command and press enter";
         commandTextField.setText(placeholder);
-        commandTextField.setFont(new Font("Arial", Font.BOLD, 14));
+        commandTextField.setFont(new Font("Arial", Font.BOLD, 16));
 
         Border paddingBorder = new EmptyBorder(10, 10, 10, 10);
         Border compoundBorder = BorderFactory.createCompoundBorder(
@@ -545,7 +549,7 @@ public class GameWindow {
             }
         });
 
-        JLabel label = new JLabel("Enter Command");
+        JLabel label = new JLabel("Command");
         label.setForeground(Color.WHITE);
         label.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 0));
         panel.add(label, BorderLayout.NORTH);
