@@ -12,9 +12,8 @@ public class MainController {
     public static void main(String[] args) throws  IOException {
 
         AudioController.loadMusic();
-        AudioController.musicVolDown(30f);
-        AudioController.musicVolUp(10.f);
-        //AudioController.loopMusic(); //<<<<Uncomment to have music play by default
+        AudioController.loopMusic();
+        AudioController.setMusicVol(-58.49485f);
         
         // Initialize all game components before doing specific terminal and GUI stuff
         GameController.getInstance().initialize();

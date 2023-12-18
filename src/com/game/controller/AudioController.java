@@ -84,6 +84,7 @@ public class AudioController {
         }
     }
 
+    // volume control on GUI
     public static boolean volControl(){
         JsonMessageParser.loadAudioOptions();
         if(audioOptions.isEmpty()) {
@@ -93,8 +94,8 @@ public class AudioController {
         }
 
         String userInput = GameWindow.getCurrentVolumeOption();
-        float newVolume = GameWindow.getCurrentVolume();
-        System.out.println("here option: " + userInput + " " + newVolume);
+        float newVolume = Math.max(-80.0f, Math.min(6.0206f, (GameWindow.getCurrentVolume() / 100.0f) * 86.0206f - 80.0f));
+        float newSfxVolume = Math.max(-80.0f, Math.min(6.0206f, (GameWindow.getCurrentSfxVolume() / 100.0f) * 86.0206f - 80.0f));
         switch (userInput){
             case "0": // M on
                 loopMusic();
@@ -103,14 +104,8 @@ public class AudioController {
                 stopSound(0);
                 return true;
             case "2": // M up
-                try {
-                    System.out.println("increasing new volume");
-                    musicVolUp(newVolume);
-                    return true;
-                } catch (IllegalArgumentException e){
-                    return false;
-                }
-
+                setMusicVol(newVolume);
+                return true;
             case "3": // M down
                 musicVolDown();
                 return true;
@@ -120,17 +115,20 @@ public class AudioController {
             case "5": //SFX off
                 setSfxOn(false);
                 return true;
-            case "6"://SFX up
+            case "6": //set SFX
+                setSfxVol(newSfxVolume);
+                return true;
+            case "7"://SFX up
                 try {
                     sfxVolUp();
                     return true;
                 } catch (IllegalArgumentException e){
                     return false;
                 }
-            case "7"://SFX down
+            case "8"://SFX down
                 sfxVolDown();
                 return true;
-            case "8":
+            case "9":
                 return true;
             default:
                 return false;
@@ -164,6 +162,11 @@ public class AudioController {
         musicVolDelta+=upBy;
         FloatControl gainControl = (FloatControl) sound[0].getControl(FloatControl.Type.MASTER_GAIN);
         gainControl.setValue(musicVolDelta);
+    }
+
+    public static void setMusicVol(float newVol) {
+        FloatControl gainControl = (FloatControl) sound[0].getControl(FloatControl.Type.MASTER_GAIN);
+        gainControl.setValue(newVol);
     }
 
     //SFX volume controls -
@@ -210,9 +213,20 @@ public class AudioController {
         gainControl3.setValue(sfxVolDelta);
     }
 
+    public static void setSfxVol(float newVol){
+        FloatControl gainControl1 = (FloatControl) sound[2].getControl(FloatControl.Type.MASTER_GAIN);
+        FloatControl gainControl2 = (FloatControl) sound[3].getControl(FloatControl.Type.MASTER_GAIN);
+        FloatControl gainControl3 = (FloatControl) sound[4].getControl(FloatControl.Type.MASTER_GAIN);
+        gainControl1.setValue(newVol);
+        gainControl2.setValue(newVol);
+        gainControl3.setValue(newVol);
+        setSfxOn(true);
+    }
+
     //General controls
 
     public static void loopMusic(){
+        FloatControl gainControl = (FloatControl) sound[0].getControl(FloatControl.Type.MASTER_GAIN);
         sound[0].loop(Clip.LOOP_CONTINUOUSLY);
     }
 

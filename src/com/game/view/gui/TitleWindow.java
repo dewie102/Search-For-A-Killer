@@ -1,5 +1,6 @@
 package com.game.view.gui;
 
+import com.formdev.flatlaf.FlatLightLaf;
 import com.game.controller.GsonParserController;
 
 import javax.swing.*;
@@ -11,6 +12,7 @@ public class TitleWindow extends JFrame {
     private static JTextArea developmentTitleTextArea;
 
     public TitleWindow() {
+        FlatLightLaf.setup();
         setTitle("Search For A Killer");
         setSize(1000, 500);
         setResizable(false);
@@ -20,6 +22,7 @@ public class TitleWindow extends JFrame {
         ImageIcon image = new ImageIcon("data/logo.png");
         setIconImage(image.getImage());
 
+        // main panel, consists of gameBanner, logoTextPane and buttonPanel
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
         panel.setBackground(new Color(34, 34, 34));
@@ -29,11 +32,13 @@ public class TitleWindow extends JFrame {
         ge.registerFont(customFont);
         customFont = customFont.deriveFont(Font.PLAIN, 36);
 
+        // game banner
         JLabel gameBanner = new JLabel("Search For A Killer");
         gameBanner.setFont(customFont);
         gameBanner.setForeground(Color.WHITE);
         gameBanner.setHorizontalAlignment(JLabel.CENTER);
 
+        // logoTextPane
         ImageIcon logoIcon = new ImageIcon("data/logo.png");
         JLabel logoLabel = new JLabel(logoIcon);
         logoLabel.setHorizontalAlignment(JLabel.CENTER);
@@ -54,27 +59,30 @@ public class TitleWindow extends JFrame {
 
         logoTextPanel.add(developmentTitleTextArea, BorderLayout.SOUTH);
 
-        // Create a separate panel for buttons
-        JPanel buttonPanel = new JPanel(new FlowLayout());
+        // button panel
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 20));
         buttonPanel.setBackground(new Color(34, 34, 34));
 
-        // Use a custom font for the buttons
-        Font buttonFont = new Font("Impact", Font.PLAIN, 15);
+        Font buttonFont = new Font("Impact", Font.PLAIN, 20);
 
         JButton playGameButton = new JButton("Play Game");
         playGameButton.setFont(buttonFont);
-        playGameButton.setBackground(Color.GREEN);
-        playGameButton.setForeground(Color.BLACK);
+        playGameButton.setBackground(new Color(89, 166, 94));
+        playGameButton.setForeground(Color.WHITE);
         playGameButton.setFocusPainted(false);
 
         JButton quitButton = new JButton("Quit");
         quitButton.setFont(buttonFont);
-        quitButton.setBackground(Color.RED);
-        quitButton.setForeground(Color.BLACK);
+        quitButton.setBackground(new Color(207, 74, 74));
+        quitButton.setForeground(Color.WHITE);
 
-        // Add buttons to the button panel
+        Dimension buttonSize = new Dimension(150, 40);
+        playGameButton.setPreferredSize(buttonSize);
+        quitButton.setPreferredSize(buttonSize);
+
         buttonPanel.add(playGameButton);
         buttonPanel.add(quitButton);
+
 
         // Add the main panel to the frame
         panel.add(gameBanner, BorderLayout.NORTH);
@@ -111,6 +119,7 @@ public class TitleWindow extends JFrame {
         loadJsonData();
     }
 
+    // load developer info
     private void loadJsonData() {
         GsonParserController developmentPage = new GsonParserController("data/DevelopmentTitle.json");
         developmentPage.printJson(developmentTitleTextArea);
