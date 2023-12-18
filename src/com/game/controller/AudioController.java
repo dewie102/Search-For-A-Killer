@@ -31,6 +31,7 @@ public class AudioController {
     private static final Clip[] sound = new Clip[soundPaths.length];
     private static final List<ConsoleText> audioOptions = new ArrayList<>();
 
+    // volume control for console
     public static boolean volMenu(){
         JsonMessageParser.loadAudioOptions();
         if(audioOptions.isEmpty()) {
@@ -94,8 +95,8 @@ public class AudioController {
         }
 
         String userInput = GameWindow.getCurrentVolumeOption();
-        float newVolume = Math.max(-80.0f, Math.min(6.0206f, (GameWindow.getCurrentVolume() / 100.0f) * 86.0206f - 80.0f));
-        float newSfxVolume = Math.max(-80.0f, Math.min(6.0206f, (GameWindow.getCurrentSfxVolume() / 100.0f) * 86.0206f - 80.0f));
+        float newVolume = (GameWindow.getCurrentVolume() == 0) ? -80.0f : Math.max(-60.0f, Math.min(6.0f, (GameWindow.getCurrentVolume() / 100.0f) * 66.0f - 60.0f));
+        float newSfxVolume = (GameWindow.getCurrentSfxVolume() == 0) ? -80.0f : Math.max(-60.0f, Math.min(6.0f, (GameWindow.getCurrentSfxVolume() / 100.0f) * 66.0f - 60.0f));
         switch (userInput){
             case "0": // M on
                 loopMusic();
