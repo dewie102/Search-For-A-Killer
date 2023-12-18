@@ -1,6 +1,6 @@
 {
   "name": "Detective Smalls",
-  "description": "Sr. Detective assigned with solving a murder",
+  "description": ["Sr. Detective assigned with solving a murder"],
   "currentLocation": "Backyard",
   "clue": "Time to look for clues",
   "jsonInventory": ["Pen", "Crime Report"],

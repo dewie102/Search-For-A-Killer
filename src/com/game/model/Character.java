@@ -1,5 +1,7 @@
 package com.game.model;
 
+import java.util.List;
+
 /*
  * This class represents a character in the game, like a suspect
  */
@@ -13,7 +15,7 @@ public class Character extends Entity{
     private boolean isMurderer;
     private String clue;
 
-    public Character(String name, String description, String currentLocation){
+    public Character(String name, List<String> description, String currentLocation){
         super(name, description);
         setCurrentLocation(currentLocation);
     }
