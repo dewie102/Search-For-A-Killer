@@ -55,7 +55,7 @@ public class TitleWindow extends JFrame {
         developmentTitleTextArea.setFont(new Font("Arial", Font.PLAIN, 14));
         developmentTitleTextArea.setForeground(Color.WHITE);
         developmentTitleTextArea.setBackground(new Color(34, 34, 34));
-        developmentTitleTextArea.setBorder(BorderFactory.createEmptyBorder(10, 600, 10, 10));
+        developmentTitleTextArea.setBorder(BorderFactory.createEmptyBorder(0, 600, 10, 10));
 
         logoTextPanel.add(developmentTitleTextArea, BorderLayout.SOUTH);
 
