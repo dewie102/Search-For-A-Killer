@@ -173,7 +173,7 @@ public class GameController {
 
         if ((commandMap.get(parts[0]).getCommandType() == CommandType.TWO_PARTS)) {
             if (entity == null) {
-                commandView.setErrorMessage(gameText.getErrorMessages().get("invalidAction"));
+                mainView.setErrorMessage(gameText.getErrorMessages().get("invalidAction"));
             }
         }
 
@@ -190,6 +190,8 @@ public class GameController {
 
         if(result){
             mainView.clearErrorMessage();
+        } else {
+            mainView.setErrorMessage(commandView.getErrorMessage());
         }
         
         // Clear the component and display the text
@@ -209,6 +211,7 @@ public class GameController {
     }
 
     private boolean goCommand(Entity target) {
+        secondaryText.add(new ConsoleText(""));
         if(target instanceof Room){
             //if the room they are trying to go to is in current location's adjacent rooms
             if (rooms.get(player.getCurrentLocation()).getAdjacentRooms().contains(target)) {
@@ -260,6 +263,7 @@ public class GameController {
 
     private boolean lookRoom(Room room) {
         secondaryText.clear();
+        secondaryText.add(new ConsoleText(""));
         //If the room they are looking at is the currentLocation
         if(room == rooms.get(player.getCurrentLocation())){
             //print the room description
@@ -331,14 +335,17 @@ public class GameController {
     
     public void displayHelpMessage() {
         GameWindow.helpTextArea.setText("");
-        GameWindow.helpTextArea.append(gameText.getInfoMessages().get("availableCommands") + "\n");
+        GameWindow.helpTextArea.append(gameText.getInfoMessages().get("availableCommands") + "\n\n");
         for (var command : commandMap.values()) {
             GameWindow.helpTextArea.append(String.format("%s: \t%s\n", command.getKeyWord(), command.getDescription()));
         }
+        GameWindow.helpTextArea.append("\n");
+        GameWindow.helpTextArea.append("Click on the rooms on the map to traverse the level");
     }
 
     private boolean dropCommand(Entity target) {
         secondaryText.clear();
+        secondaryText.add(new ConsoleText(""));
         //if target is instance of Item
         if (target instanceof Item){
             //if target Item is in your inventory
@@ -350,7 +357,9 @@ public class GameController {
                 player.getInventory().getItems().remove((Item)target);
                 //Tell the player what happened
                 secondaryText.add(new ConsoleText(String.format(gameText.getInfoMessages().get("dropItem"),target.getName())));
-                secondaryText.add(new ConsoleText(gameText.getGeneralMessages().get("divider"), AnsiTextColor.BLUE));
+                if(!MainController.PLAY_IN_GUI) {
+                    secondaryText.add(new ConsoleText(gameText.getGeneralMessages().get("divider"), AnsiTextColor.BLUE));
+                }
                 return true;
             }
             //that item is not in your inventory, so you can't drop it
@@ -380,6 +389,7 @@ public class GameController {
 
     private boolean getCommand(Entity target) {
         secondaryText.clear();
+        secondaryText.add(new ConsoleText(""));
         if(target instanceof Item){
             Room currentRoom = rooms.get(player.getCurrentLocation());
             Item item = (Item)target;
@@ -388,14 +398,16 @@ public class GameController {
                 commandView.setErrorMessage(String.format(gameText.getErrorMessages().get("invalidItemPickup"), item.getName()));
                 return false;
             }
-            if(currentRoom.getInventory().contains(item)){
+            if(currentRoom.getInventory().contains(item) && !item.isHidden()){
                 AudioController.playSFX(3);
                 player.getInventory().add(item);
                 currentRoom.getInventory().remove(item);
                 mainText.clear();
                 mainText.addAll(getViewText());
                 secondaryText.add(new ConsoleText(String.format(gameText.getInfoMessages().get("itemPickup"),target.getName())));
-                secondaryText.add(new ConsoleText(gameText.getGeneralMessages().get("divider"), AnsiTextColor.BLUE));
+                if(!MainController.PLAY_IN_GUI) {
+                    secondaryText.add(new ConsoleText(gameText.getGeneralMessages().get("divider"), AnsiTextColor.BLUE));
+                }
                 return true;
             }
             commandView.setErrorMessage(gameText.getErrorMessages().get("invalidItemNotPresent"));
@@ -543,5 +555,9 @@ public class GameController {
 
         detective.getConversation().insertDialog(murdererDialog);
         detective.getConversation().insertDialog(murdererWeaponDialog);
+    }
+    
+    public static void clearInstance() {
+        instance = null;
     }
 }
