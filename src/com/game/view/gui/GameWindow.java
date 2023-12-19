@@ -138,7 +138,7 @@ public class GameWindow {
 
         frame.add(mainPanel, BorderLayout.CENTER);
 
-        // Action Panel, consist of command input, volume control and help/quit buttons
+        // 3. Action Panel, consist of command input, volume control and help/quit buttons
         JPanel actionPanel = new JPanel(new GridBagLayout());
         actionPanel.setBackground(MAIN_BACKGROUND_COLOR);
         actionPanel.setPreferredSize(new Dimension(FRAME_WIDTH, ACTION_PANEL_HEIGHT));
@@ -297,6 +297,7 @@ public class GameWindow {
         muteButton.setBackground(Color.WHITE);
         muteButton.addActionListener(e -> {
             toggleMute();
+            // update mute button icon
             updateMuteButton(muteButton, soundIcon);
         });
         
@@ -378,6 +379,7 @@ public class GameWindow {
         setCurrentVolume(volume);
         GameController.getInstance().runCommand("volume");
 
+        // check if muted when change volume and toggle mute
         if (isMuted()) {
             muteButton.setIcon(resizeImageIcon(new ImageIcon("data/volume.png"), 10, 10));
             toggleMute();
