@@ -1,6 +1,5 @@
 package com.game.view.gui;
 
-import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import com.game.controller.GameController;
 import com.game.controller.GameResult;
@@ -31,7 +30,6 @@ public class GameWindow {
     public static JPanel gameTextPanel;
     public static JPanel talkButtonPanel;
     public static JPanel mainTalkPanel;
-    private static JPanel gameBannerPanel;
     private static int currentVolume = 25;
     private static int previousVolume = 25;
     private static int currentSfxVolume = 50;
@@ -41,12 +39,13 @@ public class GameWindow {
     private static String currentVolumeOption = "1";
     public static JPanel mapButtonPanel;
     private static boolean initialCommandTextCleared = false;
+    private static JFrame frame;
 
     static void createAndShowGUI() {
         FlatLightLaf.setup();
         UIManager.put("TextComponent.arc", 20);
 
-        JFrame frame = new JFrame("Search For A Killer");
+        frame = new JFrame("Search For A Killer");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(FRAME_WIDTH, FRAME_HEIGHT);
 
@@ -59,7 +58,7 @@ public class GameWindow {
         frame.setResizable(false);
 
         // 1. Game Banner Panel
-        gameBannerPanel = createBannerPanel();
+        JPanel gameBannerPanel = createBannerPanel();
         frame.add(gameBannerPanel, BorderLayout.NORTH);
 
         // 2. Main Panel, consist of game text, player/room info and map panels
@@ -188,22 +187,15 @@ public class GameWindow {
 
         frame.setVisible(true);
 
-        gameTextAreaPrintln("Welcome to the game!");
-        roomInformationAreaPrintln();
-        playerInformationAreaPrintln();
-
         // Add ActionListener for the Help button
-        helpButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Display the help pop-up
-                showHelpPopup();
-            }
+        helpButton.addActionListener(e -> {
+            // Display the help pop-up
+            showHelpPopup();
         });
 
-        quitButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        quitButton.addActionListener(e -> {
+            int option = JOptionPane.showOptionDialog(frame, "Are you sure you want to quit?", "", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+            if(option == 0) {
                 // Close the current window and terminate the process
                 frame.dispose();
                 System.exit(0);
@@ -301,20 +293,14 @@ public class GameWindow {
         ImageIcon soundIcon = resizeImageIcon(new ImageIcon("data/volume.png"), 10, 10);
         JButton muteButton = new JButton(soundIcon);
         muteButton.setBackground(Color.WHITE);
-        muteButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                toggleMute();
-                updateMuteButton(muteButton, soundIcon);
-            }
+        muteButton.addActionListener(e -> {
+            toggleMute();
+            updateMuteButton(muteButton, soundIcon);
         });
         
-        volumeScrollBar.addAdjustmentListener(new AdjustmentListener() {
-            @Override
-            public void adjustmentValueChanged(AdjustmentEvent e) {
-                int volume = e.getValue();
-                updateVolumeControls(volume, currentVolumeLabel,muteButton);
-            }
+        volumeScrollBar.addAdjustmentListener(e -> {
+            int volume = e.getValue();
+            updateVolumeControls(volume, currentVolumeLabel,muteButton);
         });
         
         volumePanel.add(currentVolumeLabel);
@@ -336,20 +322,14 @@ public class GameWindow {
         
         JButton sfxMuteButton = new JButton(soundIcon);
         sfxMuteButton.setBackground(Color.WHITE);
-        sfxMuteButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                toggleSfxMute();
-                updateSfxMuteButton(sfxMuteButton, soundIcon);
-            }
+        sfxMuteButton.addActionListener(e -> {
+            toggleSfxMute();
+            updateSfxMuteButton(sfxMuteButton, soundIcon);
         });
         
-        sfxVolumeScrollBar.addAdjustmentListener(new AdjustmentListener() {
-            @Override
-            public void adjustmentValueChanged(AdjustmentEvent e) {
-                int volume = e.getValue();
-                updateSfxVolumeControls(volume, sfxVolumeLabel, sfxMuteButton);
-            }
+        sfxVolumeScrollBar.addAdjustmentListener(e -> {
+            int volume = e.getValue();
+            updateSfxVolumeControls(volume, sfxVolumeLabel, sfxMuteButton);
         });
         
         sfxPanel.add(sfxVolumeLabel);
@@ -539,12 +519,9 @@ public class GameWindow {
             }
         });
 
-        commandTextField.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                GameController.getInstance().runCommand(commandTextField.getText());
-                commandTextField.setText("");
-            }
+        commandTextField.addActionListener(e -> {
+            GameController.getInstance().runCommand(commandTextField.getText());
+            commandTextField.setText("");
         });
 
         JLabel label = new JLabel("Command");
@@ -557,8 +534,9 @@ public class GameWindow {
 
     private static void showHelpPopup() {
         JFrame helpFrame = new JFrame("Help");
-        helpFrame.setSize(700, 500);
-        helpFrame.setLocationRelativeTo(null);
+        helpFrame.setSize(525, 300);
+        helpFrame.setLocationRelativeTo(frame);
+        helpFrame.setResizable(false);
 
         ImageIcon image = new ImageIcon("data/logo.png");
         helpFrame.setIconImage(image.getImage());
@@ -567,6 +545,7 @@ public class GameWindow {
         helpTextArea.setEditable(false);
         helpTextArea.setBackground(MAIN_BACKGROUND_COLOR);
         helpTextArea.setForeground(Color.WHITE);
+        helpTextArea.setFont(new Font("Ariel", Font.PLAIN, 14));
 
         int padding = 10;
         helpTextArea.setBorder(BorderFactory.createEmptyBorder(padding, padding, padding, padding));
@@ -586,12 +565,12 @@ public class GameWindow {
         helpFrame.setVisible(true);
     }
 
-    public static JPanel createGridLayoutPanel(int rows, int columns) {
+    /*public static JPanel createGridLayoutPanel(int rows, int columns) {
         JPanel panel = new JPanel(new GridLayout(rows, columns)); // 5 rows, 1 column
         panel.setBackground(MAIN_BACKGROUND_COLOR);
 
         return panel;
-    }
+    }*/
     
     public static JButton createMapButton(Dimension size) {
         JButton btn = new JButton();
@@ -621,43 +600,40 @@ public class GameWindow {
         JButton button = new JButton(label);
         button.setActionCommand(String.valueOf(id));
 
-        button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String command = e.getActionCommand();
-                int buttonID = Integer.parseInt(command);
+        button.addActionListener(e -> {
+            String command = e.getActionCommand();
+            int buttonID = Integer.parseInt(command);
 
-                GameController gameController = GameController.getInstance();
+            GameController gameController = GameController.getInstance();
 
-                // if conversation does not have a followup questions
-                if (!gameController.conversationController.followedUpQuestion) {
-                    gameController.conversationController.result = buttonID;
-                } else {
+            // if conversation does not have a followup questions
+            if (!gameController.conversationController.followedUpQuestion) {
+                gameController.conversationController.result = buttonID;
+            } else {
 
-                    // report weapon/suspect
-                    GameController.getInstance().character.getConversation().getDialog(gameController.conversationController.result).getFollowUpConversation().getDialog(buttonID).reportIfAble();
+                // report weapon/suspect
+                GameController.getInstance().character.getConversation().getDialog(gameController.conversationController.result).getFollowUpConversation().getDialog(buttonID).reportIfAble();
 
-                    // check winning condition
-                    GameResult result = gameController.conversationController.checkWinningConditions.checkWinningConditions();
+                // check winning condition
+                GameResult result = gameController.conversationController.checkWinningConditions.checkWinningConditions();
 
-                    // check for result after reporting suspect/weapon
-                    if (!result.equals(GameResult.UNDEFINED)) {
-                        if (result.equals(GameResult.WIN)) {
-                            JOptionPane.showMessageDialog(null, "You WON the game\nThanks for playing.", "Result", JOptionPane.INFORMATION_MESSAGE);
-                        } else {
-                            JOptionPane.showMessageDialog(null, "You LOST the game\nThanks for playing.", "Result", JOptionPane.INFORMATION_MESSAGE);
+                // check for result after reporting suspect/weapon
+                if (!result.equals(GameResult.UNDEFINED)) {
+                    if (result.equals(GameResult.WIN)) {
+                        JOptionPane.showMessageDialog(null, "You WON the game\nThanks for playing.", "Result", JOptionPane.INFORMATION_MESSAGE);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "You LOST the game\nThanks for playing.", "Result", JOptionPane.INFORMATION_MESSAGE);
 
-                        }
-                        System.exit(0);
                     }
-
-                    // reset followup questions and result after answering followup question
-                    gameController.conversationController.followedUpQuestion = false;
-                    gameController.conversationController.result = -1;
+                    System.exit(0);
                 }
-                gameController.conversationController.run(GameController.getInstance().player, GameController.getInstance().character);
 
+                // reset followup questions and result after answering followup question
+                gameController.conversationController.followedUpQuestion = false;
+                gameController.conversationController.result = -1;
             }
+            gameController.conversationController.run(GameController.getInstance().player, GameController.getInstance().character);
+
         });
 
         return button;
@@ -721,22 +697,5 @@ public class GameWindow {
 
     public static void setCurrentVolumeOption(String currentVolumeOption) {
         GameWindow.currentVolumeOption = currentVolumeOption;
-    }
-
-    private static void gameTextAreaPrintln(String message) {
-        //gameTextArea.append(message + "\n");
-        gameTextArea.setText(gameTextArea.getText() + message + "\n");
-    }
-
-    private static void roomInformationAreaPrintln() {
-        roomInformationArea.append("Room Information" + "\n");
-    }
-
-    private static void playerInformationAreaPrintln() {
-        playerInformationArea.append("Player Information Area" + "\n");
-    }
-
-    private static void executeCommand(String command) {
-        gameTextAreaPrintln("Player entered command: " + command);
     }
 }

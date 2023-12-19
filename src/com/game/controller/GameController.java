@@ -335,10 +335,12 @@ public class GameController {
     
     public void displayHelpMessage() {
         GameWindow.helpTextArea.setText("");
-        GameWindow.helpTextArea.append(gameText.getInfoMessages().get("availableCommands") + "\n");
+        GameWindow.helpTextArea.append(gameText.getInfoMessages().get("availableCommands") + "\n\n");
         for (var command : commandMap.values()) {
             GameWindow.helpTextArea.append(String.format("%s: \t%s\n", command.getKeyWord(), command.getDescription()));
         }
+        GameWindow.helpTextArea.append("\n");
+        GameWindow.helpTextArea.append("Click on the rooms on the map to traverse the level");
     }
 
     private boolean dropCommand(Entity target) {
