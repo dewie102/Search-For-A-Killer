@@ -26,7 +26,7 @@ public class ConversationController {
 
     public ConversationController(List<ConsoleText> mainText, CheckWinningConditions checkWinningConditions){
         this.mainText = mainText;
-        this.checkWinningConditions = checkWinningConditions;
+        setCheckWinningConditions(checkWinningConditions);
     }
 
     public void run(Player player, Character character){
