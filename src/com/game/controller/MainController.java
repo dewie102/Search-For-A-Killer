@@ -10,22 +10,27 @@ public class MainController {
     public static boolean PLAY_IN_GUI = true;
     
     public static void main(String[] args) throws  IOException {
-        
+       startNewGame();
+    }
+    
+    public static void startNewGame() {
         AudioController.loadMusic();
         AudioController.loopMusic();
         AudioController.setMusicVol(-43.5f);
         AudioController.setSfxVol(-27.0f);
+    
+        GameController.clearInstance();
         
         // Initialize all game components before doing specific terminal and GUI stuff
         GameController.getInstance().initialize();
-        
+    
         if(!PLAY_IN_GUI) {
             // Create the titlePage and devTitlePage objects that will take in the json data and pass it
             // to the ConsoleText class and the Console class, so it's outputted.
             GsonParserController titlePage = new GsonParserController("data/Title.json");
             GsonParserController developmentPage = new GsonParserController("data/DevelopmentTitle.json");
             GsonParserController introText = new GsonParserController("data/IntroText.json");
-    
+        
             titlePage.printJson();
             developmentPage.printJson();
             introText.printJson();

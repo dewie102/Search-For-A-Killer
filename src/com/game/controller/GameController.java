@@ -556,4 +556,8 @@ public class GameController {
         detective.getConversation().insertDialog(murdererDialog);
         detective.getConversation().insertDialog(murdererWeaponDialog);
     }
+    
+    public static void clearInstance() {
+        instance = null;
+    }
 }

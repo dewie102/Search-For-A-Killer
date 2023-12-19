@@ -4,6 +4,7 @@ import com.formdev.flatlaf.FlatLightLaf;
 import com.game.controller.GameController;
 import com.game.controller.GameResult;
 import com.game.controller.GsonParserController;
+import com.game.controller.MainController;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -42,6 +43,7 @@ public class GameWindow {
     private static JFrame frame;
 
     static void createAndShowGUI() {
+        initialCommandTextCleared = false;
         FlatLightLaf.setup();
         UIManager.put("TextComponent.arc", 20);
 
@@ -551,7 +553,6 @@ public class GameWindow {
         helpTextArea.setBorder(BorderFactory.createEmptyBorder(padding, padding, padding, padding));
 
         // Set text content in help window
-        //helpTextArea.setText("Help Window");
         GameController.getInstance().displayHelpMessage();
 
         JScrollPane scrollPane = new JScrollPane(helpTextArea);
@@ -564,13 +565,6 @@ public class GameWindow {
 
         helpFrame.setVisible(true);
     }
-
-    /*public static JPanel createGridLayoutPanel(int rows, int columns) {
-        JPanel panel = new JPanel(new GridLayout(rows, columns)); // 5 rows, 1 column
-        panel.setBackground(MAIN_BACKGROUND_COLOR);
-
-        return panel;
-    }*/
     
     public static JButton createMapButton(Dimension size) {
         JButton btn = new JButton();
@@ -619,13 +613,25 @@ public class GameWindow {
 
                 // check for result after reporting suspect/weapon
                 if (!result.equals(GameResult.UNDEFINED)) {
+                    StringBuilder resultText = new StringBuilder();
                     if (result.equals(GameResult.WIN)) {
-                        JOptionPane.showMessageDialog(null, "You WON the game\nThanks for playing.", "Result", JOptionPane.INFORMATION_MESSAGE);
+                        resultText.append("You WON the game\n");
                     } else {
-                        JOptionPane.showMessageDialog(null, "You LOST the game\nThanks for playing.", "Result", JOptionPane.INFORMATION_MESSAGE);
-
+                        resultText.append("You LOST the game\n");
                     }
-                    System.exit(0);
+                    
+                    resultText.append("Thanks for playing.\n Would you like to play again?");
+                    int option = JOptionPane.showOptionDialog(frame, resultText.toString(), "Result", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+                    if(option == 0) {
+                        //We want to play again, so start new title screen?
+                        frame.dispose();
+                        MainController.startNewGame();
+                        return;
+                    } else {
+                        // No we don't want to play again, quit.
+                        frame.dispose();
+                        System.exit(0);
+                    }
                 }
 
                 // reset followup questions and result after answering followup question
