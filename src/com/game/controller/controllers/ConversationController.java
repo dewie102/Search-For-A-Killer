@@ -2,6 +2,8 @@ package com.game.controller.controllers;
 
 
 import com.game.controller.CheckWinningConditions;
+import com.game.controller.GameResult;
+import com.game.controller.MainController;
 import com.game.model.Conversation;
 import com.game.model.Player;
 import com.game.view.gui.GameWindow;
@@ -30,29 +32,54 @@ public class ConversationController {
     }
 
     public void run(Player player, Character character){
-        run(player, character, character.getConversation());
+        if (!MainController.PLAY_IN_GUI) {
+            run(player, character, character.getConversation());
+        } else {
+            runConversation(player, character, character.getConversation());
+        }
+
     }
 
     private void run(Player player, Character character, Conversation currentConversation){
         this.character = character;
         List<String> questions = currentConversation.getConversationQuestions();
 
-
+        int result = -1;
         // While the last option selected wasn't the last option and winning condition is undefined, keep asking.
         // The last option added to question essentially goes back
-//        while (result != questions.size() - 1 && (checkWinningConditions == null || checkWinningConditions.checkWinningConditions() == GameResult.UNDEFINED)) {
-//            if (checkWinningConditions != null && checkWinningConditions.checkWinningConditions() != GameResult.UNDEFINED)
-//                break;
-//            consoleView = new MultipleChoiceConsoleView(List.of(mainText, secondaryText), questions, false);
-//            secondaryText.clear();
-//            secondaryText.add(new ConsoleText(String.format("This is a conversation between you and %s:", character.getName())));
+        while (result != questions.size() - 1 && (checkWinningConditions == null || checkWinningConditions.checkWinningConditions() == GameResult.UNDEFINED)) {
+            if(checkWinningConditions != null && checkWinningConditions.checkWinningConditions() != GameResult.UNDEFINED)
+                break;
+            consoleView = new MultipleChoiceConsoleView(List.of(mainText, secondaryText), questions, false);
+            secondaryText.clear();
+            secondaryText.add(new ConsoleText(String.format("This is a conversation between you and %s:", character.getName())));
+            if(result != -1) {
+                secondaryText.add(new ConsoleText(String.format("%s: %s", player.getName(), questions.get(result))));
+                secondaryText.add(new ConsoleText(String.format("%s: %s", character.getName(), currentConversation.getDialog(result).getResponse())));
+                // This will report in case is possible, triggering a callback to report when the player tells the detective which one was the murder
+            }
+            // We check if the option selected has follow-up questions/dialog
+//            result = Integer.parseInt(consoleView.show());
+            currentConversation.getDialog(result).reportIfAble();
 
-//            );
+            if(currentConversation.getDialog(result).getFollowUpConversation() != null){
+                run(player, character, currentConversation.getDialog(result).getFollowUpConversation());
+                result = -1;
+                // This fixes the loop but we lost the secondary text
+            } else if(currentConversation.getDialog(result).endsConversation()) {
+                result = questions.size() - 1;
+            }
+        }
+    }
 
+    private void runConversation(Player player, Character character, Conversation currentConversation){
+        this.character = character;
+        List<String> questions = currentConversation.getConversationQuestions();
 
         secondaryText.add(new ConsoleText(String.format("This is a conversation between you and %s:", character.getName())));
         MultipleChoiceDisplayView displayView = new MultipleChoiceDisplayView(List.of(secondaryText), questions, GameWindow.talkTextArea, GameWindow.talkButtonPanel);
 
+        // make talk panel visible and hide game text panel
         GameWindow.gameTextPanel.setVisible(false);
         GameWindow.mainTalkPanel.setVisible(true);
         GameWindow.talkButtonPanel.removeAll();
@@ -60,27 +87,23 @@ public class ConversationController {
         GameWindow.talkButtonPanel.repaint();
 
 
+        // already in conversation
         if (result != -1) {
                 secondaryText.clear();
                 secondaryText.add(new ConsoleText(String.format("This is a conversation between you and %s:", character.getName())));
                 secondaryText.add(new ConsoleText(String.format("%s: %s", player.getName(), questions.get(result))));
                 secondaryText.add(new ConsoleText(String.format("%s: %s", character.getName(), currentConversation.getDialog(result).getResponse())));
-                // This will report in case is possible, triggering a callback to report when the player tells the detective which one was the murder
         }
-            // We check if the option selected has follow-up questions/dialog
-//            result = Integer.parseInt(consoleView.show());
+
         displayView.show();
+
         if (result != -1) {
-//            currentConversation.getDialog(result).reportIfAble(); //report murder
+            // if dialog has follow-up questions (to get response for murderer and murder weapon)
             if(currentConversation.getDialog(result).getFollowUpConversation() != null){
-//                run(player, character, currentConversation.getDialog(result).getFollowUpConversation());
                 handleFollowUp(currentConversation.getDialog(result).getFollowUpConversation());
-//                result = -1;
-                // This fixes the loop but we lost the secondary text
-            } else if(currentConversation.getDialog(result).endsConversation()) {
-//               result = questions.size() - 1;
-            }
-            else if (result == questions.size() - 1) {
+
+            // exit conversation
+            } else if (result == questions.size() - 1) {
                 GameWindow.gameTextPanel.setVisible(true);
                 GameWindow.mainTalkPanel.setVisible(false);
                 result = -1;
@@ -98,11 +121,12 @@ public class ConversationController {
         GameWindow.talkButtonPanel.revalidate();
         GameWindow.talkButtonPanel.repaint();
 
+        // display talk panel with follow-up questions
         displayView.show();
 
+        // this will be used to check winning condition after each follow-up question answered
         followedUpQuestion = true;
         secondaryText.clear();
-
     }
 
     public void setCheckWinningConditions(CheckWinningConditions checkWinningConditions) {

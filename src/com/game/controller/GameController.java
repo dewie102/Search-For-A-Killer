@@ -371,7 +371,7 @@ public class GameController {
             Character character = (Character) target;
             //If the target is in the same room as the player
             if (((Character) target).getCurrentLocation().equals(player.getCurrentLocation())){
-                this.character = character; // ?
+                this.character = character;
                 conversationController.run(player, character);
                 return true;
             }

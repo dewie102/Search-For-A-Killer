@@ -95,19 +95,21 @@ public class AudioController {
         }
 
         String userInput = GameWindow.getCurrentVolumeOption();
+
+        // mapping volume scrolling range from 0 to 100 to sound audio volume range (-80f to 6f)
         float newVolume = (GameWindow.getCurrentVolume() == 0) ? -80.0f : Math.max(-60.0f, Math.min(6.0f, (GameWindow.getCurrentVolume() / 100.0f) * 66.0f - 60.0f));
         float newSfxVolume = (GameWindow.getCurrentSfxVolume() == 0) ? -80.0f : Math.max(-60.0f, Math.min(6.0f, (GameWindow.getCurrentSfxVolume() / 100.0f) * 66.0f - 60.0f));
         switch (userInput){
-            case "0": // M on
+            case "0": // Music on
                 loopMusic();
                 return true;
-            case "1": // M off
+            case "1": // Music off
                 stopSound(0);
                 return true;
-            case "2": // M up
+            case "2": // Music volume up
                 setMusicVol(newVolume);
                 return true;
-            case "3": // M down
+            case "3": // Music volume down
                 musicVolDown();
                 return true;
             case "4": //SFX on
@@ -116,17 +118,17 @@ public class AudioController {
             case "5": //SFX off
                 setSfxOn(false);
                 return true;
-            case "6": //set SFX
+            case "6": //set SFX volume
                 setSfxVol(newSfxVolume);
                 return true;
-            case "7"://SFX up
+            case "7"://SFX volume up
                 try {
                     sfxVolUp();
                     return true;
                 } catch (IllegalArgumentException e){
                     return false;
                 }
-            case "8"://SFX down
+            case "8"://SFX volume down
                 sfxVolDown();
                 return true;
             case "9":
