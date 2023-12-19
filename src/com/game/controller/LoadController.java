@@ -171,9 +171,6 @@ public class LoadController {
         if(item != null && item.isWeapon()) {
             murderWeapon = item;
         }
-    
-        // TODO: remove this print line!!!
-        System.out.println(storyIndex);
         
         return storyIndex;
     }

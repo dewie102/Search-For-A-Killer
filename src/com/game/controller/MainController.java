@@ -4,13 +4,18 @@ import com.game.view.gui.TitleWindow;
 
 import javax.swing.*;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.List;
 
 public class MainController {
     // "Feature toggle" for whether to play in the GUI or terminal
     public static boolean PLAY_IN_GUI = true;
     
     public static void main(String[] args) throws  IOException {
-       startNewGame();
+        readInConfig();
+        
+        startNewGame();
     }
     
     public static void startNewGame() {
@@ -40,6 +45,25 @@ public class MainController {
             // Use this if you want/ need to add parameters
             //SwingUtilities.invokeLater(() -> new TitleWindow());
             SwingUtilities.invokeLater(TitleWindow::new);
+        }
+    }
+    
+    private static void readInConfig() {
+        try {
+            List<String> lines = Files.readAllLines(Path.of("data/config.txt"));
+            for(String line : lines) {
+                line = line.toLowerCase();
+                if(line.contains("play_in_gui")) {
+                    String[] parts = line.split(":");
+                    if(parts.length > 1 && parts[1].contains("true")) {
+                        PLAY_IN_GUI = true;
+                    } else if(parts.length > 1 && parts[1].contains("false")) {
+                        PLAY_IN_GUI = false;
+                    }
+                }
+            }
+        } catch(IOException e) {
+            System.out.println("WARNING: config file not found, running with defaults");
         }
     }
 }
