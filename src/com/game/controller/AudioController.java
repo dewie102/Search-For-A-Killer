@@ -28,7 +28,7 @@ public class AudioController {
             "audio/wooden-thud-mono-6244.wav"};
     private static final AudioInputStream[] inputStream = new AudioInputStream[soundPaths.length];
     private static final File[] file = new File[soundPaths.length];
-    private static final Clip[] sound = new Clip[soundPaths.length];
+    public static final Clip[] sound = new Clip[soundPaths.length];
     private static final List<ConsoleText> audioOptions = new ArrayList<>();
 
     // volume control for console
@@ -165,6 +165,7 @@ public class AudioController {
         gainControl.setValue(musicVolDelta);
     }
 
+    // set music volume
     public static void setMusicVol(float newVol) {
         FloatControl gainControl = (FloatControl) sound[0].getControl(FloatControl.Type.MASTER_GAIN);
         gainControl.setValue(newVol);
