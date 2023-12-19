@@ -92,11 +92,6 @@ public class GameController {
         // List of words to ignore
         ignoreList = gameText.getIgnoreList();
         
-        // TODO: Temporary code to add all rooms to players history
-        /*for(Room room : rooms.values()) {
-            player.addToPlayerHistory(room.getName());
-        }*/
-        
         if(!MainController.PLAY_IN_GUI) {
             commandView = new CommandConsoleView(List.of(mainText, secondaryText), new ArrayList<>(commandMap.values()), entities, ignoreList);
         } else {
@@ -340,7 +335,7 @@ public class GameController {
             GameWindow.helpTextArea.append(String.format("%s: \t%s\n", command.getKeyWord(), command.getDescription()));
         }
         GameWindow.helpTextArea.append("\n");
-        GameWindow.helpTextArea.append("Click on the rooms on the map to traverse the level");
+        GameWindow.helpTextArea.append("-> Click on the rooms on the map to traverse the level");
     }
 
     private boolean dropCommand(Entity target) {

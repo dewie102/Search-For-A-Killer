@@ -41,7 +41,7 @@ public class InputCollector {
      */
     public static String collectInput(List<Command> commands, List<String> entities, List<String> ignoreList) throws InvalidInputException {
         String line = collectInput();
-
+    
         return validateCommandInput(line, commands, entities, ignoreList);
     }
     
