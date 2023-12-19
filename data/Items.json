@@ -118,41 +118,37 @@
   },
   {
     "name": "Note #1",
-    "description": ["The note reads:\n\"Thank goodness I was out at the movies with the children last night!\nHow scary to think I would otherwise have been home when the murder\ntook place.\"",
-                    "Pretty sure it was the Nanny",
-                    "Pretty sure it was the gardener"],
+    "description": ["The note reads:\n\t\"Thank goodness I was out at the movies with the children last night!\n\tHow scary to think I would otherwise have been home when the murder\n\ttook place.\""],
     "pickUpable": true,
     "isHidden": true
   },
   {
     "name": "Note #2",
-    "description": ["The note reads:\n\"I have no further need of your Butlering services. \nYour employment will be ended effective next week.\"",
-                    "Yup, definitely the Nanny",
-                    "All signs point to him"],
+    "description": ["The note reads:\n\t\"I have no further need of your Butlering services. \n\tYour employment will be ended effective next week.\"",
+                    "The note reads:\n\t\"Darling, I have noticed that the Nanny has not been taking care of the kids, \n\thave you found anyone to replace them?\"",
+                    "The note reads:\n\t\"Have you noticed that all of our fruit this season has gone missing? \n\tAlso, our prized purple people eater has been destroyed.\""],
     "pickUpable": true,
     "isHidden": true
   },
   {
     "name": "Note #3",
-    "description": ["The note reads:\n\"I saw the Butler digging in the garden this morning. How peculiar!\nNote to self, search backyard after tending to the lawn\nto see what he was looking for - or trying to hide.\"",
-                    "Saw her with a PEN",
-                    "Most definitely the gardener"],
+    "description": ["The note reads:\n\t\"I saw the Butler digging in the garden this morning. How peculiar!\n\tNote to self, search backyard after tending to the lawn\n\tto see what he was looking for - or trying to hide.\"",
+                    "The note reads:\n\t\"While the kids were napping, \n\tI was going to start dinner preparations and \n\tI found that the knife was missing from the kitchen.\"",
+                    "The note reads:\n\t\"This is the last time something like this is going to happen, \n\tmaybe we can get the Gardener to fix everything before we let them go.\t\""],
     "pickUpable": true,
     "isHidden": false
   },
   {
     "name": "Note #4",
-    "description": ["It looks like this was a confession letter, but there is blood smeared on the paper and so you cannot make out any of the words.",
-                    "Good Luck with that",
-                    "hmmm starts with g"],
+    "description": ["It looks like this was a confession letter, but there is blood smeared on the paper and so you cannot make out any of the words."],
     "pickUpable": true,
     "isHidden": true
   },
   {
     "name": "Note #5",
-    "description": ["The note reads:\n\"I think it was the Butler, personally! He's always disliked Mr. Cool, \nhe'd have quit a long time ago if he didn't need the money.\"",
-                    "N A N N Y",
-                    "G A R D E N E R"],
+    "description": ["The note reads:\n\t\"I think it was the Butler, personally! He's always disliked Mr. Cool, \n\the'd have quit a long time ago if he didn't need the money.\"",
+                    "The note reads:\n\t\"The Nanny has been whispering on the phone a lot recently, \n\tI have a strange feeling that they are up to something...\"",
+                    "The note reads:\n\t\"I saw the Gardener washing their gloves in the kitchens slop sink, how strange.\""],
     "pickUpable": true,
     "isHidden": true
   },

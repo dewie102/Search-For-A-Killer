@@ -29,7 +29,7 @@ public class GameControllerTest {
     public void testCheckForWinningConditionsWhenWin() {
         // Set up conditions for a winning scenario
         gameController.reportedMurder = new Character("Gardener", new ArrayList<>(), "");
-        gameController.reportedMurderWeapon = new Item("Knife", new ArrayList<>(), true);
+        gameController.reportedMurderWeapon = new Item("Glove", new ArrayList<>(), true);
 
         GameResult result1 = gameController.checkForWinningConditions();
 
@@ -39,7 +39,7 @@ public class GameControllerTest {
         GameResult result2 = gameController.checkForWinningConditions();
 
         gameController.reportedMurder = new Character("Nanny", new ArrayList<>(), "");
-        gameController.reportedMurderWeapon = new Item("Glove", new ArrayList<>(), true);
+        gameController.reportedMurderWeapon = new Item("Knife", new ArrayList<>(), true);
 
         GameResult result3 = gameController.checkForWinningConditions();
 

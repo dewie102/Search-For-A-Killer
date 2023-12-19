@@ -335,7 +335,7 @@ public class GameController {
             GameWindow.helpTextArea.append(String.format("%s: \t%s\n", command.getKeyWord(), command.getDescription()));
         }
         GameWindow.helpTextArea.append("\n");
-        GameWindow.helpTextArea.append("Click on the rooms on the map to traverse the level");
+        GameWindow.helpTextArea.append("-> Click on the rooms on the map to traverse the level");
     }
 
     private boolean dropCommand(Entity target) {
