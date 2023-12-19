@@ -9,9 +9,7 @@ import com.game.controller.GsonParserController;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.text.DefaultCaret;
+
 import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.awt.event.*;
@@ -21,6 +19,7 @@ public class GameWindow {
     public static final int FRAME_HEIGHT = 800;
     private static final int ACTION_PANEL_HEIGHT = 100;
     public static final Color MAIN_BACKGROUND_COLOR = new Color(50, 50, 50);
+    public static final Color MAIN_FOREGROUND_COLOR = Color.white;
     public static final int PANEL_SPACE = 10;
 
     public static JTextPane gameTextArea;
