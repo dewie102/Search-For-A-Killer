@@ -44,8 +44,8 @@ public class GameController {
     private final Map<String, Command> commandMap = new TreeMap<>();
     private final MapLoaderController mapLoaderController = new MapLoaderController();
     public final ConversationController conversationController = new ConversationController(mainText, this::checkForWinningConditions);
-    private Character reportedMurder = null;
-    private Item reportedMurderWeapon = null;
+    Character reportedMurder = null;
+    Item reportedMurderWeapon = null;
     private final Map<String, Entity> entityDictionary = new HashMap<>();
     private List<String> entities;
     private List<String> ignoreList;
@@ -504,7 +504,7 @@ public class GameController {
         return true;
     }
 
-    private GameResult checkForWinningConditions(){
+    GameResult checkForWinningConditions(){
         if(reportedMurder == null || reportedMurderWeapon == null)
             return GameResult.UNDEFINED;
         else{
